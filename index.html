@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Somniq · Home v2 preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------------------
+   Somniq Home v2 — standalone preview.
+   Pixel mirror of src/components/home-v2/* at 393x852. Same copy, same
+   colours, same geometry (dial 272, ring r=101, orb r=65, 270 deg 7a->11p).
+   ?state=morning|high-debt|day1   ?sheet=debt|night   ?clean=1
+--------------------------------------------------------------------------- */
+:root{
+  --ink:#FFFFFF;
+  --muted:rgba(255,255,255,0.55);
+  --faint:rgba(255,255,255,0.35);
+  --hairline:rgba(255,255,255,0.09);
+  --violet:#a78bfa;
+  --cyan:#22d3ee;
+  --green:#34d399;
+  --amber:#fbbf24;
+  --rose:#fb7185;
+  --radius:24px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+html,body{height:100%;background:#050308;font-family:'Inter',-apple-system,system-ui,sans-serif;}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+
+#stage{position:relative;}
+#frame{
+  position:relative;width:393px;height:852px;overflow:hidden;background:#000;
+  transform-origin:top left;
+  box-shadow:0 30px 90px rgba(0,0,0,.8);
+}
+@media (min-width:460px){ #frame{border-radius:44px;} }
+
+/* --- night sky ----------------------------------------------------------- */
+.sky{position:absolute;inset:0;}
+.sky .g1{position:absolute;inset:0;background:linear-gradient(180deg,#241a4d 0%,#17123a 26%,#0a0818 60%,#000 100%);}
+.sky .g2{position:absolute;inset:0;background:linear-gradient(150deg,rgba(124,92,240,.35) 0%,rgba(124,92,240,0) 55%);}
+.star{position:absolute;border-radius:50%;background:#fff;}
+
+/* --- status bar ---------------------------------------------------------- */
+.statusbar{position:relative;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:5;}
+.statusbar .time{font-weight:600;font-size:15.5px;color:#fff;letter-spacing:-.2px;}
+.notch{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:124px;height:34px;border-radius:18px;background:#000;}
+.sbicons{display:flex;align-items:center;gap:6px;}
+
+/* --- chrome -------------------------------------------------------------- */
+.screen{position:relative;height:100%;display:flex;flex-direction:column;z-index:2;}
+.topchrome{padding:2px 18px 0;}
+.header{display:flex;align-items:center;padding:4px 0;}
+.htitle{flex:1;display:flex;align-items:baseline;gap:8px;min-width:0;}
+.greeting{font-weight:700;font-size:19px;letter-spacing:-.4px;color:#fff;white-space:nowrap;}
+.hdate{font-weight:500;font-size:13.5px;color:rgba(255,255,255,.42);}
+.avatar{width:36px;height:36px;border-radius:50%;background:conic-gradient(from 0deg,#a78bfa,#22d3ee,#ec4899,#a78bfa);display:flex;align-items:center;justify-content:center;flex:none;}
+.avatar i{width:32px;height:32px;border-radius:50%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:14.4px;color:#fff;}
+
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 18px 8px;scrollbar-width:none;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* --- glass --------------------------------------------------------------- */
+.glass{position:relative;border-radius:var(--radius);border:1px solid var(--hairline);
+  background:rgba(14,12,24,.35);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden;}
+.glass::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.015));pointer-events:none;}
+.glass.cyan::before{background:linear-gradient(135deg,rgba(34,211,238,.14),rgba(255,255,255,.01));}
+.glass.violet::before{background:linear-gradient(135deg,rgba(167,139,250,.14),rgba(255,255,255,.01));}
+.glass::after{content:'';position:absolute;top:0;left:16px;right:16px;height:1px;
+  background:linear-gradient(90deg,rgba(255,255,255,.22),rgba(255,255,255,0));pointer-events:none;}
+.glass > .in{position:relative;z-index:1;}
+
+/* --- hero ---------------------------------------------------------------- */
+.heroblock{display:flex;justify-content:center;margin-top:2px;}
+.dial{position:relative;width:272px;height:272px;}
+.dial svg{position:absolute;inset:0;}
+.halo{position:absolute;left:50%;top:50%;width:154px;height:154px;margin:-77px 0 0 -77px;border-radius:50%;
+  filter:blur(26px);animation:breathe 5.2s ease-in-out infinite;}
+@keyframes breathe{0%,100%{opacity:.55;transform:scale(.96);}50%{opacity:1;transform:scale(1.03);}}
+.orbtext{position:absolute;left:50%;top:50%;width:130px;height:130px;margin:-65px 0 0 -65px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.eyebrow{font-weight:600;font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:2px;}
+.numrow{display:flex;align-items:flex-end;}
+.numrow .pad{width:15px;flex:none;}
+.num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:64px;line-height:72px;letter-spacing:-2px;color:#fff;
+  text-shadow:0 0 18px rgba(255,255,255,.3);}
+.unit{font-family:'JetBrains Mono',monospace;font-size:24px;color:rgba(255,255,255,.5);margin:0 0 11px 1px;}
+.hourlbl{position:absolute;width:32px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:.4px;color:rgba(255,255,255,.4);}
+
+.emptytitle{font-weight:600;font-size:17px;letter-spacing:-.3px;color:#fff;text-align:center;margin-top:4px;}
+.emptybody{font-size:12.5px;line-height:18px;color:var(--muted);text-align:center;margin:6px 12px 0;}
+
+/* --- pills --------------------------------------------------------------- */
+.pillblock{display:flex;flex-direction:column;align-items:center;gap:7px;margin-top:-10px;}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:1px solid;
+  background:rgba(12,10,22,.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);}
+.pill .dot{width:7px;height:7px;border-radius:50%;}
+.pill .txt{font-size:12.5px;color:rgba(255,255,255,.6);white-space:nowrap;}
+.pill .txt b{font-weight:700;color:#fff;}
+
+/* --- aria line ----------------------------------------------------------- */
+.ariablock{margin-top:16px;display:flex;flex-direction:column;align-items:center;padding:0 18px;}
+.ariaeye{font-weight:600;font-size:9px;letter-spacing:2.4px;text-transform:uppercase;color:var(--violet);margin-bottom:10px;}
+.arialine{font-family:'Instrument Serif',Georgia,'Times New Roman',serif;font-size:26px;line-height:31px;
+  letter-spacing:.1px;color:rgba(255,255,255,.96);text-align:center;}
+
+/* --- last night strip ---------------------------------------------------- */
+.stripblock{margin-top:48px;}
+.strip{padding:13px 16px;display:flex;align-items:center;gap:10px;}
+.strip .left{flex:1;min-width:0;}
+.eyecyan{font-weight:600;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:var(--cyan);}
+.valrow{display:flex;align-items:baseline;gap:9px;margin-top:5px;}
+.dur{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;letter-spacing:-.4px;color:#fff;}
+.clocks{font-size:12.5px;color:rgba(255,255,255,.5);}
+.confirm{padding:9px 14px;border-radius:999px;border:1px solid rgba(52,211,153,.38);background:rgba(52,211,153,.12);
+  font-weight:600;font-size:12.5px;color:var(--green);white-space:nowrap;}
+.segments{display:flex;gap:5px;}
+.seg{width:15px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);}
+.seg.on{background:var(--cyan);}
+
+/* --- aria action chip ---------------------------------------------------- */
+.chipblock{margin-top:16px;}
+.chiprow{padding:11px 12px;display:flex;align-items:center;gap:8px;}
+.chip{padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,#c3b0ff,#9f7dfb);
+  font-weight:600;font-size:13.5px;letter-spacing:-.1px;color:#1a1333;white-space:nowrap;}
+.why{font-weight:500;font-size:13px;color:rgba(255,255,255,.55);margin-right:8px;}
+.spacer{flex:1;}
+.question{flex:1;font-weight:500;font-size:13px;line-height:17px;color:rgba(255,255,255,.88);padding-left:4px;}
+.held{padding:10px 14px;border-radius:999px;border:1px solid rgba(52,211,153,.4);background:rgba(52,211,153,.16);
+  font-weight:600;font-size:12.5px;color:var(--green);white-space:nowrap;}
+.notyet{padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);
+  font-weight:600;font-size:12.5px;color:rgba(255,255,255,.85);white-space:nowrap;}
+
+/* --- this week ----------------------------------------------------------- */
+.weekblock{margin-top:26px;}
+.week{padding:16px;}
+.weekhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.eyegrey{font-weight:600;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);}
+.segmented{display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);}
+.segbtn{padding:5px 12px;border-radius:999px;font-weight:500;font-size:12px;color:rgba(255,255,255,.6);cursor:pointer;}
+.segbtn.on{background:rgba(255,255,255,.92);color:#000;font-weight:600;}
+.bars{display:flex;align-items:flex-end;justify-content:space-between;height:91px;}
+.barcol{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.barval{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:rgba(255,255,255,.45);height:13px;}
+.bar{width:14px;border-radius:7px;}
+.barday{font-size:10px;color:rgba(255,255,255,.35);height:14px;}
+.rule{height:1px;background:rgba(255,255,255,.07);margin-top:14px;}
+.recaphead{display:flex;align-items:center;justify-content:space-between;padding-top:12px;cursor:pointer;}
+.recaptitle{font-weight:600;font-size:13px;color:#fff;}
+.recap{font-size:13px;line-height:20px;color:rgba(255,255,255,.72);margin-top:8px;}
+
+/* --- ask dock ------------------------------------------------------------ */
+.dock{padding:8px 18px 0;z-index:4;}
+.askbar{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:24px;
+  border:1px solid var(--hairline);background:rgba(18,16,30,.72);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
+.askorb{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#e3d4ff,#8b5cf6 45%,#4c1d95 100%);
+  box-shadow:0 0 14px rgba(167,139,250,.5);}
+.asktxt{font-weight:600;font-size:15px;color:rgba(255,255,255,.9);}
+.homebar{height:26px;display:flex;align-items:center;justify-content:center;}
+.homebar i{display:block;width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.45);}
+
+/* --- sheets -------------------------------------------------------------- */
+.backdrop{position:absolute;inset:0;background:rgba(0,0,0,.42);backdrop-filter:blur(6px);z-index:8;display:none;}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:9;display:none;overflow:hidden;
+  border-top-left-radius:28px;border-top-right-radius:28px;border-top:1px solid var(--hairline);
+  background:linear-gradient(160deg,rgba(40,32,72,.95),rgba(12,10,24,.98));backdrop-filter:blur(26px);}
+.sheet.show,.backdrop.show{display:block;}
+.grabber{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.22);margin:10px auto 0;}
+.sheethead{display:flex;align-items:center;justify-content:space-between;padding:22px 20px 0;}
+.sheeteye{font-weight:600;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.sheeteye.cyan{color:var(--cyan);}
+.done{font-weight:600;font-size:15px;color:var(--violet);}
+.sheetbody{padding:0 20px;}
+.sheetfoot{padding:12px 20px 22px;display:flex;align-items:center;justify-content:space-between;}
+.foottxt{font-size:12px;color:rgba(255,255,255,.4);}
+.refresh{font-weight:600;font-size:13px;color:var(--violet);}
+
+.bignum{display:flex;align-items:flex-end;}
+.bignum .n{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:62px;line-height:68px;letter-spacing:-2px;color:#fff;}
+.bignum .u{font-family:'JetBrains Mono',monospace;font-size:22px;color:rgba(255,255,255,.5);margin-bottom:10px;}
+.toprow{display:flex;align-items:flex-end;justify-content:space-between;margin-top:18px;}
+.scorewrap{text-align:right;padding-bottom:8px;}
+.scoreeye{font-weight:600;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.45);}
+.score{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:30px;letter-spacing:-1px;color:var(--green);margin-top:2px;}
+.estimate{font-weight:500;font-size:12px;color:var(--violet);margin-top:8px;}
+.payoff{font-family:'Instrument Serif',Georgia,serif;font-size:27px;line-height:33px;color:#fff;margin-top:18px;}
+.sheetbodytxt{font-size:13.5px;line-height:20px;color:rgba(255,255,255,.6);margin-top:8px;}
+.parts{margin-top:22px;padding:16px;}
+.partstitle{font-weight:600;font-size:9px;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px;}
+.partrow{display:flex;align-items:center;gap:12px;padding:7px 0;}
+.partlbl{width:92px;font-weight:500;font-size:13.5px;color:#fff;}
+.track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden;}
+.fill{height:100%;border-radius:3px;}
+.partpts{width:44px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:rgba(255,255,255,.6);}
+.sheetrule{height:1px;background:rgba(255,255,255,.08);margin-top:22px;}
+.linkrow{display:flex;align-items:center;justify-content:space-between;padding:17px 0;}
+.linktxt{font-weight:500;font-size:14.5px;color:#fff;}
+
+.nightdur{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:48px;line-height:56px;letter-spacing:-1.5px;color:#fff;margin-top:16px;}
+.nightclocks{font-size:14px;color:rgba(255,255,255,.5);margin-top:4px;}
+.sourcerow{display:flex;align-items:center;gap:10px;margin-top:16px;}
+.sourcepill{padding:6px 12px;border-radius:999px;border:1px solid rgba(34,211,238,.4);background:rgba(34,211,238,.12);
+  font-weight:600;font-size:12.5px;color:var(--cyan);}
+.confidence{font-size:13px;color:rgba(255,255,255,.45);}
+.editcard{margin-top:20px;padding:0 16px;}
+.editrow{display:flex;align-items:center;gap:8px;padding:14px 0;}
+.editrow .l{flex:1;}
+.rowlbl{font-size:13.5px;color:rgba(255,255,255,.6);}
+.rowval{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;letter-spacing:-.3px;color:#fff;margin-top:3px;}
+.nudge{padding:9px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);
+  font-weight:500;font-size:12.5px;color:rgba(255,255,255,.82);}
+.plainrow{display:flex;align-items:center;justify-content:space-between;padding:14px 0;min-height:54px;}
+.action{font-weight:600;font-size:13.5px;color:var(--violet);}
+.editrule{height:1px;background:rgba(255,255,255,.07);}
+.switch{width:51px;height:31px;border-radius:16px;background:rgba(255,255,255,.14);position:relative;}
+.switch i{position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;}
+.primarybtn{margin:12px 20px 22px;border-radius:999px;padding:16px;text-align:center;background:var(--cyan);
+  font-weight:700;font-size:16px;color:#04212a;}
+
+/* --- state switcher ------------------------------------------------------ */
+#switcher{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+  padding:10px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);z-index:50;}
+#switcher a{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;padding:7px 12px;
+  border-radius:999px;border:1px solid rgba(255,255,255,.14);}
+#switcher a.on{background:#fff;color:#000;border-color:#fff;}
+#switcher.hide{display:none;}
+</style>
+</head>
+<body>
+<div id="stage"><div id="frame"></div></div>
+<div id="switcher"></div>
+
+<script>
+/* =========================================================================
+   Geometry — mirrors src/components/home-v2/view-model.ts exactly.
+   270 deg of a perfect circle from 7a (-135 deg) to 11p (+135 deg).
+   ========================================================================= */
+const TRACK_START_HOUR = 7, TRACK_END_HOUR = 23, SWEEP = 270, START_ANGLE = -135;
+const LABEL_HOURS = [7, 12, 18, 23];
+const DIAL = 272, RING_R = 101, ORB_R = 65, TICK_GAP = 5, LABEL_R = 121;
+const C = DIAL / 2;
+
+const TONE = { green:'#34d399', amber:'#fbbf24', rose:'#fb7185', violet:'#a78bfa', cyan:'#22d3ee' };
+
+function angleForHour(h){
+  const span = TRACK_END_HOUR - TRACK_START_HOUR;
+  const v = Math.min(TRACK_END_HOUR, Math.max(TRACK_START_HOUR, h));
+  return START_ANGLE + ((v - TRACK_START_HOUR) / span) * SWEEP;
+}
+function polar(r, deg){
+  const rad = (deg - 90) * Math.PI / 180;
+  return { x: C + r * Math.cos(rad), y: C + r * Math.sin(rad) };
+}
+function arc(r, from, to){
+  const a = polar(r, from), b = polar(r, to);
+  const large = (to - from) > 180 ? 1 : 0;
+  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
+}
+function trackLabel(h){ const s = h >= 12 ? 'p' : 'a'; return (h % 12 || 12) + s; }
+
+/* =========================================================================
+   Mock data — the three states the design ships. Realistic, and shaped
+   exactly like the HomeViewModel the RN screen renders.
+   ========================================================================= */
+const STATES = {
+  morning: {
+    clock: '9:41', nowHour: 9 + 41/60, wakeHour: 6.5,
+    header: { greeting:'Good morning', name:'Harish', date:'Tue 13', letter:'H' },
+    hero: { value:'1.8', unit:'h', tone:'green', known:true, trackKnown:true, provisional:false, estimateLabel:null },
+    pill: { strong:'Peak now', rest:'· until 12pm', tone:'amber' },
+    aria: {
+      line:'Debt down 3.1h since you started. Bed by 11 clears 40 min.',
+      full:'Debt down 3.1h since you started. Bed by 11 clears 40 min. Your weekday nights still run about 50 minutes shorter than your weekend ones — that gap is most of what is left.',
+    },
+    lastNight: { kind:'night', eyebrow:'LAST NIGHT', duration:'6h 48m', clocks:'11:42p – 6:30a', confirmLabel:'Looks right ✓' },
+    action: { kind:'schedule', label:'Remind me at 10:30pm', why:'Why?' },
+    week: {
+      debt:[['M',4.1],['T',3.8],['W',3.5],['T',2.9],['F',2.6],['S',2.2],['S',1.8]],
+      hours:[['M',5.9],['T',6.2],['W',6.4],['T',7.1],['F',6.8],['S',7.4],['S',6.8]],
+    },
+    debtSheet: {
+      score:'82', payoff:'Debt-free by Thursday',
+      body:'7h 40m a night clears it in three nights.',
+      parts:[['Duration',.72,'72','#34d399'],['Consistency',.86,'86','#34d399'],['Timing',.64,'64','#34d399']],
+      footer:'Updated 6:34a · Apple Health', estimate:null, coverage:null,
+    },
+    nightSheet: {
+      duration:'6h 48m', clocks:'11:42p – 6:30a', bed:'11:42p', wake:'6:30a',
+      source:'Apple Watch', confidence:'92% confident', nap:'Add', confirm:'Looks right',
+    },
+  },
+
+  'high-debt': {
+    clock:'2:40', nowHour: 14 + 40/60, wakeHour: 6.5,
+    header:{ greeting:'Good afternoon', name:'Harish', date:'Tue 13', letter:'H' },
+    hero:{ value:'6.0', unit:'h', tone:'rose', known:true, trackKnown:true, provisional:false, estimateLabel:null },
+    pill:{ strong:'Dip now', rest:'· lifts at 4pm', tone:'rose' },
+    aria:{
+      line:'Heavy week. A 20-minute nap before 3 softens this dip.',
+      full:'Heavy week. A 20-minute nap before 3 softens this dip. Four of the last seven nights ran under five hours, so the debt is mostly recent — two full nights take the edge off it.',
+    },
+    lastNight:{ kind:'night', eyebrow:'LAST NIGHT', duration:'4h 52m', clocks:'1:38a – 6:30a', confirmLabel:'Looks right ✓' },
+    action:{ kind:'checkin', question:'Did 10:30pm bedtime hold?', held:'It held ✓', notYet:'Not yet' },
+    week:{
+      debt:[['M',3.4],['T',4.2],['W',4.9],['T',5.1],['F',5.6],['S',5.8],['S',6.0]],
+      hours:[['M',6.1],['T',5.2],['W',4.8],['T',5.0],['F',4.4],['S',5.1],['S',4.9]],
+    },
+    debtSheet:{
+      score:'58', payoff:null,
+      body:'Nothing is being paid down yet, so there is no date to name. Two nights at 7h 40m start the clock.',
+      parts:[['Duration',.41,'41','#fb7185'],['Consistency',.52,'52','#fbbf24'],['Timing',.38,'38','#fb7185']],
+      footer:'Updated 6:34a · Apple Health', estimate:null, coverage:null,
+    },
+    nightSheet:{
+      duration:'4h 52m', clocks:'1:38a – 6:30a', bed:'1:38a', wake:'6:30a',
+      source:'Apple Watch', confidence:'92% confident', nap:'Add', confirm:'Looks right',
+    },
+  },
+
+  day1: {
+    clock:'9:41', nowHour: 9 + 41/60, wakeHour:null,
+    header:{ greeting:'Welcome', name:'Harish', date:'Tue 13', letter:'H' },
+    hero:{ value:'1.2', unit:'h', tone:'violet', known:true, trackKnown:false, provisional:true,
+           estimateLabel:'Provisional · sharpens nightly' },
+    pill:{ strong:'Learning your rhythm', rest:null, tone:'violet' },
+    aria:{
+      line:'Your first estimate from what you told us. Tonight’s recording sharpens it.',
+      full:'Your first estimate from what you told us. Tonight’s recording sharpens it. After three nights the number stops moving on its own and starts following what you actually sleep.',
+    },
+    lastNight:{ kind:'baseline', eyebrow:'TONIGHT · YOUR PHONE RECORDS', title:'Night 1 of 3',
+                trailing:'starts tonight', step:1, total:3 },
+    action:{ kind:'schedule', label:'Wind down at 10:30pm', why:'Why?' },
+    week:{
+      debt:[['W',null],['T',null],['F',null],['S',null],['S',null],['M',null],['T',1.2]],
+      hours:[['W',null],['T',null],['F',null],['S',null],['S',null],['M',null],['T',null]],
+    },
+    debtSheet:{
+      score:null, payoff:null,
+      body:'Your first estimate comes from the schedule you gave us. Tonight’s recording replaces it with measured hours.',
+      parts:[], footer:'Updated from your quiz · Schedule',
+      estimate:'Provisional · sharpens nightly', coverage:'Building 0 of 14 nights',
+    },
+    nightSheet:{
+      duration:'—', clocks:'', bed:'—', wake:'—',
+      source:'Awaiting', confidence:null, nap:'Add', confirm:'Looks right',
+      empty:'No observed night yet. Log your usual window — hours are never guessed.',
+    },
+  },
+};
+
+/* ========================================================================= */
+const params = new URLSearchParams(location.search);
+const stateKey = STATES[params.get('state')] ? params.get('state') : 'morning';
+const S = STATES[stateKey];
+const sheetKey = params.get('sheet');
+const clean = params.get('clean') === '1';
+
+function stars(){
+  let out = '';
+  for (let i = 0; i < 46; i++){
+    const s = (n) => { const x = Math.sin((i + 1) * 12.9898 + n * 78.233) * 43758.5453; return x - Math.floor(x); };
+    const size = (0.8 + s(3) * 1.6).toFixed(2);
+    out += `<div class="star" style="left:${(s(1)*100).toFixed(2)}%;top:${(s(2)*72).toFixed(2)}%;
+      width:${size}px;height:${size}px;opacity:${(0.12 + s(4)*0.4).toFixed(2)}"></div>`;
+  }
+  return out;
+}
+
+function dial(){
+  const tone = TONE[S.hero.tone];
+  const accent = TONE[S.pill.tone === 'cyan' ? 'amber' : S.pill.tone];
+  const trackKnown = S.hero.trackKnown;
+  const nowAngle = trackKnown ? angleForHour(S.nowHour) : null;
+  const fromAngle = angleForHour(S.wakeHour == null ? TRACK_START_HOUR : S.wakeHour);
+
+  let ticks = '', labels = '';
+  for (let h = TRACK_START_HOUR; h <= TRACK_END_HOUR; h++){
+    const labelled = LABEL_HOURS.includes(h);
+    const a = angleForHour(h);
+    const inner = polar(RING_R + TICK_GAP, a);
+    const outer = polar(RING_R + TICK_GAP + (labelled ? 7 : 3), a);
+    ticks += `<line x1="${inner.x.toFixed(2)}" y1="${inner.y.toFixed(2)}" x2="${outer.x.toFixed(2)}" y2="${outer.y.toFixed(2)}"
+      stroke="${labelled ? 'rgba(255,255,255,.45)' : 'rgba(255,255,255,.14)'}" stroke-width="1" stroke-linecap="round"/>`;
+    if (labelled){
+      const p = polar(LABEL_R, a);
+      labels += `<div class="hourlbl" style="left:${(p.x-16).toFixed(1)}px;top:${(p.y-7).toFixed(1)}px">${trackLabel(h)}</div>`;
+    }
+  }
+
+  const progress = (trackKnown && nowAngle != null && nowAngle - fromAngle > 0.5)
+    ? `<path d="${arc(RING_R, fromAngle, nowAngle)}" fill="none" stroke="url(#prog)" stroke-width="6"
+         stroke-linecap="round" opacity=".5" filter="url(#soft)"/>
+       <path d="${arc(RING_R, fromAngle, nowAngle)}" fill="none" stroke="url(#prog)" stroke-width="3.2" stroke-linecap="round"/>`
+    : '';
+
+  const dot = nowAngle == null ? '' : (() => {
+    const p = polar(RING_R, nowAngle);
+    return `<circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="13" fill="${accent}" opacity=".4" filter="url(#soft)"/>
+            <circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="7" fill="${accent}"/>
+            <circle cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="2.6" fill="rgba(255,255,255,.9)"/>`;
+  })();
+
+  return `
+  <div class="dial">
+    <div class="halo" style="background:radial-gradient(circle,${tone}55 0%,${tone}00 70%)"></div>
+    <svg viewBox="0 0 ${DIAL} ${DIAL}" width="${DIAL}" height="${DIAL}">
+      <defs>
+        <linearGradient id="prog" gradientUnits="userSpaceOnUse"
+          x1="${polar(RING_R, fromAngle).x}" y1="${polar(RING_R, fromAngle).y}"
+          x2="${polar(RING_R, nowAngle == null ? fromAngle : nowAngle).x}"
+          y2="${polar(RING_R, nowAngle == null ? fromAngle : nowAngle).y}">
+          <stop offset="0%" stop-color="${TONE.violet}"/>
+          <stop offset="45%" stop-color="${TONE.violet}"/>
+          <stop offset="100%" stop-color="${accent}"/>
+        </linearGradient>
+        <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+        <filter id="soft2" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="14"/>
+        </filter>
+        <filter id="spec" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="1.5"/>
+        </filter>
+        <filter id="spec2" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="5"/>
+        </filter>
+        <radialGradient id="body" cx="35%" cy="29%" r="92%">
+          <stop offset="0%" stop-color="#2b2446"/>
+          <stop offset="42%" stop-color="#171331"/>
+          <stop offset="78%" stop-color="#0b0918"/>
+          <stop offset="100%" stop-color="#05040c"/>
+        </radialGradient>
+        <clipPath id="orbclip"><circle cx="${C}" cy="${C}" r="${ORB_R}"/></clipPath>
+      </defs>
+
+      <path d="${arc(RING_R, START_ANGLE, START_ANGLE + SWEEP)}" fill="none"
+        stroke="${trackKnown ? 'rgba(255,255,255,.13)' : 'rgba(167,139,250,.5)'}"
+        stroke-width="${trackKnown ? 1.5 : 2}" stroke-linecap="round"
+        ${trackKnown ? '' : 'stroke-dasharray="1.6 6"'}/>
+      ${ticks}
+      ${progress}
+
+      <circle cx="${C}" cy="${C}" r="${ORB_R}" fill="url(#body)"/>
+      <g clip-path="url(#orbclip)">
+        <circle cx="${C}" cy="${C + ORB_R*0.46}" r="${ORB_R*0.74}" fill="${tone}" opacity=".5" filter="url(#soft2)"/>
+        <circle cx="${C}" cy="${C + ORB_R*0.52}" r="${ORB_R*0.34}" fill="${tone}" opacity=".55" filter="url(#soft)"/>
+        <circle cx="${C - ORB_R*0.38}" cy="${C - ORB_R*0.66}" r="${ORB_R*0.17}" fill="rgba(255,255,255,.32)" filter="url(#spec2)"/>
+        <circle cx="${C - ORB_R*0.4}" cy="${C - ORB_R*0.7}" r="${ORB_R*0.055}" fill="rgba(255,255,255,.7)" filter="url(#spec)"/>
+      </g>
+      <circle cx="${C}" cy="${C}" r="${ORB_R}" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1"/>
+      ${dot}
+    </svg>
+    ${labels}
+    <div class="orbtext">
+      <div class="eyebrow">SLEEP DEBT</div>
+      <div class="numrow"><div class="pad"></div><div class="num">${S.hero.value}</div><div class="unit">${S.hero.unit}</div></div>
+    </div>
+  </div>`;
+}
+
+function pills(){
+  const row = (tone, strong, rest) => `
+    <div class="pill" style="border-color:${TONE[tone]}47">
+      <div class="dot" style="background:${TONE[tone]};box-shadow:0 0 5px ${TONE[tone]}"></div>
+      <div class="txt">${strong ? `<b>${strong}</b>` : ''}${strong && rest ? ' ' : ''}${rest || ''}</div>
+    </div>`;
+  return `<div class="pillblock">
+    ${S.hero.estimateLabel ? row('violet', null, S.hero.estimateLabel) : ''}
+    ${row(S.pill.tone, S.pill.strong, S.pill.rest)}
+  </div>`;
+}
+
+function strip(){
+  const ln = S.lastNight;
+  if (ln.kind === 'baseline'){
+    return `<div class="stripblock"><div class="glass cyan"><div class="in strip">
+      <div class="left">
+        <div class="eyecyan">${ln.eyebrow}</div>
+        <div class="valrow"><div class="dur">${ln.title}</div><div class="clocks">${ln.trailing}</div></div>
+      </div>
+      <div class="segments">${[0,1,2].map(i => `<div class="seg${i < ln.step ? ' on' : ''}"></div>`).join('')}</div>
+    </div></div></div>`;
+  }
+  return `<div class="stripblock"><div class="glass cyan"><div class="in strip">
+    <div class="left">
+      <div class="eyecyan">${ln.eyebrow}</div>
+      <div class="valrow"><div class="dur">${ln.duration}</div><div class="clocks">${ln.clocks}</div></div>
+    </div>
+    <div class="confirm">${ln.confirmLabel}</div>
+  </div></div></div>`;
+}
+
+function chip(){
+  const a = S.action;
+  if (a.kind === 'checkin'){
+    return `<div class="chipblock"><div class="glass"><div class="in chiprow">
+      <div class="question">${a.question}</div>
+      <div class="held">${a.held}</div>
+      <div class="notyet">${a.notYet}</div>
+    </div></div></div>`;
+  }
+  return `<div class="chipblock"><div class="glass"><div class="in chiprow">
+    <div class="chip">${a.label}</div><div class="spacer"></div><div class="why">${a.why}</div>
+  </div></div></div>`;
+}
+
+let weekTab = 'debt';
+function barColor(h){ if (h <= 2) return TONE.green; if (h <= 3.5) return TONE.amber; return TONE.rose; }
+
+function weekCard(){
+  const rows = weekTab === 'debt' ? S.week.debt : S.week.hours;
+  const vals = rows.map(r => r[1]).filter(v => v != null);
+  const peak = vals.length ? Math.max(...vals) : 1;
+  const bars = rows.map(([d, h]) => {
+    if (h == null){
+      return `<div class="barcol"><div class="barval">—</div>
+        <div class="bar" style="height:10px;background:rgba(255,255,255,.18)"></div>
+        <div class="barday">${d}</div></div>`;
+    }
+    const px = Math.min(56, Math.max(8, (h / peak) * 56));
+    const c = weekTab === 'debt' ? barColor(h) : TONE.cyan;
+    return `<div class="barcol"><div class="barval">${h.toFixed(1)}</div>
+      <div class="bar" style="height:${px.toFixed(1)}px;background:${c};box-shadow:0 0 10px ${c}66"></div>
+      <div class="barday">${d}</div></div>`;
+  }).join('');
+
+  return `<div class="weekblock"><div class="glass"><div class="in week">
+    <div class="weekhead">
+      <div class="eyegrey">THIS WEEK</div>
+      <div class="segmented">
+        <div class="segbtn${weekTab === 'debt' ? ' on' : ''}" data-tab="debt">Debt</div>
+        <div class="segbtn${weekTab === 'hours' ? ' on' : ''}" data-tab="hours">Hours asleep</div>
+      </div>
+    </div>
+    <div class="bars">${bars}</div>
+    <div class="rule"></div>
+    <div class="recaphead" id="recaphead">
+      <div class="recaptitle">Aria’s recap</div>
+      <div style="color:rgba(255,255,255,.35);font-size:13px">▾</div>
+    </div>
+    <div class="recap">${S.aria.full}</div>
+  </div></div></div>`;
+}
+
+function debtSheet(){
+  const d = S.debtSheet;
+  return `<div class="sheet${sheetKey === 'debt' ? ' show' : ''}" id="sheet-debt">
+    <div class="grabber"></div>
+    <div class="sheethead"><div class="sheeteye">Sleep debt</div><div class="done">Done</div></div>
+    <div class="sheetbody">
+      <div class="toprow">
+        <div class="bignum"><div class="n">${S.hero.value}</div><div class="u">${S.hero.unit}</div></div>
+        ${d.score ? `<div class="scorewrap"><div class="scoreeye">SCORE</div><div class="score">${d.score}</div></div>` : ''}
+      </div>
+      ${d.estimate ? `<div class="estimate">${d.estimate}</div>` : ''}
+      ${d.coverage ? `<div class="foottxt" style="margin-top:4px">${d.coverage}</div>` : ''}
+      ${d.payoff ? `<div class="payoff">${d.payoff}</div>` : ''}
+      <div class="sheetbodytxt">${d.body}</div>
+      ${d.parts.length ? `<div class="glass parts"><div class="in">
+        <div class="partstitle">WHAT MAKES THE SCORE</div>
+        ${d.parts.map(([l, pct, pts, c]) => `<div class="partrow">
+          <div class="partlbl">${l}</div>
+          <div class="track"><div class="fill" style="width:${(pct*100).toFixed(0)}%;background:${c};box-shadow:0 0 6px ${c}99"></div></div>
+          <div class="partpts">${pts}</div></div>`).join('')}
+      </div></div>` : ''}
+      <div class="sheetrule"></div>
+      <div class="linkrow"><div class="linktxt">How we estimate debt</div>
+        <div style="color:rgba(255,255,255,.35)">›</div></div>
+      <div class="sheetrule" style="margin-top:0"></div>
+      <div style="height:120px"></div>
+    </div>
+    <div class="sheetfoot"><div class="foottxt">${d.footer}</div><div class="refresh">Refresh</div></div>
+  </div>`;
+}
+
+function nightSheet(){
+  const n = S.nightSheet;
+  return `<div class="sheet${sheetKey === 'night' ? ' show' : ''}" id="sheet-night">
+    <div class="grabber"></div>
+    <div class="sheethead"><div class="sheeteye cyan">Last night</div><div class="done">Done</div></div>
+    <div class="sheetbody">
+      <div class="nightdur">${n.duration}</div>
+      ${n.clocks ? `<div class="nightclocks">${n.clocks}</div>` : ''}
+      ${n.empty ? `<div class="sheetbodytxt">${n.empty}</div>` : ''}
+      <div class="sourcerow">
+        <div class="sourcepill">${n.source}</div>
+        ${n.confidence ? `<div class="confidence">${n.confidence}</div>` : ''}
+      </div>
+      <div class="glass editcard"><div class="in">
+        <div class="editrow"><div class="l"><div class="rowlbl">Fell asleep</div><div class="rowval">${n.bed}</div></div>
+          <div class="nudge">−30m</div><div class="nudge">+30m</div></div>
+        <div class="editrule"></div>
+        <div class="editrow"><div class="l"><div class="rowlbl">Woke up</div><div class="rowval">${n.wake}</div></div>
+          <div class="nudge">−30m</div><div class="nudge">+30m</div></div>
+        <div class="editrule"></div>
+        <div class="plainrow"><div class="rowlbl">Naps</div><div class="action">${n.nap}</div></div>
+        <div class="editrule"></div>
+        <div class="plainrow"><div class="rowlbl">Split night</div><div class="switch"><i></i></div></div>
+      </div></div>
+      <div style="height:90px"></div>
+    </div>
+    <div class="primarybtn">${n.confirm}</div>
+  </div>`;
+}
+
+function render(){
+  document.getElementById('frame').innerHTML = `
+    <div class="sky"><div class="g1"></div><div class="g2"></div>${stars()}</div>
+    <div class="screen">
+      <div class="statusbar">
+        <div class="time">${S.clock}</div>
+        <div class="notch"></div>
+        <div class="sbicons">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="#fff"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".4"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="rgba(255,255,255,.5)"/><rect x="2" y="2" width="18" height="8" rx="2" fill="#fff"/><rect x="23" y="4" width="1.5" height="4" rx=".7" fill="rgba(255,255,255,.5)"/></svg>
+        </div>
+      </div>
+      <div class="topchrome"><div class="header">
+        <div class="htitle">
+          <div class="greeting">${S.header.greeting}, ${S.header.name}</div>
+          <div class="hdate">${S.header.date}</div>
+        </div>
+        <div class="avatar"><i>${S.header.letter}</i></div>
+      </div></div>
+      <div class="scroll" id="scroll">
+        <div class="heroblock">${dial()}</div>
+        ${pills()}
+        <div class="ariablock">
+          <div class="ariaeye">ARIA</div>
+          <div class="arialine">${S.aria.line}</div>
+        </div>
+        ${strip()}
+        ${chip()}
+        ${weekCard()}
+        <div style="height:80px"></div>
+      </div>
+      <div class="dock">
+        <div class="askbar"><div class="askorb"></div><div class="asktxt">Ask Aria</div></div>
+        <div class="homebar"><i></i></div>
+      </div>
+    </div>
+    <div class="backdrop${sheetKey ? ' show' : ''}"></div>
+    ${debtSheet()}
+    ${nightSheet()}
+  `;
+
+  document.querySelectorAll('.segbtn').forEach((el) => {
+    el.addEventListener('click', () => { weekTab = el.dataset.tab; render(); });
+  });
+  const orb = document.querySelector('.orbtext');
+  if (orb) orb.addEventListener('click', () => go({ sheet:'debt' }));
+  const st = document.querySelector('.strip');
+  if (st) st.addEventListener('click', () => go({ sheet:'night' }));
+  document.querySelectorAll('.done, .backdrop').forEach((el) => {
+    el.addEventListener('click', () => go({ sheet:null }));
+  });
+}
+
+function go(patch){
+  const p = new URLSearchParams(location.search);
+  Object.entries(patch).forEach(([k, v]) => { if (v == null) p.delete(k); else p.set(k, v); });
+  location.search = p.toString();
+}
+
+function switcher(){
+  const el = document.getElementById('switcher');
+  if (clean){ el.classList.add('hide'); return; }
+  const link = (label, qs, on) => `<a class="${on ? 'on' : ''}" href="?${qs}">${label}</a>`;
+  el.innerHTML = [
+    link('Morning', 'state=morning', stateKey === 'morning' && !sheetKey),
+    link('High debt', 'state=high-debt', stateKey === 'high-debt' && !sheetKey),
+    link('First day', 'state=day1', stateKey === 'day1' && !sheetKey),
+    link('Debt sheet', `state=${stateKey}&sheet=debt`, sheetKey === 'debt'),
+    link('Night sheet', `state=${stateKey}&sheet=night`, sheetKey === 'night'),
+    link('Clean', `state=${stateKey}${sheetKey ? `&sheet=${sheetKey}` : ''}&clean=1`, false),
+  ].join('');
+}
+
+function fit(){
+  const frame = document.getElementById('frame');
+  const stage = document.getElementById('stage');
+  // On a phone the frame fills the screen and the switcher floats over it;
+  // on desktop it gets its own strip under the frame.
+  const padBottom = (clean || window.innerWidth < 520) ? 0 : 56;
+  const s = Math.min(window.innerWidth / 393, (window.innerHeight - padBottom) / 852, 1);
+  frame.style.transform = `scale(${s})`;
+  stage.style.width = `${393 * s}px`;
+  stage.style.height = `${852 * s}px`;
+  stage.style.marginBottom = `${padBottom}px`;
+}
+
+render();
+switcher();
+fit();
+window.addEventListener('resize', fit);
+</script>
+</body>
+</html>
