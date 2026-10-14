@@ -135,15 +135,25 @@ body.full .scroll { overflow: visible; }
 .energyCard { padding-top: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.42); }
 .caption { font-size: 13px; line-height: 19px; color: var(--inkSecondary); }
 
-/* Last night has no card at all now: one quiet tappable line at the foot of
-   the hero, under a hairline. Everything else is one tap away in the sheet. */
-.lastLineWrap { align-self: stretch; width: 100%; margin-top: 18px; padding-top: 12px;
-  border-top: 0.5px solid var(--divider); }
-.lastLine { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; }
-.lastLineText { flex-shrink: 1; min-width: 0; font-size: 12.5px; line-height: 18px; color: var(--inkTertiary);
+/* Last night is the debt's partner stat, not a footnote: a faintly teal
+   tappable panel at the foot of the hero — its own border is the separation,
+   so no hairline above it — with a big mono duration, the clocks under it and
+   a chevron on the right. Everything else is one tap away in the sheet. */
+.lastLineWrap { align-self: stretch; width: 100%; margin-top: 20px; }
+.lastLine { display: flex; align-items: center; gap: 6px; padding: 13px 14px; border-radius: 18px;
+  border: 0.8px solid rgba(34,211,238,0.24); background: rgba(34,211,238,0.06); }
+/* Nothing logged yet: same geometry, none of the glow. */
+.lastLineFlat { border-color: var(--border); background: rgba(255,255,255,0.04); }
+/* The chevron is 16px + 6px gap, so the body carries that much padding on the
+   other side to keep the duration optically centred in the panel. */
+.lastLineBody { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; padding-left: 22px; }
+.lastLineText { max-width: 100%; font-size: 12.5px; line-height: 18px; color: var(--inkTertiary); margin-top: 5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lastLineLabel { font-weight: 500; color: var(--inkSecondary); }
-.lastLineVal { font-family: 'JetBrains Mono'; font-weight: 600; font-size: 13px; color: var(--cyan); }
+.lastLineLabel { font-weight: 600; font-size: 10px; line-height: 14px; letter-spacing: 1.6px;
+  text-transform: uppercase; color: var(--inkSecondary); text-align: center; }
+.lastLineVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 32px; line-height: 37px;
+  letter-spacing: -1.5px; color: var(--cyan); margin-top: 5px; text-shadow: 0 0 14px rgba(34,211,238,0.38); }
+.lastLineValEmpty { color: var(--faint); text-shadow: none; }
 /* The sheet head: the provenance chip, the clocks line and Looks right. */
 .sheetHeader { margin-bottom: 14px; }
 .sheetHeaderRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -160,7 +170,6 @@ body.full .scroll { overflow: visible; }
 .editToggle { margin-top: 14px; padding: 4px 0; font-weight: 600; font-size: 13px; color: var(--cyan); display: inline-block; }
 
 .btnRow { display: flex; gap: 10px; margin-top: 16px; }
-.lastLine { font-size: 13px; line-height: 19px; color: var(--inkSecondary); margin-top: 2px; }
 /* Aria brief + More toggle */
 .ariaDetail { font-size: 13px; line-height: 20px; color: var(--inkSecondary); margin-top: 12px; }
 .moreToggle { margin-top: 10px; padding: 4px 0; min-height: 28px; display: inline-flex; align-items: center;
@@ -383,6 +392,12 @@ const STATES = {
       lastNight: { tail: '11:42p – 6:34a' },
       energy: { openBlock: 'peak' },
     },
+    v5: {
+      // Fifth polish pass (Harish: "sleep duration should be highlighted — it
+      // is the most important for many"). lastNightDurationLabel +
+      // lastNightLineTail, now the hero's second number instead of a footnote.
+      lastNight: { value: '6h 52m', tail: '11:42p – 6:34a', hasDuration: true },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -487,6 +502,12 @@ const STATES = {
       lastNight: { tail: '1:05a – 6:35a' },
       energy: { openBlock: 'peak' },
     },
+    v5: {
+      // Fifth polish pass (Harish: "sleep duration should be highlighted — it
+      // is the most important for many"). lastNightDurationLabel +
+      // lastNightLineTail, now the hero's second number instead of a footnote.
+      lastNight: { value: '5h 30m', tail: '1:05a – 6:35a', hasDuration: true },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -590,6 +611,12 @@ const STATES = {
       // quiet line, Energy rich). activeLegendWindow(9) → the morning peak.
       lastNight: { tail: '11:48p – 6:32a' },
       energy: { openBlock: 'peak' },
+    },
+    v5: {
+      // Fifth polish pass (Harish: "sleep duration should be highlighted — it
+      // is the most important for many"). lastNightDurationLabel +
+      // lastNightLineTail, now the hero's second number instead of a footnote.
+      lastNight: { value: '6h 44m', tail: '11:48p – 6:32a', hasDuration: true },
     },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
@@ -876,16 +903,21 @@ function heroHtml(s) {
   </div>`;
 }
 
-// Last night has no card face any more — one quiet tappable line at the foot
-// of the hero. The duration, the clocks and a chevron: that is the whole of
-// it. Everything that used to sit out here (Looks right, Edit, the chip) is
-// in the sheet this line opens.
+// Last night has no card face any more — one tappable panel at the foot of
+// the hero, carrying the duration at nearly the debt's weight: a small label,
+// the big teal number, the clocks and a chevron. Everything that used to sit
+// out here (Looks right, Edit, the chip) is in the sheet it opens.
 function lastNightLineHtml(s) {
   const n = s.lastNight;
-  const v = s.v4.lastNight;
-  return `<div class="lastLineWrap"><div class="lastLine">
-    <div class="lastLineText"><span class="lastLineLabel">${esc(n.eyebrow)}</span>&nbsp;&nbsp;<span class="lastLineVal">${n.value}</span> · ${esc(v.tail)}</div>
-    <span class="ion" style="font-size:13px;color:var(--faint)">${ION.chevron}</span>
+  const v = s.v5.lastNight;
+  const empty = !v.hasDuration;
+  return `<div class="lastLineWrap"><div class="lastLine${empty ? ' lastLineFlat' : ''}">
+    <div class="lastLineBody">
+      <div class="lastLineLabel">${esc(n.eyebrow)}</div>
+      <div class="lastLineVal${empty ? ' lastLineValEmpty' : ''}">${esc(v.value)}</div>
+      ${v.tail ? `<div class="lastLineText">${esc(v.tail)}</div>` : ''}
+    </div>
+    <span class="ion" style="font-size:16px;color:var(--faint)">${ION.chevron}</span>
   </div></div>`;
 }
 
