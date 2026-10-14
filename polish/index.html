@@ -122,7 +122,7 @@ body.full .scroll { overflow: visible; }
 .soloBody { display: flex; flex-direction: row; align-items: center; gap: 12px; }
 .soloMeta { display: flex; flex-direction: column; gap: 1px; }
 .soloHead { display: flex; align-items: center; gap: 5px; }
-.soloBandWord { font-weight: 600; font-size: 14px; line-height: 18px; letter-spacing: -0.1px; }
+.soloBandWord { font-weight: 600; font-size: 14px; line-height: 18px; letter-spacing: -0.1px; color: var(--ink); }
 .ring { position: relative; width: 48px; height: 48px; flex: 0 0 auto; }
 .ringLabel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 .ringVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 20px; line-height: 24px; letter-spacing: -1px; color: var(--ink); }
@@ -948,9 +948,9 @@ function orbHtml(s) {
    src/components/glass/DebtOrbHero.tsx. 80+ teal, 60-79 amber, below 60 coral;
    a missing score draws the bare track and a dash. */
 const SCORE_BANDS = [
-  { min: 80, word: 'Good', color: '#22d3ee', tint: 'rgba(34,211,238,0.1)' },
-  { min: 60, word: 'Fair', color: '#fbbf24', tint: 'rgba(251,191,36,0.1)' },
-  { min: 0, word: 'Low', color: '#fb7185', tint: 'rgba(251,113,133,0.1)' },
+  { min: 80, word: 'Good', color: '#38BDF8', tint: 'rgba(129,140,248,0.1)' },
+  { min: 60, word: 'Fair', color: '#38BDF8', tint: 'rgba(129,140,248,0.1)' },
+  { min: 0, word: 'Low', color: '#38BDF8', tint: 'rgba(129,140,248,0.1)' },
 ];
 const RING_SIZE = 48, RING_STROKE = 4.5;
 const RING_R = (RING_SIZE - RING_STROKE) / 2;
@@ -971,9 +971,8 @@ function scoreRingHtml(o) {
   return `<div class="ring">
     <svg width="${RING_SIZE}" height="${RING_SIZE}">
       <defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
-        <stop offset="40%" stop-color="${stroke}"/>
-        <stop offset="100%" stop-color="${stroke}"/>
+        <stop offset="0%" stop-color="${stroke}"/>
+        <stop offset="100%" stop-color="${band ? '#818CF8' : stroke}"/>
       </linearGradient></defs>
       <circle cx="${RING_MID}" cy="${RING_MID}" r="${RING_R}" stroke="rgba(255,255,255,0.1)" stroke-width="${RING_STROKE}" fill="none"/>
       ${filled > 0 ? `<circle cx="${RING_MID}" cy="${RING_MID}" r="${RING_R}" stroke="url(#${gid})"
@@ -1009,7 +1008,7 @@ function heroHtml(s) {
               <span class="label">Sleep score</span>
               <span class="ion" style="font-size:12px;color:var(--inkTertiary)">${ION.info}</span>
             </div>
-            ${band ? `<div class="soloBandWord" style="color:${band.color}">${band.word}</div>` : ''}
+            ${band ? `<div class="soloBandWord">${band.word}</div>` : ''}
             ${scoreNote ? `<div class="tileNote">${esc(scoreNote)}</div>` : ''}
           </div>
         </div></div>
