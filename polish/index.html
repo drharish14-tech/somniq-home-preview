@@ -111,8 +111,15 @@ body.full .scroll { overflow: visible; }
 
 /* stacked metric tiles under the orb */
 .tileRow { display: flex; gap: 10px; width: 100%; margin-top: 16px; }
+/* Last night moved out of the hero, so the score tile goes solo: a centred
+   capsule, not a half-width box with a hole beside it. */
+.tileRowSolo { justify-content: center; margin-top: 18px; }
 .tile { flex: 1; border-radius: 16px; border: 0.63px solid var(--border); background: rgba(255,255,255,0.05); padding: 12px 14px; }
+.tileSolo { flex: 0 0 auto; border-radius: 999px; padding: 9px 16px; }
 .tileBody { display: flex; flex-direction: column; gap: 6px; }
+.soloBody { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+.soloRow { display: flex; align-items: center; gap: 8px; }
+.soloVal { font-family: 'JetBrains Mono'; font-weight: 600; font-size: 19px; line-height: 23px; letter-spacing: -0.4px; color: var(--ink); }
 .tileHead { display: flex; align-items: center; gap: 4px; }
 .tileVal { font-family: 'JetBrains Mono'; font-weight: 600; font-size: 20px; line-height: 24px; letter-spacing: -0.6px; color: var(--ink); }
 .tileValCyan { color: var(--cyan); }
@@ -125,10 +132,22 @@ body.full .scroll { overflow: visible; }
 
 /* ---- cards ---- */
 .card { padding: 20px; margin-bottom: 16px; }
+.energyCard { padding-top: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.42); }
 .caption { font-size: 13px; line-height: 19px; color: var(--inkSecondary); }
 
-.lastHead { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.lastNightVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 26px; line-height: 30px; letter-spacing: -0.8px; color: var(--cyan); margin-top: 6px; text-shadow: 0 0 6px rgba(34,211,238,0.35); }
+/* The one Last night row, right under Energy: eyebrow + source chip, then
+   the duration with Looks right / Edit beside it, then the quiet clocks
+   line. ~110px against the old card's ~220 — same elements, half the height. */
+.lastRow { padding: 14px 16px; margin-bottom: 16px; }
+.lastHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.lastMain { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lastActions { display: flex; align-items: center; gap: 8px; }
+.lastRowLine { font-size: 12.5px; line-height: 18px; color: var(--inkSecondary); margin-top: 8px; }
+.slimPrimaryBtn { background: rgba(255,255,255,0.95); border-radius: 12px; padding: 9px 14px; min-height: 36px;
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12.5px; letter-spacing: -0.1px; color: #000; white-space: nowrap; }
+.slimGhostBtn { background: rgba(255,255,255,0.06); border: 0.73px solid var(--border); border-radius: 12px; padding: 9px 14px; min-height: 36px;
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 500; font-size: 12.5px; letter-spacing: -0.1px; color: var(--inkSecondary); white-space: nowrap; }
+.lastNightVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 26px; line-height: 30px; letter-spacing: -0.8px; color: var(--cyan); text-shadow: 0 0 6px rgba(34,211,238,0.35); }
 .pill { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 100px; border: 1px solid; font-weight: 600; font-size: 10px; line-height: 13px; letter-spacing: 0.6px; }
 .pill.glow { box-shadow: 0 0 16px rgba(251,191,36,0.4); }
 
@@ -142,6 +161,26 @@ body.full .scroll { overflow: visible; }
 .ariaDetail { font-size: 13px; line-height: 20px; color: var(--inkSecondary); margin-top: 12px; }
 .moreToggle { margin-top: 10px; padding: 4px 0; min-height: 28px; display: inline-flex; align-items: center;
   font-weight: 600; font-size: 13px; color: var(--violet); }
+/* Aria, small and cute: one row, 68px tall (avatar + one line + More) */
+.ariaMini { padding: 14px 16px; margin-bottom: 16px; min-height: 68px; display: flex; align-items: center; }
+.ariaMiniRow { display: flex; align-items: center; gap: 12px; width: 100%; }
+.ariaMiniCol { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.ariaMiniTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ariaMiniEye { font-weight: 600; font-size: 10px; line-height: 14px; letter-spacing: 1.6px;
+  text-transform: uppercase; color: var(--violet); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ariaMiniLine { font-weight: 500; font-size: 13.5px; line-height: 19px; letter-spacing: -0.1px;
+  color: rgba(255,255,255,0.92); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ariaMorePill { display: inline-flex; align-items: center; gap: 2px; padding: 4px 9px; border-radius: 999px;
+  border: 0.73px solid rgba(167,139,250,0.38); background: rgba(167,139,250,0.12);
+  font-weight: 600; font-size: 12px; color: var(--violet); white-space: nowrap; }
+.ariaOrb34 { position: relative; width: 34px; height: 34px; border-radius: 50%; flex: none;
+  background: conic-gradient(from 90deg, #a78bfa, #22d3ee, #ec4899, #a78bfa); display: flex; align-items: center; justify-content: center; }
+.ariaOrb34 .core { width: 27px; height: 27px; border-radius: 50%; background: #000; display: flex;
+  align-items: center; justify-content: center; font-weight: 700; font-size: 13.6px; }
+/* The sheet More opens: same sheet language as Edit last night, violet Done */
+.ariaSheetDone { font-weight: 600; font-size: 14px; color: var(--violet); padding: 6px 4px; }
+.ariaSheetBody { padding: 8px 20px 36px; }
+
 /* Edit sheet (LastNightEditor variant="sheet") */
 .sheetWrap { position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; justify-content: flex-end;
   background: rgba(0,0,0,0.55); }
@@ -238,7 +277,9 @@ body.full .tabWrap { position: relative; left: 0; right: 0; bottom: 0; margin: 8
    localMorningDebrief, scoreNeedMet, layoutTrendBars, formatDuration …)
    from src/ with the sample inputs noted per state. No invented copy.
 
-   `v2` on each state is the second polish pass (Harish's three notes):
+   `v3` on each state is the third polish pass (Energy on top, a one-line Aria
+   card, no engine vocabulary anywhere a sleeper can read it). `v2` on each
+   state is the second polish pass (Harish's three notes):
    buildingStatusLine / debtHeroExplanation after the "Getting more accurate"
    rewrite, lastNightSourceLine + lastNightSheetInfoLine for the Last night
    card and its Edit sheet, and localMorningBrief / homeDebriefView for the
@@ -272,7 +313,7 @@ const STATES = {
       lastUpdated: null,
       cta: null,
       payoff: 'Sun, Nov 8',
-      explanation: 'You’re only a little behind, so your energy should hold up well today. Last night is in the 14-night set.',
+      explanation: 'Acute 14-night debt is under about five hours — Energy stays high. Last night is in the 14-night set.',
     },
     orb: {
       durationLabel: '6h 52m', showDuration: true,
@@ -299,7 +340,7 @@ const STATES = {
       status: 'Getting more accurate · 11 of 14 nights',
       // debtHeroExplanation energyNote = energyDebtLead(1.8): the hero no
       // longer repeats "Last night is in the 14-night set." under the status.
-      explanation: 'You’re only a little behind, so your energy should hold up well today.',
+      explanation: 'Acute 14-night debt is under about five hours — Energy stays high.',
       lastNight: {
         // lastNightSourceLine({ clocks, chip: 'Auto' })
         line: '11:42p – 6:34a · from phone motion',
@@ -317,6 +358,29 @@ const STATES = {
         brief: "Short night, 6h 52m. You're about 2 hours behind, so today should feel steady. Last coffee by 2:30pm today.",
         more: 'More',
       },
+    },
+    v3: {
+      // Third polish pass (Harish: "Energy should be on top bro! Aria should be
+      // very small and cute"). Energy leads Home, the Aria card is one line and
+      // a More affordance, and the engine vocabulary is gone from every string
+      // a sleeper can read.
+      // debtHeroExplanation({ energyNote: energyDebtLead(debt) }) / DEBT_SHARPENS_LINE
+      explanation: "You’re only a little behind, so your energy should hold up well today.",
+      aria: {
+        // debriefHeadline(localMorningBrief(...)) — the one line on the card
+        headline: "Short night, 6h 52m.",
+        // localMorningBrief(...) — the whole brief, at the top of the sheet
+        brief: "Short night, 6h 52m. You're about 2 hours behind, so today should feel steady. Last coffee by 2:30pm today.",
+        // localMorningDebrief(...) — the detail, under it in the sheet
+        detail: "Last night 6h 52m. Sleep debt is 1.8h — you're about 2 hours behind across 11 trusted nights. Last night is already counted. Energy is 78% because you're about 2 hours behind on sleep (1.8h) — not much left to catch up. Your need: 8h 0m Source: Auto. One cutoff at 2:30 PM fitted to your schedule. It does not recalculate debt or Energy.",
+        title: 'Morning debrief',
+        more: 'More',
+      },
+      // Sample cloud replies, de-jargoned the same way the helpers were.
+      chat: [
+      { role: "user", content: "Why is my energy 78 if I slept under 7 hours?" },
+      { role: "assistant", content: "Energy index (estimate) maps how far behind you are on sleep, not last night alone. You're about 2 hours behind (1.8h), so the index stays high even after a 6h 52m night." },
+      ],
     },
     energy: { known: true, pct: '78', band: 'HIGH ENERGY', title: 'Right now', pill: PEAK_PILL },
     trend: [
@@ -349,7 +413,7 @@ const STATES = {
       lastUpdated: null,
       cta: null,
       payoff: 'Tue, Jan 26',
-      explanation: 'You’re quite far behind. A few earlier nights will lift your energy. Last night is in the 14-night set.',
+      explanation: 'Pay acute 14-night debt toward under five hours to lift Energy. Last night is in the 14-night set.',
     },
     orb: {
       durationLabel: '5h 30m', showDuration: true,
@@ -375,7 +439,7 @@ const STATES = {
       // 14 of 14 nights: debtBuildingLabel returns null, so the recovered line stays
       status: '↓ 0.4h recovered this week',
       // energyDebtLead(6.0)
-      explanation: 'You’re quite far behind. A few earlier nights will lift your energy.',
+      explanation: 'Pay acute 14-night debt toward under five hours to lift Energy.',
       lastNight: {
         line: '1:05a – 6:35a · from phone motion',
         primary: 'Looks right',
@@ -392,6 +456,29 @@ const STATES = {
         brief: "Short night, 5h 30m. You're about 6 hours behind, so expect a dip after lunch. Get to bed by 12am tonight.",
         more: 'More',
       },
+    },
+    v3: {
+      // Third polish pass (Harish: "Energy should be on top bro! Aria should be
+      // very small and cute"). Energy leads Home, the Aria card is one line and
+      // a More affordance, and the engine vocabulary is gone from every string
+      // a sleeper can read.
+      // debtHeroExplanation({ energyNote: energyDebtLead(debt) }) / DEBT_SHARPENS_LINE
+      explanation: "You’re quite far behind. A few earlier nights will lift your energy.",
+      aria: {
+        // debriefHeadline(localMorningBrief(...)) — the one line on the card
+        headline: "Short night, 5h 30m.",
+        // localMorningBrief(...) — the whole brief, at the top of the sheet
+        brief: "Short night, 5h 30m. You're about 6 hours behind, so expect a dip after lunch. Get to bed by 12am tonight.",
+        // localMorningDebrief(...) — the detail, under it in the sheet
+        detail: "Last night 5h 30m. Sleep debt is 6.0h — you're about 6 hours behind across 14 trusted nights. Last night is already counted. Energy is 44% because you're about 6 hours behind on sleep (6.0h) — not because last night was short on its own. Your need: 8h 0m Source: Auto. You're about 6 hours behind on sleep (6.0h) and last night was 5h 30m. One earlier bed is the habit — it does not recalculate debt or Energy.",
+        title: 'Morning debrief',
+        more: 'More',
+      },
+      // Sample cloud replies, de-jargoned the same way the helpers were.
+      chat: [
+      { role: "user", content: "Can I clear 6 hours of debt this weekend?" },
+      { role: "assistant", content: "Not in two nights — the number only moves as far as the extra sleep you actually bank. One earlier bed at 12am, repeated, is what moves it." },
+      ],
     },
     energy: { known: true, pct: '44', band: 'GROGGY', title: 'Right now', pill: PEAK_PILL },
     trend: [
@@ -467,6 +554,28 @@ const STATES = {
         brief: "Short night, 6h 44m (estimated). You're about 3 hours behind, so the afternoon may feel soft. Last coffee by 2:30pm today.",
         more: 'More',
       },
+    },
+    v3: {
+      // Third polish pass (Harish: "Energy should be on top bro! Aria should be
+      // very small and cute"). Energy leads Home, the Aria card is one line and
+      // a More affordance, and the engine vocabulary is gone from every string
+      // a sleeper can read.
+      // debtHeroExplanation({ energyNote: energyDebtLead(debt) }) / DEBT_SHARPENS_LINE
+      explanation: "Your number sharpens a little with each night we see.",
+      aria: {
+        // debriefHeadline(localMorningBrief(...)) — the one line on the card
+        headline: "Short night, 6h 44m (estimated).",
+        // localMorningBrief(...) — the whole brief, at the top of the sheet
+        brief: "Short night, 6h 44m (estimated). You're about 3 hours behind, so the afternoon may feel soft. Last coffee by 2:30pm today.",
+        // localMorningDebrief(...) — the detail, under it in the sheet
+        detail: "Last night estimated 6h 44m. Sleep debt is 3.1h — you're about 3 hours behind across 1 night (provisional). Last night is already counted. Energy is 65% because you're about 3 hours behind on sleep (3.1h) — not much left to catch up. Your need: 8h 0m Source: estimated from your phone. It already counts toward your debt; edit the times if they look wrong. One cutoff at 2:30 PM fitted to your schedule. It does not recalculate debt or Energy.",
+        title: 'Morning debrief',
+        more: 'More',
+      },
+      // Sample cloud replies, de-jargoned the same way the helpers were.
+      chat: [
+
+      ],
     },
     energy: { known: true, pct: '65', band: 'DIP', title: 'Provisional', pill: PEAK_PILL },
     trend: [
@@ -628,7 +737,7 @@ function orbHtml(s) {
 
 function heroHtml(s) {
   const o = s.orb;
-  const explanation = s.v2.explanation;
+  const explanation = s.v3.explanation;
   const pace = s.hero.payoff
     ? `Debt-free by <span class="paceStrong">${s.hero.payoff}</span>. ${esc(explanation)}`
     : esc(explanation);
@@ -640,14 +749,13 @@ function heroHtml(s) {
         <div class="heroInfoBtn"><span class="ion" style="font-size:16px;color:var(--inkTertiary)">${ION.info}</span></div>
       </div>
       ${orbHtml(s)}
-      <div class="tileRow">
-        <div class="tile"><div class="tileBody">
-          <div class="label">Last night</div>
-          <div class="tileVal tileValCyan">${o.durationLabel}</div>
-        </div></div>
-        <div class="tile"><div class="tileBody">
-          <div class="tileHead"><span class="label">Score</span><span class="ion" style="font-size:13px;color:var(--inkTertiary)">${ION.info}</span></div>
-          <div class="tileVal">${o.scoreLabel}</div>
+      <div class="tileRow tileRowSolo">
+        <div class="tile tileSolo"><div class="soloBody">
+          <div class="soloRow">
+            <span class="label">Score</span>
+            <span class="ion" style="font-size:12px;color:var(--inkTertiary)">${ION.info}</span>
+            <span class="soloVal">${o.scoreLabel}</span>
+          </div>
           ${o.scoreNote ? `<div class="tileNote">${esc(o.scoreNote)}</div>` : ''}
         </div></div>
       </div>
@@ -657,26 +765,28 @@ function heroHtml(s) {
   </div>`;
 }
 
+// Last night's ONE home: a slim row right under Energy. The duration is
+// still the big number, the quiet lastNightSourceLine sits under it, and
+// Looks right / Edit keep their old actions — Edit opens the same sheet.
+// The hero no longer repeats the duration (durationTile={false}).
 function lastNightHtml(s) {
   const n = s.lastNight;
   const v = s.v2.lastNight;
-  // Card face: the duration big, one quiet line, then Looks right / Edit.
-  // Add nap, ±30m and the time editor moved into the sheet Edit opens.
-  return `<div class="glass card ${n.tone}">
+  return `<div class="glass lastRow ${n.tone}">
     <div class="sheen"></div>${n.highlight ? '<div class="hl"></div>' : ''}
     <div class="gcontent">
       <div class="lastHead">
-        <div>
-          <div class="label">${esc(n.eyebrow)}</div>
-          <div class="lastNightVal">${n.value}</div>
-        </div>
+        <div class="label">${esc(n.eyebrow)}</div>
         ${pill(n.pill.label, n.pill.color, false)}
       </div>
-      <div class="lastLine">${esc(v.line)}</div>
-      <div class="btnRow">
-        <span class="primaryBtn">${esc(v.primary)}</span>
-        <span class="ghostBtn">${esc(v.secondary)}</span>
+      <div class="lastMain">
+        <div class="lastNightVal">${n.value}</div>
+        <div class="lastActions">
+          <span class="slimPrimaryBtn">${esc(v.primary)}</span>
+          <span class="slimGhostBtn">${esc(v.secondary)}</span>
+        </div>
       </div>
+      <div class="lastRowLine">${esc(v.line)}</div>
     </div>
   </div>`;
 }
@@ -700,24 +810,53 @@ function editSheetHtml(s) {
   </div>`;
 }
 
+// Aria's card face: the avatar, ONE line, and a small More affordance.
+// Everything that used to print here lives in ariaSheetHtml below.
 function ariaHtml(s) {
-  const a = s.aria;
-  return `<div class="glass card violet">
-    <div class="sheen"></div>
+  const v = s.v3.aria;
+  return `<div class="glass ariaMini violet">
+    <div class="sheen"></div><div class="hl"></div>
     <div class="gcontent">
-      <div class="ariaHead">
-        <div class="ariaOrb"><div class="ariaOrbCore">A</div></div>
-        <div class="ariaName">Aria</div>
-        <div class="label">${esc(a.eye)}</div>
-        <div class="spacer"></div>
-        <div class="ariaTime">${a.time}</div>
+      <div class="ariaMiniRow">
+        <div class="ariaOrb34"><div class="core">A</div></div>
+        <div class="ariaMiniCol">
+          <div class="ariaMiniTop">
+            <div class="ariaMiniEye">ARIA · THIS MORNING</div>
+            <div class="ariaMorePill">${esc(v.more)}<span class="ion" style="font-size:11px">${ION.chevron}</span></div>
+          </div>
+          <div class="ariaMiniLine">${esc(v.headline)}</div>
+        </div>
       </div>
-      <div class="ariaBody">${esc(s.v2.aria.brief)}</div>
-      ${qsMore() ? `<div class="ariaDetail">${esc(a.body)}</div>` : ''}
-      <div class="moreToggle">${qsMore() ? 'Less' : esc(s.v2.aria.more)}</div>
-      <div class="btnRow">
-        <span class="primaryBtn">${esc(a.primary)}</span>
-        ${a.ghosts.map((g) => `<span class="ghostBtn">${esc(g)}</span>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ?more=1 — the sheet More opens: the full brief, the detail, and the
+// Remind me / Why this? actions. Nothing from the old card was dropped.
+function ariaSheetHtml(s) {
+  const a = s.aria;
+  const v = s.v3.aria;
+  return `<div class="sheetWrap">
+    <div class="sheet">
+      <div class="grabber"></div>
+      <div class="sheetHead">
+        <div class="sheetTitle">${esc(v.title)}</div>
+        <div class="ariaSheetDone">Done</div>
+      </div>
+      <div class="ariaSheetBody">
+        <div class="ariaHead">
+          <div class="ariaOrb"><div class="ariaOrbCore">A</div></div>
+          <div class="ariaName">Aria</div>
+          <div class="label">${esc(a.eye)}</div>
+          <div class="spacer"></div>
+          <div class="ariaTime">${a.time}</div>
+        </div>
+        <div class="ariaBody">${esc(v.brief)}</div>
+        <div class="ariaDetail">${esc(v.detail)}</div>
+        <div class="btnRow">
+          <span class="primaryBtn">${esc(a.primary)}</span>
+          ${a.ghosts.map((g) => `<span class="ghostBtn">${esc(g)}</span>`).join('')}
+        </div>
       </div>
     </div>
   </div>`;
@@ -753,9 +892,11 @@ function waveHtml(muted) {
   </svg>`;
 }
 
+// Energy leads Home now — same score, curve and Peak pill, one step more
+// glass weight because it is the first card under the greeting.
 function energyHtml(s) {
   const e = s.energy;
-  return `<div class="glass card">
+  return `<div class="glass card energyCard">
     <div class="sheen"></div><div class="hl"></div>
     <div class="gcontent">
       <div class="label">${ENERGY_INDEX_LABEL}</div>
@@ -809,8 +950,9 @@ function trendHtml(s) {
 }
 
 function chatHtml(s) {
-  if (!s.chat.length) return '<div class="chatThread"></div>';
-  return `<div class="chatThread">${s.chat.map((m) => `<div class="chatPad"><div class="chatRow ${m.role === 'user' ? 'user' : ''}">
+  const chat = s.v3.chat;
+  if (!chat.length) return '<div class="chatThread"></div>';
+  return `<div class="chatThread">${chat.map((m) => `<div class="chatPad"><div class="chatRow ${m.role === 'user' ? 'user' : ''}">
       ${m.role === 'user' ? '' : '<div class="chatAvatar">A</div>'}
       <div class="bubble ${m.role === 'user' ? 'bubbleUser' : 'bubbleAgent'}"><div class="bubbleText">${esc(m.content)}</div></div>
     </div></div>`).join('')}</div>`;
@@ -861,17 +1003,18 @@ function render() {
         </div>
       </div>
       <div class="scroll"><div class="content">
-        ${heroHtml(s)}
-        ${lastNightHtml(s)}
-        ${ariaHtml(s)}
         ${energyHtml(s)}
+        ${lastNightHtml(s)}
+        ${heroHtml(s)}
+        ${ariaHtml(s)}
         ${trendHtml(s)}
         ${chatHtml(s)}
       </div></div>
       ${dockHtml()}
     </div>
     ${tabBarHtml()}
-    ${qsSheet() ? editSheetHtml(s) : ''}`;
+    ${qsSheet() ? editSheetHtml(s) : ''}
+    ${qsMore() ? ariaSheetHtml(s) : ''}`;
   const h = full ? phone.getBoundingClientRect().height : 852;
   document.getElementById('auroraSlot').outerHTML = auroraHtml(393, h);
   document.title = `Somniq Home AFTER — ${key}`;
