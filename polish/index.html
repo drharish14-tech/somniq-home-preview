@@ -90,13 +90,18 @@ body.full .scroll { overflow: visible; }
 .gcontent { position: relative; z-index: 3; width: 100%; }
 
 /* ---- hero ---- */
-.hero { padding: 20px 20px 22px; margin-bottom: 16px; }
+/* 8pt grid, top to bottom: 20 pad - eyebrow - 8 - orb (its halo is 22pt of
+   air on every side) - 8 - score ring - 8 - status - 24 - last night -
+   20 pad. That is what lets the Energy eyebrow clear the fold at 852. */
+.hero { padding: 16px 20px; margin-bottom: 16px; }
 .heroInner { display: flex; flex-direction: column; align-items: center; }
-.heroEyeRow { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 12px; }
+.heroEyeRow { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; }
 .heroInfoBtn { padding: 2px; display: flex; }
 .ion { font-family: Ionicons; font-style: normal; line-height: 1; }
 
-/* orb: size 148 → canvas 192 */
+/* orb: size 148 → canvas 192. The sphere is the one thing on this screen
+   that does not give ground: at 140 the HOURS OF DEBT caption ran onto the
+   ring. The eight points came out of the need meter's gap instead. */
 .orbStage { position: relative; width: 192px; height: 192px; }
 .orbHalo { position: absolute; left: 2px; top: 2px; width: 188px; height: 188px; border-radius: 50%; background: conic-gradient(from 90deg, #a78bfa, #22d3ee, #ec4899, #a78bfa); opacity: 0.62; filter: blur(16px); }
 .orbRing { position: absolute; left: 22px; top: 22px; width: 148px; height: 148px; border-radius: 50%; background: conic-gradient(from 90deg, #a78bfa, #22d3ee, #ec4899, #a78bfa); }
@@ -113,9 +118,11 @@ body.full .scroll { overflow: visible; }
 .tileRow { display: flex; gap: 10px; width: 100%; margin-top: 16px; }
 /* Last night moved out of the hero, so the score tile goes solo: a centred
    capsule, not a half-width box with a hole beside it. */
-.tileRowSolo { justify-content: center; margin-top: 18px; }
+.tileRowSolo { justify-content: center; margin-top: 8px; }
 .tile { flex: 1; border-radius: 16px; border: 0.63px solid var(--border); background: rgba(255,255,255,0.05); padding: 12px 14px; }
-.tileSolo { flex: 0 0 auto; border-radius: 999px; padding: 8px 18px 8px 8px; }
+/* The pill's left cap is concentric with the ring: equal padding top, bottom
+   and left, so the 48pt ring sits in a true 6pt annulus. */
+.tileSolo { flex: 0 0 auto; border-radius: 999px; padding: 6px 16px 6px 6px; }
 .tileBody { display: flex; flex-direction: column; gap: 6px; }
 /* The score was invisible as a text pill. It is now a 48px band-coloured ring
    with the number inside, the label and the band word beside it. */
@@ -123,6 +130,7 @@ body.full .scroll { overflow: visible; }
 .soloMeta { display: flex; flex-direction: column; gap: 1px; }
 .soloHead { display: flex; align-items: center; gap: 5px; }
 .soloBandWord { font-weight: 600; font-size: 14px; line-height: 18px; letter-spacing: -0.1px; color: var(--ink); }
+.soloBandNote { font-weight: 400; font-size: 12px; letter-spacing: 0; color: var(--inkTertiary); }
 .ring { position: relative; width: 48px; height: 48px; flex: 0 0 auto; }
 .ringLabel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
 .ringVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 20px; line-height: 24px; letter-spacing: -1px; color: var(--ink); }
@@ -132,14 +140,27 @@ body.full .scroll { overflow: visible; }
 .tileValCyan { color: var(--cyan); }
 .tileNote { font-size: 11px; line-height: 15px; color: var(--inkTertiary); }
 
-.recovered { font-weight: 600; font-size: 13px; line-height: 18px; color: var(--green); margin-top: 14px; text-align: center; }
-.statusLine { font-weight: 500; font-size: 13px; line-height: 18px; color: var(--inkSecondary); margin-top: 14px; text-align: center; }
-.pace { font-size: 12px; line-height: 17.5px; color: var(--inkTertiary); margin-top: 7px; text-align: center; }
-.paceStrong { color: var(--ink); font-weight: 600; }
+/* One line, on the orb's own centre axis, 8pt under the ring it explains.
+   The accuracy note, the recovered line and the "Debt-free by..." paragraph
+   it replaces all read in the SLEEP DEBT (i) sheet now. */
+.statusLine { font-weight: 500; font-size: 13px; line-height: 18px; letter-spacing: -0.1px;
+  color: var(--inkSecondary); margin-top: 8px; text-align: center; white-space: nowrap; }
+/* The (i) sheet reads as a short ledger: one hairline row per fact, label
+   left, value right, then the prose the face used to carry. */
+.debtInfoRow { display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 0; border-bottom: 0.5px solid var(--divider); }
+.debtInfoEye { font-weight: 600; font-size: 10px; line-height: 14px; letter-spacing: 1.6px;
+  text-transform: uppercase; color: var(--inkTertiary); white-space: nowrap; }
+.debtInfoVal { font-weight: 600; font-size: 14px; line-height: 20px; letter-spacing: -0.1px;
+  color: var(--ink); text-align: right; }
+.debtInfoGood { color: var(--green); }
+.debtInfoBody { font-size: 13.5px; line-height: 20px; color: var(--inkSecondary); margin-top: 16px; }
+.debtInfoLink { display: flex; align-items: center; gap: 4px; margin-top: 20px; padding: 8px 0; min-height: 44px; }
+.debtInfoLinkText { font-weight: 600; font-size: 14px; color: var(--cyan); }
 
 /* ---- cards ---- */
 .card { padding: 20px; margin-bottom: 16px; }
-.energyCard { padding-top: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.42); }
+.energyCard { padding-top: 16px; box-shadow: 0 12px 40px rgba(0,0,0,0.42); }
 .caption { font-size: 13px; line-height: 19px; color: var(--inkSecondary); }
 
 /* Last night is the debt's CO-HEADLINE and it has no box: the hero's own
@@ -148,8 +169,8 @@ body.full .scroll { overflow: visible; }
    closed by a hairline chevron, the duration as display type in the orb's
    gradient at the debt number's own size, the clocks under it, and a thick
    meter of the night against the need. */
-.lastLineWrap { align-self: stretch; width: 100%; margin-top: 28px; }
-.lastLine { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+.lastLineWrap { align-self: stretch; width: 100%; margin-top: 24px; }
+.lastLine { display: flex; flex-direction: column; align-items: center; }
 /* The two glyphs bracket the heading, so the block still reads as tappable
    without a border to say so. */
 .lastLineCaps { display: flex; align-items: center; justify-content: center; gap: 7px; max-width: 100%; }
@@ -157,7 +178,7 @@ body.full .scroll { overflow: visible; }
   letter-spacing: 1.7px; text-transform: uppercase; color: var(--inkSecondary);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Display type at the orb's own weight and face, filled white into brand teal. */
-.lastLineVal { font-weight: 800; font-size: 56px; line-height: 62px; letter-spacing: -2.2px; margin-top: 8px;
+.lastLineVal { font-weight: 800; font-size: 56px; line-height: 60px; letter-spacing: -2.2px; margin-top: 8px;
   background: linear-gradient(100deg, #ffffff 8%, #a5f3fc 48%, #22d3ee 92%);
   -webkit-background-clip: text; background-clip: text; color: transparent; }
 /* When — under the how much. */
@@ -174,7 +195,7 @@ body.full .scroll { overflow: visible; }
    bar. The row is inset: at 8pt a full-bleed bar reads as a rule across the
    card instead of as this number's meter. */
 .lastLineMeter { align-self: stretch; display: flex; align-items: center; gap: 10px;
-  margin: 16px 14px 0; }
+  margin: 8px 14px 0; }
 .lastLineTrack { flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.1); overflow: hidden; }
 .lastLineFill { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #a78bfa, #22d3ee); }
 .lastLineNeed { font-weight: 500; font-size: 12px; line-height: 16px; color: var(--inkTertiary); }
@@ -438,6 +459,27 @@ const STATES = {
       // is thick enough to read at arm's length.
       lastNight: { caps: 'Slept last night', emptyCaps: 'Last night' },
     },
+    v8: {
+      // Eighth polish pass (Harish: the first screen holds exactly three
+      // things). debtStatusLine({ provisional: false, nightsUsed: 11,
+      // debtHours: 1.8, payoff: debtFreeLabel(1.8, 0.5) }) — one line, under
+      // the score ring, no wrap at 393pt.
+      status: 'On track to be debt-free by Sun, Nov 8',
+      // DEBT_INFO_SHEET_TITLE + everything the hero face used to print under
+      // the orb, verbatim. recovered = previousDebt 2.3 - debt 1.8.
+      sheet: {
+        title: 'Sleep debt',
+        accuracy: 'Getting more accurate \u00b7 11 of 14 nights',
+        recovered: '\u2193 0.5h recovered this week',
+        payoff: 'Sun, Nov 8',
+        asOf: null,
+        body: [
+          'You\u2019re only a little behind, so your energy should hold up well today.',
+          'Motion nights count toward debt automatically.',
+        ],
+        link: 'How we estimate',
+      },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -564,6 +606,25 @@ const STATES = {
       // is thick enough to read at arm's length.
       lastNight: { caps: 'Slept last night', emptyCaps: 'Last night' },
     },
+    v8: {
+      // debtStatusLine({ provisional: false, nightsUsed: 14, debtHours: 6.0,
+      // payoff: debtFreeLabel(6.0, 0.4) }) — shortBehindPhrase + the date.
+      status: 'About 6h behind, debt-free by Tue, Jan 26',
+      // 14 of 14 nights: buildingStatusLine is null, so the sheet opens on
+      // the recovered row instead of an accuracy row.
+      sheet: {
+        title: 'Sleep debt',
+        accuracy: null,
+        recovered: '\u2193 0.4h recovered this week',
+        payoff: 'Tue, Jan 26',
+        asOf: null,
+        body: [
+          'You\u2019re quite far behind. A few earlier nights will lift your energy.',
+          'Motion nights count toward debt automatically.',
+        ],
+        link: 'How we estimate',
+      },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -689,6 +750,24 @@ const STATES = {
       // the debt number's own size, the clocks sit under it and the need bar
       // is thick enough to read at arm's length.
       lastNight: { caps: 'Estimated last night', emptyCaps: 'Last night' },
+    },
+    v8: {
+      // debtStatusLine({ provisional: true, nightsUsed: 1, debtHours: 3.1,
+      // payoff: null }) — one night in, so the line says so instead of
+      // promising a date the lookback cannot support yet.
+      status: 'First night in, still learning your sleep',
+      sheet: {
+        title: 'Sleep debt',
+        accuracy: 'Getting more accurate \u00b7 1 of 14 nights',
+        recovered: null,
+        payoff: null,
+        asOf: null,
+        body: [
+          'Your number sharpens a little with each night we see.',
+          'Motion nights count toward debt automatically.',
+        ],
+        link: 'How we estimate',
+      },
     },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
@@ -893,10 +972,12 @@ function qsState() {
 function qsFull() {
   return new URLSearchParams(location.search).get('view') === 'full';
 }
-/* ?sheet=night (or =1) shows the last-night sheet; ?more=1 the Aria debrief. */
+/* ?sheet=night (or =1) shows the last-night sheet, ?sheet=debt the SLEEP DEBT
+   (i) sheet; ?more=1 the Aria debrief. */
 function qsSheet() {
   const v = new URLSearchParams(location.search).get('sheet');
-  return v === 'night' || v === '1';
+  if (v === 'debt') return 'debt';
+  return v === 'night' || v === '1' ? 'night' : null;
 }
 function qsMore() {
   return new URLSearchParams(location.search).get('more') === '1';
@@ -948,9 +1029,9 @@ function orbHtml(s) {
    src/components/glass/DebtOrbHero.tsx. 80+ teal, 60-79 amber, below 60 coral;
    a missing score draws the bare track and a dash. */
 const SCORE_BANDS = [
-  { min: 80, word: 'Good', color: '#38BDF8', tint: 'rgba(129,140,248,0.1)' },
-  { min: 60, word: 'Fair', color: '#38BDF8', tint: 'rgba(129,140,248,0.1)' },
-  { min: 0, word: 'Low', color: '#38BDF8', tint: 'rgba(129,140,248,0.1)' },
+  { min: 80, word: 'Good', color: '#22d3ee', tint: 'rgba(34,211,238,0.1)' },
+  { min: 60, word: 'Fair', color: '#fbbf24', tint: 'rgba(251,191,36,0.1)' },
+  { min: 0, word: 'Low', color: '#fb7185', tint: 'rgba(251,113,133,0.1)' },
 ];
 const RING_SIZE = 48, RING_STROKE = 4.5;
 const RING_R = (RING_SIZE - RING_STROKE) / 2;
@@ -971,8 +1052,9 @@ function scoreRingHtml(o) {
   return `<div class="ring">
     <svg width="${RING_SIZE}" height="${RING_SIZE}">
       <defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="${stroke}"/>
-        <stop offset="100%" stop-color="${band ? '#818CF8' : stroke}"/>
+        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+        <stop offset="40%" stop-color="${stroke}"/>
+        <stop offset="100%" stop-color="${stroke}"/>
       </linearGradient></defs>
       <circle cx="${RING_MID}" cy="${RING_MID}" r="${RING_R}" stroke="rgba(255,255,255,0.1)" stroke-width="${RING_STROKE}" fill="none"/>
       ${filled > 0 ? `<circle cx="${RING_MID}" cy="${RING_MID}" r="${RING_R}" stroke="url(#${gid})"
@@ -988,10 +1070,6 @@ function heroHtml(s) {
   const o = s.orb;
   const band = sleepScoreBand(o);
   const scoreNote = o.showScore ? o.scoreNote : o.scoreReason;
-  const explanation = s.v3.explanation;
-  const pace = s.hero.payoff
-    ? `Debt-free by <span class="paceStrong">${s.hero.payoff}</span>. ${esc(explanation)}`
-    : esc(explanation);
   return `<div class="glass hero">
     <div class="sheen"></div><div class="hl"></div>
     <div class="gcontent"><div class="heroInner">
@@ -1008,13 +1086,13 @@ function heroHtml(s) {
               <span class="label">Sleep score</span>
               <span class="ion" style="font-size:12px;color:var(--inkTertiary)">${ION.info}</span>
             </div>
-            ${band ? `<div class="soloBandWord">${band.word}</div>` : ''}
-            ${scoreNote ? `<div class="tileNote">${esc(scoreNote)}</div>` : ''}
+            ${band
+              ? `<div class="soloBandWord" style="color:${band.color}">${band.word}${scoreNote ? `<span class="soloBandNote"> \u00b7 ${esc(scoreNote)}</span>` : ''}</div>`
+              : scoreNote ? `<div class="tileNote">${esc(scoreNote)}</div>` : ''}
           </div>
         </div></div>
       </div>
-      <div class="${s.hero.statusKind === 'recovered' ? 'recovered' : 'statusLine'}">${esc(s.v2.status)}</div>
-      <div class="pace">${pace}</div>
+      <div class="statusLine">${esc(s.v8.status)}</div>
       ${lastNightLineHtml(s)}
     </div></div>
   </div>`;
@@ -1044,6 +1122,33 @@ function lastNightLineHtml(s) {
       <div class="lastLineNeed">of ${esc(v.need)} need</div>
     </div>`}
   </div></div>`;
+}
+
+// ?sheet=debt — the SLEEP DEBT (i) sheet. Everything the hero used to print
+// under the orb reads here, word for word: how accurate the number is yet,
+// what came off it this week, the debt-free date, and the line about what
+// lifts energy. How we estimate is still one tap on.
+function debtSheetHtml(s) {
+  const d = s.v8.sheet;
+  const row = (eye, val, cls) => `<div class="debtInfoRow">
+    <div class="debtInfoEye">${esc(eye)}</div>
+    <div class="debtInfoVal${cls ? ' ' + cls : ''}">${esc(val)}</div>
+  </div>`;
+  return `<div class="sheetWrap">
+    <div class="sheet">
+      <div class="grabber"></div>
+      <div class="sheetHead"><div class="sheetTitle">${esc(d.title)}</div><div class="sheetDone">Done</div></div>
+      <div class="sheetBody">
+        ${d.accuracy ? row('Accuracy', d.accuracy) : ''}
+        ${d.recovered ? row('This week', d.recovered, 'debtInfoGood') : ''}
+        ${d.payoff ? row('Debt-free by', d.payoff) : ''}
+        ${d.asOf ? row('As of', d.asOf) : ''}
+        ${d.body.map((t) => `<div class="debtInfoBody">${esc(t)}</div>`).join('')}
+        <div class="debtInfoLink"><span class="debtInfoLinkText">${esc(d.link)}</span>
+          <span class="ion" style="font-size:14px;color:var(--cyan)">${ION.chevron}</span></div>
+      </div>
+    </div>
+  </div>`;
 }
 
 // ?sheet=night — the sheet the line opens. Its head carries the provenance
@@ -1312,7 +1417,7 @@ function render() {
       ${dockHtml()}
     </div>
     ${tabBarHtml()}
-    ${qsSheet() ? editSheetHtml(s) : ''}
+    ${qsSheet() === 'debt' ? debtSheetHtml(s) : qsSheet() ? editSheetHtml(s) : ''}
     ${qsMore() ? ariaSheetHtml(s) : ''}`;
   const h = full ? phone.getBoundingClientRect().height : 852;
   document.getElementById('auroraSlot').outerHTML = auroraHtml(393, h);
