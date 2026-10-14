@@ -135,19 +135,23 @@ body.full .scroll { overflow: visible; }
 .energyCard { padding-top: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.42); }
 .caption { font-size: 13px; line-height: 19px; color: var(--inkSecondary); }
 
-/* The one Last night row, right under Energy: eyebrow + source chip, then
-   the duration with Looks right / Edit beside it, then the quiet clocks
-   line. ~110px against the old card's ~220 — same elements, half the height. */
-.lastRow { padding: 14px 16px; margin-bottom: 16px; }
-.lastHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-.lastMain { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.lastActions { display: flex; align-items: center; gap: 8px; }
+/* Last night has no card at all now: one quiet tappable line at the foot of
+   the hero, under a hairline. Everything else is one tap away in the sheet. */
+.lastLineWrap { align-self: stretch; width: 100%; margin-top: 18px; padding-top: 12px;
+  border-top: 0.5px solid var(--divider); }
+.lastLine { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; }
+.lastLineText { flex-shrink: 1; min-width: 0; font-size: 12.5px; line-height: 18px; color: var(--inkTertiary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lastLineLabel { font-weight: 500; color: var(--inkSecondary); }
+.lastLineVal { font-family: 'JetBrains Mono'; font-weight: 600; font-size: 13px; color: var(--cyan); }
+/* The sheet head: the provenance chip, the clocks line and Looks right. */
+.sheetHeader { margin-bottom: 14px; }
+.sheetHeaderRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sheetHeaderVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 26px; line-height: 30px; letter-spacing: -0.8px; color: var(--cyan); }
 .lastRowLine { font-size: 12.5px; line-height: 18px; color: var(--inkSecondary); margin-top: 8px; }
-.slimPrimaryBtn { background: rgba(255,255,255,0.95); border-radius: 12px; padding: 9px 14px; min-height: 36px;
-  display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12.5px; letter-spacing: -0.1px; color: #000; white-space: nowrap; }
-.slimGhostBtn { background: rgba(255,255,255,0.06); border: 0.73px solid var(--border); border-radius: 12px; padding: 9px 14px; min-height: 36px;
-  display: inline-flex; align-items: center; justify-content: center; font-weight: 500; font-size: 12.5px; letter-spacing: -0.1px; color: var(--inkSecondary); white-space: nowrap; }
-.lastNightVal { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 26px; line-height: 30px; letter-spacing: -0.8px; color: var(--cyan); text-shadow: 0 0 6px rgba(34,211,238,0.35); }
+.sheetConfirmBtn { margin-top: 14px; background: rgba(255,255,255,0.95); border-radius: 14px; padding: 12px 16px;
+  min-height: 44px; display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 13px; letter-spacing: -0.1px; color: #000; }
 .pill { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 100px; border: 1px solid; font-weight: 600; font-size: 10px; line-height: 13px; letter-spacing: 0.6px; }
 .pill.glow { box-shadow: 0 0 16px rgba(251,191,36,0.4); }
 
@@ -210,10 +214,22 @@ body.full .scroll { overflow: visible; }
 .energyNumGroup { display: flex; align-items: baseline; }
 .energyNum { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 44px; line-height: 50px; color: var(--ink); letter-spacing: -1.6px; }
 .energyPct { font-family: 'JetBrains Mono'; font-weight: 500; font-size: 18px; color: var(--inkTertiary); margin-left: 2px; }
-.windows { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-.bullet { display: flex; align-items: flex-start; gap: 10px; }
-.dot { width: 6px; height: 6px; border-radius: 3px; flex: 0 0 6px; margin-top: 6px; }
-.bulletText { flex: 1; font-size: 12.5px; color: var(--inkSecondary); line-height: 18px; }
+.energyHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.curveWrap { margin-top: 10px; margin-left: -4px; margin-right: -4px; }
+/* Three equal chips, one per block: dot + name on top, its hours under. */
+.blockChips { display: flex; gap: 8px; margin-top: 14px; }
+.blockChip { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 6px; border-radius: 14px; border: 0.73px solid var(--border); background: rgba(255,255,255,0.05); }
+.blockChipTop { display: flex; align-items: center; gap: 5px; min-width: 0; }
+.blockChipText { font-weight: 500; font-size: 11.5px; letter-spacing: -0.1px; color: var(--inkSecondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.blockChip.on .blockChipText { font-weight: 600; color: var(--ink); }
+.blockChipHours { font-family: 'JetBrains Mono'; font-size: 10.5px; color: var(--inkTertiary); white-space: nowrap; }
+.blockDetail { margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--divider);
+  display: flex; flex-direction: column; gap: 3px; }
+.blockDetailWhen { font-weight: 600; font-size: 13px; letter-spacing: -0.1px; color: var(--ink); }
+.blockDetailText { font-size: 12.5px; line-height: 18px; color: var(--inkSecondary); }
+.dot { width: 6px; height: 6px; border-radius: 3px; flex: 0 0 6px; }
 .bulletStrong { font-weight: 600; color: var(--ink); }
 
 .sectionHead { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px; }
@@ -288,10 +304,12 @@ body.full .tabWrap { position: relative; left: 0; right: 0; bottom: 0; margin: 8
 
 const ENERGY_INDEX_LABEL = 'Energy index (estimate)';
 
+/* The same three ENERGY_NOW_LEGEND blocks. `strong` is legendWindowLabel(w, 9),
+   `rest` is the window's own tip, `hours` is legendChipLabel(w). */
 const LEGEND = [
-  { kind: 'peak', strong: 'Now – 12:00', rest: 'Highest energy — deepest work and decisions first.' },
-  { kind: 'dip', strong: '2:00 – 4:00', rest: 'Natural trough — walk, meetings, or a short rest. Not a new caffeine load.' },
-  { kind: 'peak', strong: '4:00', rest: 'Review and planning. Protect the evening wind-down.' },
+  { id: 'peak', kind: 'peak', label: 'Morning peak', hours: '9a–12p', strong: 'Now – 12:00', rest: 'Highest energy — deepest work and decisions first.' },
+  { id: 'dip', kind: 'dip', label: 'Afternoon dip', hours: '2p–4p', strong: '2:00 – 4:00', rest: 'Natural trough — walk, meetings, or a short rest. Not a new caffeine load.' },
+  { id: 'second', kind: 'peak', label: 'Second wind', hours: '4p–6p', strong: '4:00', rest: 'Review and planning. Protect the evening wind-down.' },
 ];
 
 const PEAK_PILL = { label: '\u{1F525} PEAK · UNTIL 12:00', color: 'amber', glow: true };
@@ -358,6 +376,12 @@ const STATES = {
         brief: "Short night, 6h 52m. You're about 2 hours behind, so today should feel steady. Last coffee by 2:30pm today.",
         more: 'More',
       },
+    },
+    v4: {
+      // Fourth polish pass (Harish: orb on top, last night hidden behind one
+      // quiet line, Energy rich). activeLegendWindow(9) → the morning peak.
+      lastNight: { tail: '11:42p – 6:34a' },
+      energy: { openBlock: 'peak' },
     },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
@@ -457,6 +481,12 @@ const STATES = {
         more: 'More',
       },
     },
+    v4: {
+      // Fourth polish pass (Harish: orb on top, last night hidden behind one
+      // quiet line, Energy rich). activeLegendWindow(9) → the morning peak.
+      lastNight: { tail: '1:05a – 6:35a' },
+      energy: { openBlock: 'peak' },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -554,6 +584,12 @@ const STATES = {
         brief: "Short night, 6h 44m (estimated). You're about 3 hours behind, so the afternoon may feel soft. Last coffee by 2:30pm today.",
         more: 'More',
       },
+    },
+    v4: {
+      // Fourth polish pass (Harish: orb on top, last night hidden behind one
+      // quiet line, Energy rich). activeLegendWindow(9) → the morning peak.
+      lastNight: { tail: '11:48p – 6:32a' },
+      energy: { openBlock: 'peak' },
     },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
@@ -670,6 +706,79 @@ function waveDipRect() {
   return { x, width: waveX(16) - x, height: WAVE_PLOT_H };
 }
 
+/* ---- full-day curve geometry (src/utils/energy-day-curve.ts) ---- */
+const CURVE_W = 320;
+const CURVE_PLOT_TOP = 15;
+const CURVE_PLOT_H = 112;
+const CURVE_H = 132;
+const CURVE_GUIDES = [25, 50, 75];
+const CURVE_STEP_X = CURVE_W / (WAVE_HOURS.length - 1);
+const CURVE_HANDLE = 0.4;
+
+function cround(n) { return Math.round(n * 100) / 100; }
+function curveX(hour) {
+  const c = Math.max(6, Math.min(22, hour));
+  return ((c - 6) / 16) * CURVE_W;
+}
+function curveY(energy) {
+  const pct = Math.max(0, Math.min(100, energy)) / 100;
+  return CURVE_PLOT_H - pct * (CURVE_PLOT_H - CURVE_PLOT_TOP);
+}
+function curvePath() {
+  let d = '';
+  for (let i = 0; i < WAVE_HOURS.length; i++) {
+    const x = i * CURVE_STEP_X, y = curveY(WAVE_ENERGY[i]);
+    if (i === 0) { d += `M${cround(x)},${cround(y)}`; continue; }
+    const px = (i - 1) * CURVE_STEP_X, py = curveY(WAVE_ENERGY[i - 1]);
+    d += ` C${cround(px + CURVE_STEP_X * CURVE_HANDLE)},${cround(py)} ${cround(x - CURVE_STEP_X * CURVE_HANDLE)},${cround(y)} ${cround(x)},${cround(y)}`;
+  }
+  return d;
+}
+function curveAreaPath() { return `${curvePath()} L${CURVE_W},${CURVE_PLOT_H} L0,${CURVE_PLOT_H} Z`; }
+function cbez(p0, p1, p2, p3, t) {
+  const u = 1 - t;
+  return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+}
+function curvePointAt(hour) {
+  const h = Math.max(6, Math.min(22, hour));
+  const i = Math.max(0, Math.min(WAVE_HOURS.length - 2, Math.floor(h - 6)));
+  const x0 = i * CURVE_STEP_X, x1 = (i + 1) * CURVE_STEP_X;
+  const y0 = curveY(WAVE_ENERGY[i]), y1 = curveY(WAVE_ENERGY[i + 1]);
+  const c1x = x0 + CURVE_STEP_X * CURVE_HANDLE, c2x = x1 - CURVE_STEP_X * CURVE_HANDLE;
+  const targetX = curveX(h);
+  let lo = 0, hi = 1;
+  for (let k = 0; k < 24; k++) {
+    const mid = (lo + hi) / 2;
+    if (cbez(x0, c1x, c2x, x1, mid) < targetX) lo = mid; else hi = mid;
+  }
+  const t = (lo + hi) / 2;
+  return { x: cround(targetX), y: cround(cbez(y0, y0, y1, y1, t)) };
+}
+/* Peak and Dip are ENERGY_WINDOWS; Wind-down is the existing 8p–10p band. */
+function curveZones() {
+  return [
+    { id: 'peak', label: 'Peak', fromHour: 9, toHour: 12, kind: 'peak' },
+    { id: 'dip', label: 'Dip', fromHour: 14, toHour: 16, kind: 'dip' },
+    { id: 'winddown', label: 'Wind-down', fromHour: 20, toHour: 22, kind: 'winddown' },
+  ].map((z) => ({ ...z, x: curveX(z.fromHour), width: curveX(z.toHour) - curveX(z.fromHour) }));
+}
+/* Centred over its band, tucked at the plot edges so Wind-down never clips. */
+function zoneLabelAnchor(zone) {
+  const half = (zone.label.length * 6) / 2;
+  const center = zone.x + zone.width / 2;
+  if (center + half > CURVE_W - 1) return { x: CURVE_W - 1, anchor: 'end' };
+  if (center - half < 1) return { x: 1, anchor: 'start' };
+  return { x: center, anchor: 'middle' };
+}
+function curveAxisTicks() {
+  const ticks = [];
+  for (let h = 6; h <= 22; h += 4) {
+    const suffix = h >= 12 && h < 24 ? 'p' : 'a';
+    ticks.push({ hour: h, x: curveX(h), t: `${h % 12 || 12}${suffix}` });
+  }
+  return ticks;
+}
+
 const ION = {
   info: '', calendar: '', sunny: '', moon: '', pulse: '',
   mic: '', arrowUp: '', sparkles: '', chevron: '',
@@ -685,9 +794,10 @@ function qsState() {
 function qsFull() {
   return new URLSearchParams(location.search).get('view') === 'full';
 }
-/* ?sheet=1 shows the Edit sheet; ?more=1 expands the Aria debrief. */
+/* ?sheet=night (or =1) shows the last-night sheet; ?more=1 the Aria debrief. */
 function qsSheet() {
-  return new URLSearchParams(location.search).get('sheet') === '1';
+  const v = new URLSearchParams(location.search).get('sheet');
+  return v === 'night' || v === '1';
 }
 function qsMore() {
   return new URLSearchParams(location.search).get('more') === '1';
@@ -761,43 +871,43 @@ function heroHtml(s) {
       </div>
       <div class="${s.hero.statusKind === 'recovered' ? 'recovered' : 'statusLine'}">${esc(s.v2.status)}</div>
       <div class="pace">${pace}</div>
+      ${lastNightLineHtml(s)}
     </div></div>
   </div>`;
 }
 
-// Last night's ONE home: a slim row right under Energy. The duration is
-// still the big number, the quiet lastNightSourceLine sits under it, and
-// Looks right / Edit keep their old actions — Edit opens the same sheet.
-// The hero no longer repeats the duration (durationTile={false}).
-function lastNightHtml(s) {
+// Last night has no card face any more — one quiet tappable line at the foot
+// of the hero. The duration, the clocks and a chevron: that is the whole of
+// it. Everything that used to sit out here (Looks right, Edit, the chip) is
+// in the sheet this line opens.
+function lastNightLineHtml(s) {
   const n = s.lastNight;
-  const v = s.v2.lastNight;
-  return `<div class="glass lastRow ${n.tone}">
-    <div class="sheen"></div>${n.highlight ? '<div class="hl"></div>' : ''}
-    <div class="gcontent">
-      <div class="lastHead">
-        <div class="label">${esc(n.eyebrow)}</div>
-        ${pill(n.pill.label, n.pill.color, false)}
-      </div>
-      <div class="lastMain">
-        <div class="lastNightVal">${n.value}</div>
-        <div class="lastActions">
-          <span class="slimPrimaryBtn">${esc(v.primary)}</span>
-          <span class="slimGhostBtn">${esc(v.secondary)}</span>
-        </div>
-      </div>
-      <div class="lastRowLine">${esc(v.line)}</div>
-    </div>
-  </div>`;
+  const v = s.v4.lastNight;
+  return `<div class="lastLineWrap"><div class="lastLine">
+    <div class="lastLineText"><span class="lastLineLabel">${esc(n.eyebrow)}</span>&nbsp;&nbsp;<span class="lastLineVal">${n.value}</span> · ${esc(v.tail)}</div>
+    <span class="ion" style="font-size:13px;color:var(--faint)">${ION.chevron}</span>
+  </div></div>`;
 }
 
+// ?sheet=night — the sheet the line opens. Its head carries the provenance
+// chip, the clocks line and Looks right; nap, ±30m and the time rows follow.
 function editSheetHtml(s) {
+  const n = s.lastNight;
   const sh = s.v2.lastNight.sheet;
+  const v = s.v2.lastNight;
   return `<div class="sheetWrap">
     <div class="sheet">
       <div class="grabber"></div>
       <div class="sheetHead"><div class="sheetTitle">${esc(sh.title)}</div><div class="sheetDone">Done</div></div>
       <div class="sheetBody">
+        <div class="sheetHeader">
+          <div class="sheetHeaderRow">
+            <div class="sheetHeaderVal">${n.value}</div>
+            ${pill(n.pill.label, n.pill.color, false)}
+          </div>
+          <div class="lastRowLine">${esc(v.line)}</div>
+          <div class="sheetConfirmBtn">${esc(v.primary)}</div>
+        </div>
         <div class="sheetInfo">${esc(sh.info)}</div>
         <div class="napRow"><span class="napBtn">Add nap</span></div>
         <div class="shiftBlock">
@@ -862,55 +972,88 @@ function ariaSheetHtml(s) {
   </div>`;
 }
 
-function waveHtml(muted) {
-  const dip = waveDipRect();
-  const labels = waveAxisLabels(9);
-  const idx = nearestWaveIndex(9);
-  const nowX = waveX(9), nowY = waveY(WAVE_ENERGY[idx]);
-  return `<svg width="100%" height="${WAVE_H}" viewBox="0 0 ${WAVE_W} ${WAVE_H}">
+// The whole day as one curve: area fill, shaded Peak / Dip / Wind-down
+// bands, an hour axis and a soft "now" marker. Same WAVE_ENERGY series the
+// compact wave drew — only bigger, and labelled.
+const ZONE_COLOR = { peak: '#fbbf24', dip: '#fb7185', winddown: '#a78bfa' };
+
+function dayCurveHtml(hour, muted) {
+  const zones = curveZones();
+  const ticks = curveAxisTicks();
+  const now = curvePointAt(hour);
+  const dim = muted ? 0.4 : 1;
+  return `<svg width="100%" height="${CURVE_H}" viewBox="0 0 ${CURVE_W} ${CURVE_H}">
     <defs>
-      <linearGradient id="energyNowArea" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(251,191,36,0.55)"/><stop offset="100%" stop-color="rgba(251,191,36,0)"/>
+      <linearGradient id="dayCurveArea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(251,191,36,0.42)"/>
+        <stop offset="55%" stop-color="rgba(251,191,36,0.13)"/>
+        <stop offset="100%" stop-color="rgba(251,191,36,0)"/>
       </linearGradient>
-      <linearGradient id="energyNowDip" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(251,113,133,0.16)"/><stop offset="100%" stop-color="rgba(251,113,133,0.02)"/>
-      </linearGradient>
-      <linearGradient id="energyNowLine" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#2dd4bf"/><stop offset="28%" stop-color="#fbbf24"/>
-        <stop offset="52%" stop-color="#FF9F0A"/><stop offset="78%" stop-color="#fbbf24"/>
+      <linearGradient id="dayCurveLine" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#2dd4bf"/><stop offset="26%" stop-color="#fbbf24"/>
+        <stop offset="50%" stop-color="#FF9F0A"/><stop offset="76%" stop-color="#fbbf24"/>
         <stop offset="100%" stop-color="#a78bfa"/>
       </linearGradient>
+      ${zones.map((z) => `<linearGradient id="dayZone-${z.id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${ZONE_COLOR[z.kind]}" stop-opacity="0.14"/>
+        <stop offset="100%" stop-color="${ZONE_COLOR[z.kind]}" stop-opacity="0.02"/>
+      </linearGradient>`).join('')}
+      <radialGradient id="dayNowHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.5"/>
+        <stop offset="55%" stop-color="#fbbf24" stop-opacity="0.14"/>
+        <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+      </radialGradient>
     </defs>
-    <rect x="${dip.x}" y="0" rx="6" width="${dip.width}" height="${dip.height}" fill="url(#energyNowDip)"/>
-    <line x1="0" y1="${WAVE_PLOT_H}" x2="${WAVE_W}" y2="${WAVE_PLOT_H}" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
-    <path d="${waveAreaPath()}" fill="url(#energyNowArea)" opacity="${muted ? 0.35 : 1}"/>
-    <path d="${waveCurvePath()}" fill="none" stroke="url(#energyNowLine)" stroke-width="2.2" stroke-linecap="round" opacity="${muted ? 0.4 : 1}"/>
-    <line x1="${nowX}" y1="4" x2="${nowX}" y2="${WAVE_PLOT_H}" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-dasharray="2 3"/>
-    <circle cx="${nowX}" cy="${nowY}" r="5" fill="#fbbf24" opacity="0.28"/>
-    <circle cx="${nowX}" cy="${nowY}" r="3.4" fill="#fff" stroke="#fbbf24" stroke-width="1.5"/>
-    ${labels.map((m) => `<text x="${m.x}" y="61" font-size="9.5" fill="${m.now ? '#fff' : 'rgba(255,255,255,0.60)'}" font-weight="${m.now ? 700 : 400}" text-anchor="${m.x < 8 ? 'start' : m.x > WAVE_W - 8 ? 'end' : 'middle'}" font-family="JetBrains Mono">${m.t}</text>`).join('')}
+    ${zones.map((z) => `<rect x="${z.x}" y="0" rx="8" width="${z.width}" height="${CURVE_PLOT_H}" fill="url(#dayZone-${z.id})"/>`).join('')}
+    ${CURVE_GUIDES.map((g) => `<line x1="0" y1="${curveY(g)}" x2="${CURVE_W}" y2="${curveY(g)}" stroke="rgba(255,255,255,0.10)" stroke-width="0.6" stroke-dasharray="1 5"/>`).join('')}
+    <line x1="0" y1="${CURVE_PLOT_H}" x2="${CURVE_W}" y2="${CURVE_PLOT_H}" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+    <path d="${curveAreaPath()}" fill="url(#dayCurveArea)" opacity="${muted ? 0.3 : 1}"/>
+    <path d="${curvePath()}" fill="none" stroke="url(#dayCurveLine)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="${dim}"/>
+    ${zones.map((z) => { const a = zoneLabelAnchor(z); return `<text x="${a.x}" y="10" font-size="8" letter-spacing="0.8" fill="${ZONE_COLOR[z.kind]}" opacity="${muted ? 0.45 : 0.85}" text-anchor="${a.anchor}" font-weight="600">${z.label.toUpperCase()}</text>`; }).join('')}
+    ${muted ? '' : `
+    <line x1="${now.x}" y1="${now.y}" x2="${now.x}" y2="${CURVE_PLOT_H}" stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-dasharray="2 4"/>
+    <circle cx="${now.x}" cy="${now.y}" r="16" fill="url(#dayNowHalo)"/>
+    <circle cx="${now.x}" cy="${now.y}" r="6" fill="#fbbf24" opacity="0.26"/>
+    <circle cx="${now.x}" cy="${now.y}" r="3.6" fill="#fff" stroke="#fbbf24" stroke-width="1.6"/>
+    <text x="${now.x}" y="${CURVE_H - 2}" font-size="9" fill="#fff" text-anchor="${now.x < 14 ? 'start' : now.x > CURVE_W - 14 ? 'end' : 'middle'}" font-family="JetBrains Mono" font-weight="600">now</text>`}
+    ${ticks.filter((t) => muted || Math.abs(t.x - now.x) > 20).map((t) => `<text x="${t.x}" y="${CURVE_H - 2}" font-size="9" fill="rgba(255,255,255,0.60)" text-anchor="${t.x < 8 ? 'start' : t.x > CURVE_W - 8 ? 'end' : 'middle'}" font-family="JetBrains Mono">${t.t}</text>`).join('')}
   </svg>`;
 }
 
-// Energy leads Home now — same score, curve and Peak pill, one step more
-// glass weight because it is the first card under the greeting.
+// Energy, second and rich: the index big, the day curve, then the three
+// legend blocks as chips with the open one's own words underneath. Same
+// block text as before — it just does not print three paragraphs at once.
 function energyHtml(s) {
   const e = s.energy;
+  const open = s.v4.energy.openBlock;
   return `<div class="glass card energyCard">
     <div class="sheen"></div><div class="hl"></div>
     <div class="gcontent">
-      <div class="label">${ENERGY_INDEX_LABEL}</div>
+      <div class="energyHead">
+        <div class="label">${ENERGY_INDEX_LABEL}</div>
+        <span class="ion" style="font-size:15px;color:var(--faint)">${ION.chevron}</span>
+      </div>
       <div class="energyNumRow">
         <div class="energyNumGroup"><span class="energyNum">${e.pct}</span><span class="energyPct">%</span></div>
         ${pill(e.pill.label, e.pill.color, e.pill.glow)}
       </div>
-      ${waveHtml(false)}
-      <div class="windows">
+      <div class="curveWrap">${dayCurveHtml(s.hour, false)}</div>
+      <div class="blockChips">
         ${LEGEND.map((w) => {
           const c = w.kind === 'peak' ? '#fbbf24' : '#fb7185';
-          return `<div class="bullet"><div class="dot" style="background:${c}"></div>
-            <div class="bulletText"><span class="bulletStrong">${esc(w.strong)}</span> · ${esc(w.rest)}</div></div>`;
+          const on = w.id === open;
+          return `<div class="blockChip${on ? ' on' : ''}"${on ? ` style="border-color:${c}66;background:${c}1f"` : ''}>
+            <div class="blockChipTop">
+              <div class="dot" style="background:${c}"></div>
+              <div class="blockChipText">${esc(w.label)}</div>
+            </div>
+            <div class="blockChipHours">${esc(w.hours)}</div>
+          </div>`;
         }).join('')}
+      </div>
+      <div class="blockDetail">
+        <div class="blockDetailWhen">${esc(LEGEND.find((w) => w.id === open).strong)}</div>
+        <div class="blockDetailText">${esc(LEGEND.find((w) => w.id === open).rest)}</div>
       </div>
     </div>
   </div>`;
@@ -1003,9 +1146,8 @@ function render() {
         </div>
       </div>
       <div class="scroll"><div class="content">
-        ${energyHtml(s)}
-        ${lastNightHtml(s)}
         ${heroHtml(s)}
+        ${energyHtml(s)}
         ${ariaHtml(s)}
         ${trendHtml(s)}
         ${chatHtml(s)}
