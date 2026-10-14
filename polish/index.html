@@ -137,6 +137,25 @@ body.full .scroll { overflow: visible; }
 .editToggle { margin-top: 14px; padding: 4px 0; font-weight: 600; font-size: 13px; color: var(--cyan); display: inline-block; }
 
 .btnRow { display: flex; gap: 10px; margin-top: 16px; }
+.lastLine { font-size: 13px; line-height: 19px; color: var(--inkSecondary); margin-top: 2px; }
+/* Aria brief + More toggle */
+.ariaDetail { font-size: 13px; line-height: 20px; color: var(--inkSecondary); margin-top: 12px; }
+.moreToggle { margin-top: 10px; padding: 4px 0; min-height: 28px; display: inline-flex; align-items: center;
+  font-weight: 600; font-size: 13px; color: var(--violet); }
+/* Edit sheet (LastNightEditor variant="sheet") */
+.sheetWrap { position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; justify-content: flex-end;
+  background: rgba(0,0,0,0.55); }
+.sheet { background: #12132C; border-top-left-radius: 28px; border-top-right-radius: 28px;
+  border-top: 0.73px solid var(--border); padding-top: 10px; max-height: 88%; }
+.grabber { width: 36px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.22); margin: 0 auto; }
+.sheetHead { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 12px; }
+.sheetTitle { font-weight: 600; font-size: 17px; letter-spacing: -0.2px; color: var(--ink); }
+.sheetDone { font-weight: 600; font-size: 14px; color: var(--cyan); padding: 6px 4px; }
+.sheetBody { padding: 0 20px 32px; }
+.sheetInfo { font-size: 12.5px; line-height: 18px; color: var(--inkSecondary); }
+.shiftBlock { margin-top: 16px; }
+.shiftLabel { font-weight: 500; font-size: 10px; line-height: 14px; letter-spacing: 1.6px;
+  text-transform: uppercase; color: var(--inkTertiary); }
 .primaryBtn { flex: 1; background: rgba(255,255,255,0.95); border-radius: 14px; padding: 12px 16px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; letter-spacing: -0.1px; color: #000; }
 .ghostBtn { background: rgba(255,255,255,0.06); border: 0.73px solid var(--border); border-radius: 14px; padding: 12px 16px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; letter-spacing: -0.1px; color: var(--inkSecondary); }
 
@@ -217,7 +236,14 @@ body.full .tabWrap { position: relative; left: 0; right: 0; bottom: 0; margin: 8
    Every string here was produced by running the real pure helpers
    (debtEmptyState, debtHeroExplanation, energyDisplay, energyNowPill,
    localMorningDebrief, scoreNeedMet, layoutTrendBars, formatDuration …)
-   from src/ with the sample inputs noted per state. No invented copy. */
+   from src/ with the sample inputs noted per state. No invented copy.
+
+   `v2` on each state is the second polish pass (Harish's three notes):
+   buildingStatusLine / debtHeroExplanation after the "Getting more accurate"
+   rewrite, lastNightSourceLine + lastNightSheetInfoLine for the Last night
+   card and its Edit sheet, and localMorningBrief / homeDebriefView for the
+   Aria brief. The pre-pass strings above are kept so index.html (BEFORE)
+   still renders exactly what shipped. */
 
 const ENERGY_INDEX_LABEL = 'Energy index (estimate)';
 
@@ -246,7 +272,7 @@ const STATES = {
       lastUpdated: null,
       cta: null,
       payoff: 'Sun, Nov 8',
-      explanation: 'Acute 14-night debt is under about five hours — Energy stays high. Last night is in the 14-night set.',
+      explanation: 'You’re only a little behind, so your energy should hold up well today. Last night is in the 14-night set.',
     },
     orb: {
       durationLabel: '6h 52m', showDuration: true,
@@ -267,6 +293,30 @@ const STATES = {
       body: 'Last night 6h 52m. Acute 14-night sleep debt 1.8h across 11 trusted nights. Last night is in the 14-night set. Energy is 78% because acute 14-night debt is 1.8h — still under about five hours. Your need: 8h 0m Source: Auto. One cutoff at 2:30 PM fitted to your schedule. It does not recalculate debt or Energy.',
       primary: 'Remind me at 2:30pm',
       ghosts: ['Why this?'],
+    },
+    v2: {
+      // buildingStatusLine('Building — 11 of 14 nights')
+      status: 'Getting more accurate · 11 of 14 nights',
+      // debtHeroExplanation energyNote = energyDebtLead(1.8): the hero no
+      // longer repeats "Last night is in the 14-night set." under the status.
+      explanation: 'You’re only a little behind, so your energy should hold up well today.',
+      lastNight: {
+        // lastNightSourceLine({ clocks, chip: 'Auto' })
+        line: '11:42p – 6:34a · from phone motion',
+        primary: 'Looks right',
+        secondary: 'Edit',
+        sheet: {
+          title: 'Edit last night',
+          // lastNightSheetInfoLine({ chip: 'Auto', confidence: 91, durationMinutes: 412 })
+          info: 'Estimated from phone motion (91% confidence). A still phone in the evening can look like sleep — fix the times if you fell asleep later.',
+          toggle: 'Edit times / split night',
+        },
+      },
+      aria: {
+        // localMorningBrief(ctx, caffeine_cutoff 14:30, { needMinutes: 480 })
+        brief: "Short night, 6h 52m. You're about 2 hours behind, so today should feel steady. Last coffee by 2:30pm today.",
+        more: 'More',
+      },
     },
     energy: { known: true, pct: '78', band: 'HIGH ENERGY', title: 'Right now', pill: PEAK_PILL },
     trend: [
@@ -299,7 +349,7 @@ const STATES = {
       lastUpdated: null,
       cta: null,
       payoff: 'Tue, Jan 26',
-      explanation: 'Pay acute 14-night debt toward under five hours to lift Energy. Last night is in the 14-night set.',
+      explanation: 'You’re quite far behind. A few earlier nights will lift your energy. Last night is in the 14-night set.',
     },
     orb: {
       durationLabel: '5h 30m', showDuration: true,
@@ -320,6 +370,28 @@ const STATES = {
       body: 'Last night 5h 30m. Acute 14-night sleep debt 6.0h across 14 trusted nights. Last night is in the 14-night set. Energy is 44% because acute 14-night debt is 6.0h — above the five-hour target, not because last night was short on its own. Your need: 8h 0m Source: Auto. Acute 14-night debt is 6.0h and last night was 5h 30m. One earlier bed is the habit — the Energy index stays the existing mapping.',
       primary: 'Remind me at 12am',
       ghosts: ['Why this?'],
+    },
+    v2: {
+      // 14 of 14 nights: debtBuildingLabel returns null, so the recovered line stays
+      status: '↓ 0.4h recovered this week',
+      // energyDebtLead(6.0)
+      explanation: 'You’re quite far behind. A few earlier nights will lift your energy.',
+      lastNight: {
+        line: '1:05a – 6:35a · from phone motion',
+        primary: 'Looks right',
+        secondary: 'Edit',
+        sheet: {
+          title: 'Edit last night',
+          // lastNightSheetInfoLine({ chip: 'Auto', confidence: 88, durationMinutes: 330 })
+          info: 'Estimated from phone motion (88% confidence). A still phone is not the same as sleep — fix the times if you fell asleep later.',
+          toggle: 'Edit times / split night',
+        },
+      },
+      aria: {
+        // localMorningBrief(ctx, earlier_bed 00:00, { needMinutes: 480 })
+        brief: "Short night, 5h 30m. You're about 6 hours behind, so expect a dip after lunch. Get to bed by 12am tonight.",
+        more: 'More',
+      },
     },
     energy: { known: true, pct: '44', band: 'GROGGY', title: 'Right now', pill: PEAK_PILL },
     trend: [
@@ -373,6 +445,28 @@ const STATES = {
       body: 'Last night estimated 6h 44m. Acute 14-night sleep debt 3.1h across 1 night (provisional). Last night is in the 14-night set. Energy is 65% because acute 14-night debt is 3.1h — still under about five hours. Your need: 8h 0m Source: estimated from your phone. It already counts toward your debt; edit the times if they look wrong. One cutoff at 2:30 PM fitted to your schedule. It does not recalculate debt or Energy.',
       primary: 'Remind me at 2:30pm',
       ghosts: ['Why this?'],
+    },
+    v2: {
+      // buildingStatusLine('Provisional — Building 1 of 14 nights')
+      status: 'Getting more accurate · 1 of 14 nights',
+      // debtHeroExplanation({ provisional: true, nightsUsed: 1 })
+      explanation: 'Your number sharpens a little with each night we see.',
+      lastNight: {
+        line: '11:48p – 6:32a · from phone motion',
+        primary: 'Looks right',
+        secondary: 'Edit',
+        sheet: {
+          title: 'Edit last night',
+          // lastNightSheetInfoLine({ chip: 'Estimated', confidence: 62, durationMinutes: 404 })
+          info: 'Estimated from phone motion (62% confidence). A still phone in the evening can look like sleep — fix the times if you fell asleep later.',
+          toggle: 'Edit times if this window is wrong',
+        },
+      },
+      aria: {
+        // localMorningBrief(ctx, caffeine_cutoff 14:30, { needMinutes: 480 })
+        brief: "Short night, 6h 44m (estimated). You're about 3 hours behind, so the afternoon may feel soft. Last coffee by 2:30pm today.",
+        more: 'More',
+      },
     },
     energy: { known: true, pct: '65', band: 'DIP', title: 'Provisional', pill: PEAK_PILL },
     trend: [
@@ -482,6 +576,13 @@ function qsState() {
 function qsFull() {
   return new URLSearchParams(location.search).get('view') === 'full';
 }
+/* ?sheet=1 shows the Edit sheet; ?more=1 expands the Aria debrief. */
+function qsSheet() {
+  return new URLSearchParams(location.search).get('sheet') === '1';
+}
+function qsMore() {
+  return new URLSearchParams(location.search).get('more') === '1';
+}
 
 
 const PILL_COLORS = { amber: '#fbbf24', rose: '#fb7185', violet: '#a78bfa', faint: 'rgba(255,255,255,0.35)' };
@@ -527,9 +628,10 @@ function orbHtml(s) {
 
 function heroHtml(s) {
   const o = s.orb;
+  const explanation = s.v2.explanation;
   const pace = s.hero.payoff
-    ? `Debt-free by <span class="paceStrong">${s.hero.payoff}</span>. ${esc(s.hero.explanation)}`
-    : esc(s.hero.explanation);
+    ? `Debt-free by <span class="paceStrong">${s.hero.payoff}</span>. ${esc(explanation)}`
+    : esc(explanation);
   return `<div class="glass hero">
     <div class="sheen"></div><div class="hl"></div>
     <div class="gcontent"><div class="heroInner">
@@ -549,7 +651,7 @@ function heroHtml(s) {
           ${o.scoreNote ? `<div class="tileNote">${esc(o.scoreNote)}</div>` : ''}
         </div></div>
       </div>
-      <div class="${s.hero.statusKind === 'recovered' ? 'recovered' : 'statusLine'}">${esc(s.hero.status)}</div>
+      <div class="${s.hero.statusKind === 'recovered' ? 'recovered' : 'statusLine'}">${esc(s.v2.status)}</div>
       <div class="pace">${pace}</div>
     </div></div>
   </div>`;
@@ -557,6 +659,9 @@ function heroHtml(s) {
 
 function lastNightHtml(s) {
   const n = s.lastNight;
+  const v = s.v2.lastNight;
+  // Card face: the duration big, one quiet line, then Looks right / Edit.
+  // Add nap, ±30m and the time editor moved into the sheet Edit opens.
   return `<div class="glass card ${n.tone}">
     <div class="sheen"></div>${n.highlight ? '<div class="hl"></div>' : ''}
     <div class="gcontent">
@@ -567,13 +672,29 @@ function lastNightHtml(s) {
         </div>
         ${pill(n.pill.label, n.pill.color, false)}
       </div>
-      <div class="caption">${esc(n.body)}</div>
-      <div class="napRow"><span class="napBtn">Add nap</span></div>
-      <div class="editToggle">${esc(n.toggle)}</div>
+      <div class="lastLine">${esc(v.line)}</div>
       <div class="btnRow">
-        <span class="primaryBtn">${esc(n.primary)}</span>
-        <span class="ghostBtn">−30m</span>
-        <span class="ghostBtn">+30m</span>
+        <span class="primaryBtn">${esc(v.primary)}</span>
+        <span class="ghostBtn">${esc(v.secondary)}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function editSheetHtml(s) {
+  const sh = s.v2.lastNight.sheet;
+  return `<div class="sheetWrap">
+    <div class="sheet">
+      <div class="grabber"></div>
+      <div class="sheetHead"><div class="sheetTitle">${esc(sh.title)}</div><div class="sheetDone">Done</div></div>
+      <div class="sheetBody">
+        <div class="sheetInfo">${esc(sh.info)}</div>
+        <div class="napRow"><span class="napBtn">Add nap</span></div>
+        <div class="shiftBlock">
+          <div class="shiftLabel">Nudge the whole night</div>
+          <div class="btnRow"><span class="ghostBtn">−30m</span><span class="ghostBtn">+30m</span></div>
+        </div>
+        <div class="editToggle">${esc(sh.toggle)}</div>
       </div>
     </div>
   </div>`;
@@ -591,7 +712,9 @@ function ariaHtml(s) {
         <div class="spacer"></div>
         <div class="ariaTime">${a.time}</div>
       </div>
-      <div class="ariaBody">${esc(a.body)}</div>
+      <div class="ariaBody">${esc(s.v2.aria.brief)}</div>
+      ${qsMore() ? `<div class="ariaDetail">${esc(a.body)}</div>` : ''}
+      <div class="moreToggle">${qsMore() ? 'Less' : esc(s.v2.aria.more)}</div>
       <div class="btnRow">
         <span class="primaryBtn">${esc(a.primary)}</span>
         ${a.ghosts.map((g) => `<span class="ghostBtn">${esc(g)}</span>`).join('')}
@@ -747,7 +870,8 @@ function render() {
       </div></div>
       ${dockHtml()}
     </div>
-    ${tabBarHtml()}`;
+    ${tabBarHtml()}
+    ${qsSheet() ? editSheetHtml(s) : ''}`;
   const h = full ? phone.getBoundingClientRect().height : 852;
   document.getElementById('auroraSlot').outerHTML = auroraHtml(393, h);
   document.title = `Somniq Home AFTER — ${key}`;
