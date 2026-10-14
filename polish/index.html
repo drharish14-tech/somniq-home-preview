@@ -125,9 +125,9 @@ body.full .scroll { overflow: visible; }
 .tileValCyan { color: var(--cyan); }
 .tileNote { font-size: 11px; line-height: 15px; color: var(--inkTertiary); }
 
-.recovered { font-weight: 600; font-size: 14px; line-height: 20px; color: var(--green); margin-top: 16px; text-align: center; }
-.statusLine { font-weight: 500; font-size: 14px; line-height: 20px; color: var(--inkSecondary); margin-top: 16px; text-align: center; }
-.pace { font-size: 13px; line-height: 19px; color: var(--inkTertiary); margin-top: 8px; text-align: center; }
+.recovered { font-weight: 600; font-size: 13px; line-height: 18px; color: var(--green); margin-top: 14px; text-align: center; }
+.statusLine { font-weight: 500; font-size: 13px; line-height: 18px; color: var(--inkSecondary); margin-top: 14px; text-align: center; }
+.pace { font-size: 12px; line-height: 17.5px; color: var(--inkTertiary); margin-top: 7px; text-align: center; }
 .paceStrong { color: var(--ink); font-weight: 600; }
 
 /* ---- cards ---- */
@@ -135,23 +135,27 @@ body.full .scroll { overflow: visible; }
 .energyCard { padding-top: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.42); }
 .caption { font-size: 13px; line-height: 19px; color: var(--inkSecondary); }
 
-/* Last night is the debt's partner stat and it has no box: the hero's own
+/* Last night is the debt's CO-HEADLINE and it has no box: the hero's own
    edges are the container, so the block sits on the same centred axis as the
-   orb, the score pill and the pace line. A moon + small-caps LAST NIGHT ·
-   clocks line closed by a hairline chevron, the duration as display type in
-   the orb's gradient, and a slim meter of the night against the need. */
-.lastLineWrap { align-self: stretch; width: 100%; margin-top: 18px; }
+   orb, the score pill and the pace line. A moon + small-caps SLEPT LAST NIGHT
+   closed by a hairline chevron, the duration as display type in the orb's
+   gradient at the debt number's own size, the clocks under it, and a thick
+   meter of the night against the need. */
+.lastLineWrap { align-self: stretch; width: 100%; margin-top: 28px; }
 .lastLine { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
-/* The two glyphs bracket the caps line, so the block still reads as tappable
+/* The two glyphs bracket the heading, so the block still reads as tappable
    without a border to say so. */
 .lastLineCaps { display: flex; align-items: center; justify-content: center; gap: 7px; max-width: 100%; }
-.lastLineLabel { flex-shrink: 1; min-width: 0; font-weight: 600; font-size: 10px; line-height: 14px;
-  letter-spacing: 1.5px; text-transform: uppercase; color: var(--inkTertiary);
+.lastLineLabel { flex-shrink: 1; min-width: 0; font-weight: 600; font-size: 11px; line-height: 14px;
+  letter-spacing: 1.7px; text-transform: uppercase; color: var(--inkSecondary);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* Display type at the orb's own weight and face, filled white into brand teal. */
-.lastLineVal { font-weight: 800; font-size: 38px; line-height: 44px; letter-spacing: -1.4px; margin-top: 4px;
+.lastLineVal { font-weight: 800; font-size: 56px; line-height: 62px; letter-spacing: -2.2px; margin-top: 8px;
   background: linear-gradient(100deg, #ffffff 8%, #a5f3fc 48%, #22d3ee 92%);
   -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* When — under the how much. */
+.lastLineClocks { font-weight: 500; font-size: 14px; line-height: 19px; letter-spacing: 0.2px;
+  color: var(--inkSecondary); margin-top: 6px; text-align: center; white-space: nowrap; }
 /* Nothing logged yet: no gradient and no dash — an em dash in this slot at
    this weight reads as a rule, not a value — so the slot carries the quiet
    line instead and the caps line above it stays bare. A missing morning stays
@@ -159,11 +163,14 @@ body.full .scroll { overflow: visible; }
 .lastLineValEmpty { font-weight: 400; font-size: 15px; line-height: 21px; letter-spacing: 0;
   margin-top: 6px; text-align: center; background: none;
   -webkit-text-fill-color: var(--inkTertiary); color: var(--inkTertiary); }
-/* Last night against the need the app already holds; the legend closes the bar. */
-.lastLineMeter { align-self: stretch; display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-.lastLineTrack { flex: 1; height: 4px; border-radius: 3px; background: rgba(255,255,255,0.09); overflow: hidden; }
-.lastLineFill { height: 4px; border-radius: 3px; background: linear-gradient(90deg, #a78bfa, #22d3ee); }
-.lastLineNeed { font-size: 11px; line-height: 15px; color: var(--faint); }
+/* Last night against the need the app already holds; the legend closes the
+   bar. The row is inset: at 8pt a full-bleed bar reads as a rule across the
+   card instead of as this number's meter. */
+.lastLineMeter { align-self: stretch; display: flex; align-items: center; gap: 10px;
+  margin: 16px 14px 0; }
+.lastLineTrack { flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.1); overflow: hidden; }
+.lastLineFill { height: 8px; border-radius: 4px; background: linear-gradient(90deg, #a78bfa, #22d3ee); }
+.lastLineNeed { font-weight: 500; font-size: 12px; line-height: 16px; color: var(--inkTertiary); }
 /* The sheet head: the provenance chip, the clocks line and Looks right. */
 .sheetHeader { margin-bottom: 14px; }
 .sheetHeaderRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -416,6 +423,14 @@ const STATES = {
       // (needMinutes 480 = 8h 0m; 412 of 480 is the fill, no new math).
       lastNight: { value: '6h 52m', clocks: '11:42p – 6:34a', need: '8h', pct: 0.858, hasDuration: true },
     },
+    v7: {
+      // Seventh polish pass (Harish: "Not highlighted enough! Sleep duration
+      // is very important"). Same slot, same numbers — the duration is
+      // promoted to a co-hero: the heading names it, the gradient number is
+      // the debt number's own size, the clocks sit under it and the need bar
+      // is thick enough to read at arm's length.
+      lastNight: { caps: 'Slept last night', emptyCaps: 'Last night' },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -534,6 +549,14 @@ const STATES = {
       // (needMinutes 480 = 8h 0m; 330 of 480 is the fill, no new math).
       lastNight: { value: '5h 30m', clocks: '1:05a – 6:35a', need: '8h', pct: 0.688, hasDuration: true },
     },
+    v7: {
+      // Seventh polish pass (Harish: "Not highlighted enough! Sleep duration
+      // is very important"). Same slot, same numbers — the duration is
+      // promoted to a co-hero: the heading names it, the gradient number is
+      // the debt number's own size, the clocks sit under it and the need bar
+      // is thick enough to read at arm's length.
+      lastNight: { caps: 'Slept last night', emptyCaps: 'Last night' },
+    },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
       // very small and cute"). Energy leads Home, the Aria card is one line and
@@ -651,6 +674,14 @@ const STATES = {
       // gradient bar for the night against the need the app already holds
       // (needMinutes 480 = 8h 0m; 404 of 480 is the fill, no new math).
       lastNight: { value: '6h 44m', clocks: '11:48p – 6:32a', need: '8h', pct: 0.842, hasDuration: true },
+    },
+    v7: {
+      // Seventh polish pass (Harish: "Not highlighted enough! Sleep duration
+      // is very important"). Same slot, same numbers — the duration is
+      // promoted to a co-hero: the heading names it, the gradient number is
+      // the debt number's own size, the clocks sit under it and the need bar
+      // is thick enough to read at arm's length.
+      lastNight: { caps: 'Estimated last night', emptyCaps: 'Last night' },
     },
     v3: {
       // Third polish pass (Harish: "Energy should be on top bro! Aria should be
@@ -938,20 +969,24 @@ function heroHtml(s) {
 }
 
 // Last night has no card face and no panel any more — one tappable block on
-// the hero's own axis: the moon + caps line with the clocks, the duration in
-// the orb's gradient, and the need meter. Everything that used to sit out here
-// (Looks right, Edit, the chip) is in the sheet it opens.
+// the hero's own axis: the moon + SLEPT LAST NIGHT heading, the duration in
+// the orb's gradient at co-hero size, the clocks, and the need meter.
+// Everything that used to sit out here (Looks right, Edit, the chip) is in
+// the sheet it opens.
 function lastNightLineHtml(s) {
-  const n = s.lastNight;
   const v = s.v6.lastNight;
   const empty = !v.hasDuration;
+  // With nothing logged the heading drops back to the bare noun — nothing
+  // was slept that we know of.
+  const caps = empty ? s.v7.lastNight.emptyCaps : s.v7.lastNight.caps;
   return `<div class="lastLineWrap"><div class="lastLine">
     <div class="lastLineCaps">
       <span class="ion" style="font-size:12px;color:${empty ? 'var(--faint)' : 'var(--cyan)'}">${ION.moon}</span>
-      <span class="lastLineLabel">${empty ? esc(n.eyebrow) : `${esc(n.eyebrow)} \u00b7 ${esc(v.clocks)}`}</span>
-      <span class="ion" style="font-size:11px;color:var(--faint)">${ION.chevron}</span>
+      <span class="lastLineLabel">${esc(caps)}</span>
+      <span class="ion" style="font-size:12px;color:var(--faint)">${ION.chevron}</span>
     </div>
     <div class="lastLineVal${empty ? ' lastLineValEmpty' : ''}">${esc(empty ? v.clocks : v.value)}</div>
+    ${empty ? '' : `<div class="lastLineClocks">${esc(v.clocks)}</div>`}
     ${empty ? '' : `<div class="lastLineMeter">
       <div class="lastLineTrack"><div class="lastLineFill" style="width:${v.pct * 100}%"></div></div>
       <div class="lastLineNeed">of ${esc(v.need)} need</div>
