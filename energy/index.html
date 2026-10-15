@@ -402,6 +402,20 @@ input[type=range]{height:44px;margin-top:-5px;margin-bottom:-5px;}
 @keyframes shimmer{to{background-position:-200% 0;}}
 @media(prefers-reduced-motion:reduce){.state-skeleton{animation:none;}}
 @media(max-width:375px){.slots,.presets,.pair{min-width:0;}.vcard,.pcard,.slot,.preset{min-width:0;}}
+
+body.quiet-state{background:radial-gradient(ellipse at 15% 0%,#201b49 0,transparent 46%),#090d1c;}
+.quiet-state .sky{opacity:.3}.quiet-state .head .kicker{color:#8ee9df}
+.quiet-state .head h1{font-size:29px;letter-spacing:-1.1px;line-height:1.15;max-width:290px}
+.quiet-state .head{padding:24px 2px 22px}.quiet-state .head p{line-height:19px;margin-top:10px;max-width:300px}
+.quiet-state .card{background:linear-gradient(150deg,rgba(47,40,82,.48),rgba(13,20,40,.85));box-shadow:0 18px 40px #03071166;border-color:#a78bfa30}
+.q-art{height:132px;position:relative;margin:6px -18px 0;overflow:hidden}
+.q-art svg{width:100%;height:100%}.q-orbit{position:absolute;top:20px;right:42px;width:42px;height:42px;border-radius:50%;background:linear-gradient(140deg,#c4b5fd,#7875cf);box-shadow:0 0 44px #a78bfa40}
+.q-art small{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:9px;letter-spacing:2px;color:#b6acd1;text-transform:uppercase}
+.q-title{font-size:19px;font-weight:600;letter-spacing:-.4px;margin-top:8px}.q-caption{font-size:12px;line-height:19px;color:#b5b6cb;margin-top:8px}
+.q-steps{padding:2px 18px 16px}.q-step{display:flex;gap:13px;padding:12px 0;border-top:1px solid #ffffff0c}.q-icon{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:#2dd4bf16;color:#70e5d8;font-size:17px}.q-step:nth-child(2) .q-icon{color:#c4b5fd;background:#a78bfa19}.q-step:nth-child(3) .q-icon{color:#fda4cf;background:#f472b616}.q-step strong{font-size:12px;font-weight:600}.q-step p{font-size:11px;line-height:17px;color:#a4a7c1;margin-top:4px}
+.q-button{display:inline-block;border:1px solid #5eead443;border-radius:10px;background:#2dd4bf13;color:#a5f3e9;padding:8px 12px;margin-top:9px;font:600 10px Inter;cursor:pointer}.q-button.secondary{color:#ddd6fe;border-color:#a78bfa40;background:#a78bfa14}
+.q-footer{text-align:center;color:#878ba9;font-size:10px;line-height:17px;margin:18px 12px}.q-status{display:inline-flex;align-items:center;gap:7px;color:#a5f3e9;font-size:9px;letter-spacing:1.5px;text-transform:uppercase}.q-status i{height:5px;width:5px;background:#5eead4;border-radius:50%;box-shadow:0 0 12px #5eead4}
+.quiet-state .state-skeleton{height:8px;margin:10px 0}.q-skrow{display:flex;gap:10px;margin-top:6px}.q-skrow .state-skeleton{flex:1;height:18px}
 </style>
 </head>
 <body>
@@ -745,6 +759,8 @@ const shortClock = (min) => {
   const m = ((Math.round(min) % 1440) + 1440) % 1440, h = Math.floor(m / 60);
   return `${((h % 12) || 12)}:${String(m % 60).padStart(2,'0')}`;
 };
+const windowClock = min => { const m=((Math.round(min)%1440)+1440)%1440,h=Math.floor(m/60); return `${h%12||12}${m%60 ? ':'+String(m%60).padStart(2,'0') : ''}${h>=12?'p':'a'}`; };
+const windowRange = (from,to) => windowClock(from)+'–'+windowClock(to);
 const ampm = (min) => (Math.floor((((min % 1440) + 1440) % 1440) / 60) >= 12 ? 'pm' : 'am');
 const hm = (min) => { const h = Math.floor(min/60), m = Math.round(min%60);
   return h === 0 ? `${m}m` : `${h}h ${String(m).padStart(2,'0')}m`; };
@@ -971,7 +987,7 @@ function renderA(){
       const past = scrub >= (p.to ?? p.at) && i !== liveIndex;
       const isLive = i === liveIndex;
       return `<div class="row ${past ? 'past' : ''} ${isLive ? 'live' : ''} rowdot-${p.band}">
-        <div class="rail"><div class="t">${shortClock(p.at)}</div><div class="m">${p.to ? shortClock(p.to) : ampm(p.at).toUpperCase()}</div></div>
+        <div class="rail"><div class="t">${p.to ? windowClock(p.at) : shortClock(p.at)}</div><div class="m">${p.to ? windowClock(p.to) : ampm(p.at).toUpperCase()}</div></div>
         <div class="spine"><span class="dot"></span><span class="ln"></span></div>
         <div class="bd"><div class="t"><span class="nm" style="${isLive ? '' : 'display:none'}">${live ? 'NOW' : 'THEN'}</span>${p.title}
           <span class="chip ${p.chip[0]}">${p.chip[1]}</span></div>
@@ -1005,7 +1021,7 @@ function renderA(){
       const s = SLOTS[el.dataset.k];
       el.classList.toggle('on', el.dataset.k === slot);
       el.setAttribute('aria-pressed', String(el.dataset.k === slot));
-      el.querySelector('.w').textContent = shortClock(s.from) + '–' + shortClock(s.to);
+      el.querySelector('.w').textContent = windowRange(s.from,s.to);
     });
     const s = SLOTS[slot];
     const mid = (s.from + s.to) / 2;
@@ -1342,7 +1358,7 @@ function renderC(){
        glyphs themselves keeps them readable without a plate behind them */
     const halo = 'stroke="#07060f" stroke-opacity=".88" stroke-width="3.4" stroke-linejoin="round" style="paint-order:stroke"';
     s += `<text x="${CX}" y="${CY + 24}" fill="rgba(255,255,255,.94)" font-size="10" font-family="JetBrains Mono"
-      text-anchor="middle" ${halo}>${shortClock(sel.bed)}${ampm(sel.bed)} → ${shortClock(wake)}a</text>`;
+      text-anchor="middle" ${halo}>${windowRange(sel.bed,wake)}</text>`;
     s += `<text x="${CX}" y="${CY + 39}" fill="rgba(237,233,254,.86)" font-size="9.5" font-family="Inter"
       text-anchor="middle" ${halo}>9a estimate ${open}% · ${sel.debt.toFixed(1)}h debt</text>`;
     svg.innerHTML = s;
@@ -1447,10 +1463,25 @@ document.querySelectorAll('.switch a').forEach((a) => {
 const activeView=document.getElementById('v-'+view);
 if(['empty','loading'].includes(dataState)){
   const loading=dataState==='loading';
-  activeView.innerHTML=`<div class="head"><div class="kicker">Demo</div><h1>${loading ? 'Reading your nights' : 'Your nights start here'}</h1><p>${loading ? 'Bringing your sleep history together' : 'No nights recorded yet'}</p></div>
-    <div class="card violet"><div class="in" aria-busy="${loading}"><div class="eye violet">${loading ? 'Loading' : 'Awaiting sleep'}</div>
-    <div class="h2">${loading ? 'Finding your rhythm' : 'A little history, then insight'}</div>
-    ${loading ? '<div class="state-skeleton" style="height:150px"></div><div class="state-skeleton"></div><div class="state-skeleton" style="width:70%"></div>' : '<p class="sub">Record a night or connect sleep history. Your energy estimate and patterns will appear when there is sleep to work from.</p>'}</div></div>`;
+  document.body.classList.add('quiet-state');
+  const titles={a:['Meet your daily rhythm','Your day, taking shape'],b:['Better nights begin here','Making room for rest'],c:['A rhythm uniquely yours','Your story, coming together']};
+  activeView.innerHTML=`<div class="head"><div class="kicker">Somniq · ${loading?'Connecting the dots':'A fresh beginning'}</div><h1>${titles[view][loading?1:0]}</h1><p>${loading?'We’re bringing your sleep history together. Your insights will appear here when they’re ready.':'Start with sleep. Discover the natural rise and fall of your energy.'}</p></div>
+  <div class="card violet"><div class="in" aria-busy="${loading}">
+    <div class="q-status"><i></i>${loading?'Finding your rhythm':'Your rhythm awaits'}</div>
+    <div class="q-art" role="img" aria-label="Illustration of a flowing daily rhythm"><div class="q-orbit"></div>
+      <svg viewBox="0 0 357 166" aria-hidden="true"><defs><linearGradient id="qline"><stop stop-color="#5eead4"/><stop offset=".5" stop-color="#a78bfa"/><stop offset="1" stop-color="#f9a8d4"/></linearGradient><linearGradient id="qfill" x2="0" y2="1"><stop stop-color="#a78bfa" stop-opacity=".22"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></linearGradient></defs>
+      <path d="M-20 130 C30 140 36 43 95 53 S150 144 202 99 S264 48 292 76 S335 116 380 56 L380 166 L-20 166Z" fill="url(#qfill)"/>
+      <path d="M-20 130 C30 140 36 43 95 53 S150 144 202 99 S264 48 292 76 S335 116 380 56" stroke="url(#qline)" stroke-width="14" opacity=".07" fill="none"/>
+      <path d="M-20 130 C30 140 36 43 95 53 S150 144 202 99 S264 48 292 76 S335 116 380 56" stroke="url(#qline)" stroke-width="2" opacity=".8" fill="none"/>
+      </svg><small>A glimpse of what’s to come</small></div>
+    ${loading?'<div class="q-skrow" aria-hidden="true"><div class="state-skeleton"></div><div class="state-skeleton"></div><div class="state-skeleton"></div></div><div class="state-skeleton" style="width:75%"></div>':''}
+    <div class="q-title">${loading?'Good insight takes a little sleep.':'Make tonight the beginning.'}</div><p class="q-caption">${loading?'While we sync, set yourself up for tonight. You can leave this screen and come back anytime.':'Connect the nights you already have, or let Somniq get to know your next one.'}</p></div>
+    <div class="q-steps">
+      <div class="q-step"><span class="q-icon">⌁</span><div><strong>Let your phone follow your rest</strong><p>Allow Motion to help Somniq recognise your sleep.</p><button class="q-button" data-setup="Motion access is enabled in the Somniq app’s Settings.">Enable Motion ↗</button></div></div>
+      <div class="q-step"><span class="q-icon">♡</span><div><strong>Bring your nights with you</strong><p>Securely connect your existing sleep history.</p><button class="q-button secondary" data-setup="Connect Apple Health from the Somniq app on your iPhone.">Connect Apple Health ↗</button></div></div>
+      <div class="q-step"><span class="q-icon">☾</span><div><strong>Sleep with your phone tonight</strong><p>Keep it nearby as you rest. Check back after you wake.</p></div></div>
+    </div></div><p class="q-footer" role="status">Your sleep, your pace.<br>Personal insights begin with your own nights.</p>`;
+  activeView.querySelectorAll('[data-setup]').forEach(button=>button.addEventListener('click',()=>activeView.querySelector('.q-footer').textContent=button.dataset.setup));
 }else{
   if(view==='a') renderA();
   if(view==='b') renderB();
