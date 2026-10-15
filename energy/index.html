@@ -1,0 +1,1134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Somniq · Energy — three directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------------------
+   Somniq · Energy tab — three design directions, one phone-width page.
+
+     ?v=a   The Living Day    a river of today you can drag a finger through,
+                              and three things to put in the good hours
+     ?v=b   Tonight           one bedtime, two tomorrows, drawn as you drag
+     ?v=c   Fingerprint       14 nights as one radial print you can spin back
+
+   Sample data is the fortnight the review render uses
+   (scripts/review-render/data-energy.ts): 14 nights, 5.9 h of debt, a 7 h 45 m
+   need, last night 00:12 → 06:57. Every number on the page is computed from
+   it in the script at the bottom — nothing is typed in twice.
+
+   Theme follows src/constants/theme.ts: Inter + JetBrains Mono, glass over an
+   aurora, teal / amber / coral. No blue anywhere.
+--------------------------------------------------------------------------- */
+:root{
+  --ink:#FFFFFF;
+  --muted:rgba(255,255,255,0.56);
+  --faint:rgba(255,255,255,0.34);
+  --hairline:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.10);
+  --teal:#2dd4bf;
+  --amber:#fbbf24;
+  --coral:#fb7185;
+  --violet:#a78bfa;
+  --r:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+html{background:#07070f;}
+body{background:#07070f;color:var(--ink);font-family:'Inter',-apple-system,system-ui,sans-serif;min-height:100%;
+  -webkit-tap-highlight-color:transparent;}
+
+/* --- aurora backdrop (GlassScreen palette="dawn") ------------------------ */
+.sky{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;}
+.sky i{position:absolute;display:block;border-radius:50%;filter:blur(64px);}
+.b1{width:380px;height:380px;left:-130px;top:-160px;background:rgba(251,191,36,.44);}
+.b2{width:320px;height:320px;right:-150px;top:80px;background:rgba(251,113,133,.34);}
+.b3{width:360px;height:360px;left:-90px;top:600px;background:rgba(167,139,250,.28);}
+.b4{width:300px;height:300px;right:-120px;top:1020px;background:rgba(45,212,191,.20);}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 60% at 50% 0%,rgba(0,0,0,0) 38%,rgba(0,0,0,.6) 100%);}
+
+/* --- page ---------------------------------------------------------------- */
+.page{position:relative;z-index:2;width:393px;margin:0 auto;padding:0 18px 76px;}
+.switch{display:flex;gap:4px;align-items:center;margin:12px 0 2px;padding:4px;
+  border-radius:999px;border:1px solid var(--hairline);background:rgba(10,10,18,.55);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);width:max-content;}
+.switch a{flex:none;display:block;padding:6px 11px;border-radius:999px;text-decoration:none;
+  font-size:10px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;color:var(--faint);}
+.switch a.on{background:rgba(255,255,255,.95);color:#06060c;}
+
+.head{padding:18px 0 14px;}
+.head h1{font-size:23px;font-weight:700;letter-spacing:-.5px;}
+.head p{margin-top:4px;font-size:12.5px;color:var(--faint);}
+.head .kicker{display:inline-flex;align-items:center;gap:6px;margin-bottom:9px;
+  font-size:9px;font-weight:600;letter-spacing:2.4px;text-transform:uppercase;color:var(--amber);}
+.head .kicker b{width:5px;height:5px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);
+  animation:pulse 2.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.8);}}
+
+/* --- glass --------------------------------------------------------------- */
+.card{position:relative;border-radius:var(--r);border:1px solid var(--border);
+  background:rgba(16,14,24,.34);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+  overflow:hidden;margin-bottom:14px;box-shadow:0 10px 26px rgba(0,0,0,.4);}
+.card::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(140deg,rgba(255,255,255,.075),rgba(255,255,255,.015));}
+.card::after{content:'';position:absolute;top:0;left:18px;right:18px;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));}
+.card.hero{border-color:rgba(251,191,36,.26);}
+.card.hero::before{background:linear-gradient(140deg,rgba(251,191,36,.18),rgba(251,113,133,.06));}
+.card.teal::before{background:linear-gradient(140deg,rgba(45,212,191,.15),rgba(255,255,255,.015));}
+.card.violet::before{background:linear-gradient(140deg,rgba(167,139,250,.17),rgba(255,255,255,.015));}
+.card.flush .in{padding:18px 0 16px;}
+.in{position:relative;z-index:1;padding:18px;}
+
+.eye{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);}
+.eye.teal{color:var(--teal);} .eye.amber{color:var(--amber);} .eye.coral{color:var(--coral);}
+.eye.violet{color:var(--violet);}
+.h2{font-size:17px;font-weight:700;letter-spacing:-.25px;margin-top:6px;}
+.sub{font-size:12.5px;line-height:18.5px;color:var(--muted);margin-top:6px;}
+.pad{padding:0 18px;}
+
+/* --- A: the living day --------------------------------------------------- */
+.readout{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
+.readout .big{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:54px;line-height:52px;
+  letter-spacing:-3px;background:linear-gradient(100deg,#fbbf24,#fb7185);
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.readout .pc{font-family:'JetBrains Mono',monospace;font-size:19px;color:var(--faint);margin-left:2px;}
+.readout .rt{text-align:right;flex:none;}
+.statepill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  font-size:11px;font-weight:600;letter-spacing:.2px;white-space:nowrap;}
+.readout .clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:7px;display:block;}
+.indexnote{font-size:10.5px;letter-spacing:.2px;color:var(--faint);margin-top:9px;}
+.leadline{font-size:13px;line-height:19.5px;color:rgba(255,255,255,.84);margin-top:12px;}
+.leadline b{font-weight:600;color:#fff;}
+
+.river{position:relative;margin-top:4px;touch-action:none;cursor:grab;user-select:none;}
+.river:active{cursor:grabbing;}
+.river svg{display:block;width:100%;height:200px;}
+.hint{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:6px;
+  font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.30);}
+.hint i{width:14px;height:1px;background:rgba(255,255,255,.25);display:block;}
+
+.slots{display:flex;gap:7px;padding:0 18px;margin-top:4px;}
+.slot{flex:1;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.045);
+  padding:10px 8px;text-align:center;cursor:pointer;transition:transform .14s ease,border-color .14s,background .14s;}
+.slot:active{transform:scale(.97);}
+.slot.on{border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.13);}
+.slot .ic{font-size:15px;line-height:17px;}
+.slot .k{font-size:10px;font-weight:600;margin-top:5px;color:rgba(255,255,255,.78);}
+.slot.on .k{color:#fff;}
+.slot .w{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);margin-top:2px;}
+.slot.on .w{color:var(--amber);}
+.slotcopy{margin:14px 18px 0;padding:13px 14px;border-radius:14px;
+  border:1px solid rgba(251,191,36,.22);background:rgba(251,191,36,.08);}
+.slotcopy .t{font-size:13px;font-weight:600;}
+.slotcopy .t span{font-family:'JetBrains Mono',monospace;color:var(--amber);}
+.slotcopy .d{font-size:11.5px;line-height:17px;color:var(--muted);margin-top:4px;}
+
+.plan{margin-top:2px;}
+.row{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--hairline);}
+.row:first-child{border-top:0;}
+.rail{width:36px;flex:none;text-align:right;}
+.rail .t{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:rgba(255,255,255,.74);}
+.rail .m{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
+.spine{width:12px;flex:none;position:relative;display:flex;justify-content:center;}
+.spine .dot{width:9px;height:9px;border-radius:50%;margin-top:4px;background:var(--faint);z-index:1;}
+.spine .ln{position:absolute;top:14px;bottom:-12px;width:1.5px;background:var(--hairline);}
+.row:last-child .spine .ln{display:none;}
+.bd{flex:1;min-width:0;}
+.bd .t{font-size:14px;font-weight:600;letter-spacing:-.1px;display:flex;align-items:center;gap:7px;}
+.bd .t .nm{flex:none;}
+.bd .d{font-size:12px;line-height:17.5px;color:var(--muted);margin-top:3px;}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 7px;border-radius:7px;
+  white-space:nowrap;flex:none;margin-left:auto;}
+.chip.teal{color:var(--teal);background:rgba(45,212,191,.13);}
+.chip.amber{color:var(--amber);background:rgba(251,191,36,.13);}
+.chip.coral{color:var(--coral);background:rgba(251,113,133,.13);}
+.chip.violet{color:var(--violet);background:rgba(167,139,250,.15);}
+.row.past{opacity:.4;}
+.row.live .bd .t{color:var(--coral);}
+.row.live .spine .dot{background:var(--coral);box-shadow:0 0 0 4px rgba(251,113,133,.15),0 0 14px rgba(251,113,133,.75);}
+.nm{font-size:8px;font-weight:700;letter-spacing:1px;color:#1a0b0f;background:var(--coral);
+  padding:2px 5px;border-radius:4px;}
+.rowdot-teal .dot{background:var(--teal);} .rowdot-amber .dot{background:var(--amber);}
+.rowdot-violet .dot{background:var(--violet);} .rowdot-coral .dot{background:var(--coral);}
+
+.steps{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:14px;}
+.steps i{flex:1;border-radius:2px 2px 0 0;display:block;
+  background:linear-gradient(180deg,rgba(45,212,191,.9),rgba(45,212,191,.16));}
+.steps i.dim{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04));}
+.axis{display:flex;justify-content:space-between;margin-top:6px;}
+.axis span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
+
+/* --- B: tonight ---------------------------------------------------------- */
+.bigtime{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:46px;line-height:48px;
+  letter-spacing:-2.4px;white-space:nowrap;margin-top:6px;
+  background:linear-gradient(100deg,#2dd4bf,#fbbf24);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.undertime{font-size:12.5px;color:var(--muted);margin-top:7px;}
+.undertime b{color:#fff;font-weight:600;}
+.slidewrap{margin-top:20px;}
+.breakeven{position:relative;height:15px;}
+.breakeven span{position:absolute;transform:translateX(-50%);white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.6);}
+.breakeven span::after{content:'';position:absolute;left:50%;top:13px;width:1px;height:15px;background:rgba(255,255,255,.42);}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;cursor:pointer;}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;
+  background:linear-gradient(90deg,#2dd4bf 0%,#fbbf24 46%,#fb7185 100%);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;margin-top:-10px;
+  border-radius:50%;background:#fff;border:5px solid #14121e;box-shadow:0 0 0 1px rgba(255,255,255,.35),0 6px 18px rgba(0,0,0,.6);}
+input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:linear-gradient(90deg,#2dd4bf,#fbbf24,#fb7185);}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:5px solid #14121e;}
+.ticks{display:flex;justify-content:space-between;margin-top:2px;}
+.ticks span{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint);}
+.presets{display:flex;gap:7px;margin-top:14px;}
+.preset{flex:1;border:1px solid var(--border);background:rgba(255,255,255,.045);border-radius:12px;
+  padding:8px 6px;text-align:center;cursor:pointer;transition:background .14s,border-color .14s;}
+.preset.on{border-color:rgba(251,191,36,.55);background:rgba(251,191,36,.12);}
+.preset .k{font-size:9px;letter-spacing:.9px;text-transform:uppercase;color:var(--faint);}
+.preset .v{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;margin-top:3px;}
+.preset.on .v{color:var(--amber);}
+
+.versus{display:flex;gap:10px;margin-top:4px;}
+.vcard{flex:1;border-radius:16px;padding:13px 12px;border:1px solid var(--hairline);background:rgba(255,255,255,.035);}
+.vcard.win{border-color:rgba(45,212,191,.34);background:rgba(45,212,191,.09);}
+.vcard .k{font-size:8.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);}
+.vcard .tm{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-top:5px;}
+.vcard svg{display:block;width:100%;height:40px;margin-top:9px;}
+.vcard .mt{font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;letter-spacing:-.8px;margin-top:8px;}
+.vcard .mm{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:14.5px;}
+.vsline{text-align:center;font-size:11px;color:var(--faint);margin:12px 0 0;letter-spacing:.3px;}
+
+.curvewrap{margin-top:14px;}
+.curvewrap svg{display:block;width:100%;height:136px;overflow:visible;}
+.curvelabel{display:flex;justify-content:space-between;margin-top:8px;}
+.curvelabel span{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint);}
+.legend{display:flex;gap:14px;margin-top:11px;}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);}
+.legend i{width:16px;height:2px;border-radius:2px;display:block;}
+
+.weekline{margin-top:12px;}
+.weekline svg{display:block;width:100%;height:92px;overflow:visible;}
+.lock{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:var(--faint);}
+
+.ladder{margin-top:4px;}
+.lrow{display:flex;align-items:center;gap:10px;padding:7px 0;}
+.lrow .n{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);width:62px;flex:none;}
+.lrow .bar{flex:1;height:9px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;}
+.lrow .bar i{display:block;height:100%;border-radius:999px;}
+.lrow .v{font-family:'JetBrains Mono',monospace;font-size:11px;width:40px;text-align:right;flex:none;color:rgba(255,255,255,.82);}
+
+/* --- C: fingerprint ------------------------------------------------------ */
+.print{position:relative;touch-action:none;user-select:none;}
+.print svg{display:block;width:100%;height:357px;}
+.printkey{display:flex;justify-content:center;gap:13px;margin-top:2px;}
+.printkey span{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--faint);}
+.printkey i{width:7px;height:7px;border-radius:2px;display:block;}
+.printhint{text-align:center;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-top:9px;}
+.nightbar{display:flex;gap:3px;padding:0 18px;margin-top:14px;}
+.nightbar i{flex:1;height:30px;border-radius:5px;display:block;cursor:pointer;position:relative;
+  border:1px solid transparent;}
+.nightbar i.on{border-color:rgba(255,255,255,.8);transform:scaleY(1.14);}
+.nbaxis{display:flex;justify-content:space-between;padding:0 18px;margin-top:5px;}
+.nbaxis span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
+
+.finds{margin-top:2px;}
+.find{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--hairline);}
+.find:first-child{border-top:0;}
+.find .ic{width:36px;height:36px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;}
+.find .ic.teal{color:var(--teal);background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.24);}
+.find .ic.amber{color:var(--amber);background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.24);}
+.find .ic.coral{color:var(--coral);background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.24);}
+.find .t{font-size:13.5px;font-weight:600;}
+.find .d{font-size:11.5px;line-height:17px;color:var(--muted);margin-top:3px;}
+.pair{display:flex;gap:10px;margin-top:14px;}
+.pcard{flex:1;border-radius:14px;border:1px solid var(--hairline);background:rgba(255,255,255,.04);padding:12px;}
+.pcard .k{font-size:9px;letter-spacing:1.3px;text-transform:uppercase;}
+.pcard .v{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;margin-top:6px;letter-spacing:-.5px;}
+.pcard .d{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:15px;}
+
+/* --- aria + plus --------------------------------------------------------- */
+.aria{display:flex;align-items:center;gap:10px;}
+.orb{width:26px;height:26px;border-radius:50%;flex:none;position:relative;
+  background:conic-gradient(from 210deg,#a78bfa,#2dd4bf,#fb7185,#a78bfa);}
+.orb::after{content:'';position:absolute;inset:4px;border-radius:50%;background:#0b0a14;}
+.aria .n{font-size:12px;font-weight:600;}
+.aria .e{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-size:21px;line-height:28px;margin-top:12px;
+  color:rgba(255,255,255,.95);letter-spacing:.1px;}
+.serif em{font-style:italic;color:var(--amber);}
+.plustag{font-size:8.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#120d04;
+  background:linear-gradient(100deg,#fbbf24,#fb7185);padding:3px 7px;border-radius:5px;}
+.plus .t{font-size:13.5px;font-weight:600;margin-top:11px;}
+.plus .d{font-size:11.5px;line-height:17px;color:var(--muted);margin-top:4px;}
+.cta{display:block;margin-top:13px;text-align:center;border-radius:13px;padding:11px;
+  background:rgba(255,255,255,.95);color:#07070c;font-size:12.5px;font-weight:600;text-decoration:none;}
+.ghost{display:block;margin-top:9px;text-align:center;border-radius:13px;padding:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,.05);color:#fff;font-size:12px;font-weight:600;text-decoration:none;}
+.foot{margin-top:18px;font-size:10px;line-height:16px;color:rgba(255,255,255,.3);}
+.view{display:none;} .view.on{display:block;}
+</style>
+</head>
+<body>
+<div class="sky"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i></div>
+<div class="grain"></div>
+
+<div class="page">
+  <nav class="switch">
+    <a href="?v=a" data-v="a">A · Living day</a>
+    <a href="?v=b" data-v="b">B · Tonight</a>
+    <a href="?v=c" data-v="c">C · Fingerprint</a>
+  </nav>
+
+  <!-- ══════════════════════════════ A ══════════════════════════════ -->
+  <section class="view" id="v-a">
+    <div class="head">
+      <div class="kicker"><b></b> <span id="a-kicker">Live</span></div>
+      <h1>Your day, running</h1>
+      <p id="a-date">Thursday, October 15 · drag the river to read any hour</p>
+    </div>
+
+    <div class="card hero flush">
+      <div class="in">
+        <div class="pad">
+          <div class="readout">
+            <div><span class="big" id="a-num">44</span><span class="pc">%</span></div>
+            <div class="rt">
+              <span class="statepill" id="a-state">Afternoon dip</span>
+              <span class="clock" id="a-clock">2:20 PM · now</span>
+            </div>
+          </div>
+          <p class="indexnote" id="a-note"></p>
+          <p class="leadline" id="a-lead"></p>
+        </div>
+        <div class="river" id="a-river"><svg id="a-svg" viewBox="0 0 357 200" preserveAspectRatio="none"></svg></div>
+        <div class="hint"><i></i> drag anywhere on the river <i></i></div>
+      </div>
+    </div>
+
+    <div class="card flush">
+      <div class="in">
+        <div class="pad">
+          <div class="eye amber">Put it in the right hour</div>
+          <div class="h2">What are you planning?</div>
+        </div>
+        <div class="slots" id="a-slots">
+          <div class="slot" data-k="focus"><div class="ic">◆</div><div class="k">Deep work</div><div class="w">—</div></div>
+          <div class="slot" data-k="train"><div class="ic">▲</div><div class="k">Workout</div><div class="w">—</div></div>
+          <div class="slot" data-k="talk"><div class="ic">●</div><div class="k">Hard call</div><div class="w">—</div></div>
+        </div>
+        <div class="slotcopy" id="a-slotcopy"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="in">
+        <div class="eye teal">Built from last night</div>
+        <div class="h2">Hour by hour</div>
+        <p class="sub">Anchored to the 6:57 AM you actually woke at, not a 7 AM default.</p>
+        <div class="plan" id="a-plan"></div>
+      </div>
+    </div>
+
+    <div class="card teal">
+      <div class="in">
+        <div class="eye teal">Motion · today</div>
+        <div class="h2" id="a-steps-h">—</div>
+        <p class="sub" id="a-steps-d"></p>
+        <div class="steps" id="a-steps"></div>
+        <div class="axis"><span>6a</span><span>10a</span><span>2p</span><span>6p</span><span>11p</span></div>
+      </div>
+    </div>
+
+    <div class="card violet">
+      <div class="in">
+        <div class="aria"><span class="orb"></span><span class="n">Aria</span><span class="e">· on the hour</span></div>
+        <p class="serif" id="a-aria"></p>
+      </div>
+    </div>
+
+    <div class="card plus">
+      <div class="in">
+        <span class="plustag">Plus</span>
+        <div class="t">Tomorrow's river, tonight</div>
+        <div class="d">Free gives you today. Plus draws tomorrow before you sleep, and taps you
+          twice — at the cutoff and at the wind-down — because those are the two hours that move it.</div>
+        <a class="cta" href="#">See tomorrow's river</a>
+        <a class="ghost" href="#">Remind me at the cutoff</a>
+      </div>
+    </div>
+    <p class="foot">Timing only. Somniq never advises what to take, or how much.</p>
+  </section>
+
+  <!-- ══════════════════════════════ B ══════════════════════════════ -->
+  <section class="view" id="v-b">
+    <div class="head">
+      <div class="kicker"><b></b> <span>Tonight</span></div>
+      <h1>One night, two tomorrows</h1>
+      <p>Thursday, October 15 · drag to rewrite the morning</p>
+    </div>
+
+    <div class="card hero">
+      <div class="in">
+        <div class="eye amber">If you turn the light off at</div>
+        <div class="bigtime" id="b-time">10:15 PM</div>
+        <div class="undertime" id="b-dur">—</div>
+        <div class="slidewrap">
+          <div class="breakeven"><span id="b-break">break-even</span></div>
+          <input id="b-slider" type="range" min="1260" max="1560" step="5" value="1335" aria-label="Tonight's lights-out">
+          <div class="ticks"><span>9 PM</span><span>10 PM</span><span>11 PM</span><span>12 AM</span><span>1 AM</span><span>2 AM</span></div>
+        </div>
+        <div class="presets" id="b-presets">
+          <div class="preset" data-min="1452"><div class="k">Your usual</div><div class="v">12:12 AM</div></div>
+          <div class="preset" data-min="1380"><div class="k">Your target</div><div class="v">11:00 PM</div></div>
+          <div class="preset" data-min="1335"><div class="k">Catch-up</div><div class="v">10:15 PM</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card flush">
+      <div class="in">
+        <div class="pad">
+          <div class="eye teal">The two mornings</div>
+          <div class="h2" id="b-vs-h">—</div>
+        </div>
+        <div class="pad" style="margin-top:14px">
+          <div class="versus">
+            <div class="vcard" id="b-vcard-ghost">
+              <div class="k">Last night, repeated</div>
+              <div class="tm" id="b-ghost-time">12:12 AM</div>
+              <svg id="b-spark-ghost" viewBox="0 0 150 40" preserveAspectRatio="none"></svg>
+              <div class="mt" id="b-ghost-val">—</div>
+              <div class="mm" id="b-ghost-sub">—</div>
+            </div>
+            <div class="vcard win" id="b-vcard-pick">
+              <div class="k">This bedtime</div>
+              <div class="tm" id="b-pick-time">10:15 PM</div>
+              <svg id="b-spark-pick" viewBox="0 0 150 40" preserveAspectRatio="none"></svg>
+              <div class="mt" id="b-pick-val">—</div>
+              <div class="mm" id="b-pick-sub">—</div>
+            </div>
+          </div>
+          <p class="vsline" id="b-vs-line">—</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="in">
+        <div class="eye amber">Tomorrow's shape</div>
+        <div class="h2" id="b-shape-h">—</div>
+        <p class="sub" id="b-shape-d"></p>
+        <div class="curvewrap"><svg id="b-curve" viewBox="0 0 357 136"></svg></div>
+        <div class="curvelabel"><span>6a</span><span>9a</span><span>12p</span><span>3p</span><span>6p</span><span>9p</span></div>
+        <div class="legend">
+          <span><i style="background:rgba(255,255,255,.4)"></i>Last night repeated</span>
+          <span><i style="background:linear-gradient(90deg,#2dd4bf,#fbbf24)"></i>This bedtime</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="in">
+        <div class="eye coral">The trade</div>
+        <div class="h2" id="b-trade-h">—</div>
+        <p class="sub" id="b-trade-d"></p>
+        <div class="ladder" id="b-ladder"></div>
+      </div>
+    </div>
+
+    <div class="card violet">
+      <div class="in">
+        <div class="aria"><span class="orb"></span><span class="n">Aria</span><span class="e">· tonight</span></div>
+        <p class="serif" id="b-aria"></p>
+      </div>
+    </div>
+
+    <div class="card plus">
+      <div class="in">
+        <span class="plustag">Plus</span>
+        <div class="t">Hold it for a week</div>
+        <div class="d">Free simulates tonight. Plus runs the next seven nights, so you can see
+          which week of bedtimes actually clears the 5.9 h — and watch it hold or slip each morning.</div>
+        <div class="weekline"><svg id="b-week" viewBox="0 0 321 92"></svg></div>
+        <a class="cta" href="#">Project my week</a>
+      </div>
+    </div>
+    <p class="foot">A projection from your own nights and your 7 h 45 m need. Not a promise, and not medical advice.</p>
+  </section>
+
+  <!-- ══════════════════════════════ C ══════════════════════════════ -->
+  <section class="view" id="v-c">
+    <div class="head">
+      <div class="kicker"><b></b> <span>14 nights</span></div>
+      <h1>Your energy fingerprint</h1>
+      <p>2 – 15 October · one ring per night, midnight at the top</p>
+    </div>
+
+    <div class="card hero flush">
+      <div class="in">
+        <div class="print" id="c-print"><svg id="c-svg" viewBox="0 0 357 357"></svg></div>
+        <div class="printkey">
+          <span><i style="background:#a78bfa"></i>Asleep</span>
+          <span><i style="background:#fb7185"></i>Low</span>
+          <span><i style="background:#fbbf24"></i>Steady</span>
+          <span><i style="background:#2dd4bf"></i>High</span>
+        </div>
+        <div class="printhint">tap a ring · or a night below</div>
+        <div class="nightbar" id="c-bar"></div>
+        <div class="nbaxis"><span>Fri 2</span><span>Thu 15</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="in">
+        <div class="eye amber">Pattern</div>
+        <div class="h2" id="c-head">—</div>
+        <p class="sub" id="c-sub"></p>
+        <div class="finds" id="c-finds" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="in">
+        <div class="eye coral">Two nights, side by side</div>
+        <div class="h2">Your best and your worst</div>
+        <div class="pair" id="c-pair"></div>
+        <p class="sub" id="c-pair-d"></p>
+      </div>
+    </div>
+
+    <div class="card violet">
+      <div class="in">
+        <div class="aria"><span class="orb"></span><span class="n">Aria</span><span class="e">· this fortnight</span></div>
+        <p class="serif" id="c-aria"></p>
+      </div>
+    </div>
+
+    <div class="card plus">
+      <div class="in">
+        <span class="plustag">Plus</span>
+        <div class="t">The print, every Sunday</div>
+        <div class="d">Free keeps the last seven rings. Plus keeps all fourteen, names the one
+          pattern that moved most, and writes you a page on a Sunday night.</div>
+        <a class="cta" href="#">Unlock 14 rings</a>
+      </div>
+    </div>
+    <p class="foot">Violet is sleep. Every other hour is coloured by the energy that morning's
+      debt and your own wake time predict.</p>
+  </section>
+</div>
+
+<script>
+/* ===========================================================================
+   The fortnight — the same seeds as scripts/review-render/data-energy.ts,
+   with the debt the ledger published on each of those mornings.
+   bed/wake are minutes from midnight; bed < 240 means after midnight.
+=========================================================================== */
+const NIGHTS = [
+  { date:'2026-10-02', dow:'Fri', bed:23*60+40, obtained:402, src:'motion', debt:3.9 },
+  { date:'2026-10-03', dow:'Sat', bed:23*60+10, obtained:437, src:'motion', debt:4.2 },
+  { date:'2026-10-04', dow:'Sun', bed:22*60+55, obtained:465, src:'health', debt:3.6 },
+  { date:'2026-10-05', dow:'Mon', bed:23*60+50, obtained:398, src:'motion', debt:4.1 },
+  { date:'2026-10-06', dow:'Tue', bed:25,       obtained:371, src:'motion', debt:5.0 },
+  { date:'2026-10-07', dow:'Wed', bed:23*60+30, obtained:420, src:'motion', debt:4.8 },
+  { date:'2026-10-08', dow:'Thu', bed:23*60+5,  obtained:455, src:'health', debt:4.1 },
+  { date:'2026-10-09', dow:'Fri', bed:23*60+55, obtained:388, src:'motion', debt:4.3 },
+  { date:'2026-10-10', dow:'Sat', bed:23*60+45, obtained:405, src:'motion', debt:4.7 },
+  { date:'2026-10-11', dow:'Sun', bed:23*60+15, obtained:452, src:'health', debt:4.4 },
+  { date:'2026-10-12', dow:'Mon', bed:22*60+50, obtained:470, src:'health', debt:3.7 },
+  { date:'2026-10-13', dow:'Tue', bed:20,       obtained:362, src:'motion', debt:5.0 },
+  { date:'2026-10-14', dow:'Wed', bed:23*60+35, obtained:395, src:'motion', debt:5.5 },
+  { date:'2026-10-15', dow:'Thu', bed:12,       obtained:372, src:'health', debt:5.9 },
+];
+const NEED_MIN = 465;            // 7 h 45 m — the resolved need
+const DEBT = 5.9;                // hours, this morning
+const WAKE = 6*60 + 57;          // last night's real wake
+const ALARM = 6*60 + 57;
+const NOW = 14*60 + 20;          // the clock the review render is frozen at
+const TARGET_BED = 22*60 + 45;
+const DAY_START = 6*60, DAY_END = 23*60 + 30;
+
+const energyFromDebt = (d) => Math.round(Math.max(8, Math.min(100, 100 * Math.exp(-Math.LN2 / 5 * Math.max(0, d)))));
+const WAVE_H = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22];
+const WAVE_E = [25,45,68,85,92,88,72,55,42,48,62,75,80,70,55,35,20];
+function wave(hourFloat, wakeMin){
+  const shift = (wakeMin - 7*60) / 60;
+  const h = Math.max(6, Math.min(22, hourFloat - shift));
+  const i = Math.max(0, Math.min(WAVE_H.length - 2, Math.floor(h) - 6));
+  return WAVE_E[i] + (WAVE_E[i+1] - WAVE_E[i]) * (h - WAVE_H[i]);
+}
+/** One hour of one day: that morning's index, bent by the circadian shape. */
+function energyAt(hourFloat, debtHours, wakeMin){
+  return Math.max(6, Math.min(100, Math.round(energyFromDebt(debtHours) + (wave(hourFloat, wakeMin) - 60) * 0.55)));
+}
+const clock = (min) => {
+  const m = ((min % 1440) + 1440) % 1440, h = Math.floor(m / 60);
+  return `${((h % 12) || 12)}:${String(m % 60).padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`;
+};
+const shortClock = (min) => {
+  const m = ((min % 1440) + 1440) % 1440, h = Math.floor(m / 60);
+  return `${((h % 12) || 12)}:${String(m % 60).padStart(2,'0')}`;
+};
+const ampm = (min) => (Math.floor((((min % 1440) + 1440) % 1440) / 60) >= 12 ? 'pm' : 'am');
+const hm = (min) => { const h = Math.floor(min/60), m = Math.round(min%60);
+  return h === 0 ? `${m}m` : `${h}h ${String(m).padStart(2,'0')}m`; };
+const band = (e) => e >= 66 ? 'teal' : e >= 44 ? 'amber' : 'coral';
+/** Continuous coral → amber → teal, for surfaces that need range, not bands. */
+function scale(e){
+  const stops = [[18,[251,113,133]], [46,[251,191,36]], [78,[45,212,191]]];
+  const v = Math.max(stops[0][0], Math.min(stops[2][0], e));
+  const [lo, hi] = v <= stops[1][0] ? [stops[0], stops[1]] : [stops[1], stops[2]];
+  const t = (v - lo[0]) / (hi[0] - lo[0]);
+  const c = lo[1].map((x, i) => Math.round(x + (hi[1][i] - x) * t));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+const HEX = { teal:'#2dd4bf', amber:'#fbbf24', coral:'#fb7185', violet:'#a78bfa' };
+const BAND_NAME = { teal:'Peak', amber:'Steady', coral:'Dip' };
+
+/* ═══════════════════════════ A · The living day ═══════════════════════════
+   Every moment below is derived: the wake is last night's real one, the dip
+   is the circadian trough after it, the cutoff is nine hours before tonight's
+   target lights-out, the wind-down an hour before it. Timing only.         */
+const INERTIA_END = WAKE + 63;
+const FOCUS_FROM = WAKE + 2*60 + 13, FOCUS_TO = WAKE + 5*60 + 13;
+const CUTOFF = TARGET_BED - 9*60;
+const DIP_FROM = WAKE + 7*60 + 3, DIP_TO = WAKE + 8*60 + 43;
+const NAP_FROM = DIP_FROM + 15, NAP_TO = NAP_FROM + 25;
+const SECOND_FROM = WAKE + 10*60 + 3, SECOND_TO = WAKE + 11*60 + 43;
+const WINDDOWN = TARGET_BED - 60;
+
+const PLAN = [
+  { at:WAKE, title:'Woke', band:'violet', chip:['violet','6h45'],
+    desc:'6 h 45 m, 00:12 → 06:57. Health had the stages; Motion had the window.' },
+  { at:INERTIA_END, title:'Grogginess clears', band:'coral', chip:['coral','until '+shortClock(INERTIA_END)],
+    desc:'Sleep inertia runs about an hour past a short night. Light and water before anything hard.' },
+  { at:FOCUS_FROM, to:FOCUS_TO, title:'Focus window', band:'teal', chip:['teal','3h'],
+    desc:'Your highest hours today. One deep block, decisions first — this is the stretch 5.9 h of debt has least hold over.' },
+  { at:CUTOFF, title:'Caffeine cutoff', band:'amber', chip:['amber','9h before bed'],
+    desc:'Last cup by now to keep a '+shortClock(TARGET_BED)+' lights-out clean. Later coffee is what turned the last three late nights into 00:20 bedtimes.' },
+  { at:DIP_FROM, to:DIP_TO, title:'Afternoon dip', band:'coral', chip:['coral','−18 pts'],
+    desc:'The trough your own curve falls into every day. Walk it, or take the nap below — do not schedule the hard call.' },
+  { at:NAP_FROM, to:NAP_TO, title:'Nap window', band:'teal', chip:['teal','+0.4h'],
+    desc:'25 minutes inside the dip pays about 0.4 h of debt and still leaves tonight intact. Later than '+shortClock(NAP_TO+60)+' and it starts costing you.' },
+  { at:SECOND_FROM, to:SECOND_TO, title:'Second wind', band:'amber', chip:['amber','rebound'],
+    desc:'Good for movement, review and planning. Not a second place to put the hard call.' },
+  { at:WINDDOWN, title:'Wind-down', band:'violet', chip:['violet','60 min'],
+    desc:'Dim the room and put the screens down. The hour before bed is the one you actually control.' },
+  { at:TARGET_BED, title:'Lights out', band:'violet', chip:['teal','−1.1h debt'],
+    desc:'A '+shortClock(TARGET_BED)+' lights-out with your 6:57 alarm is 8 h 12 m — the first night this fortnight that pays debt back instead of adding to it.' },
+];
+
+/** Where each kind of work belongs, found in the curve rather than assumed. */
+const SLOTS = {
+  focus: { label:'Deep work', from:FOCUS_FROM, to:FOCUS_TO,
+    copy:'Your curve is highest here and the debt has least hold on it. One block, phone face down — and nothing that needs a decision after '+shortClock(DIP_FROM)+' '+ampm(DIP_FROM)+'.' },
+  train: { label:'Workout', from:SECOND_FROM, to:SECOND_TO,
+    copy:'Body temperature peaks on the second wind, and a session here lands far enough from a '+shortClock(TARGET_BED)+' lights-out to leave tonight alone.' },
+  talk:  { label:'Hard call', from:WAKE+3*60+3, to:WAKE+4*60+33,
+    copy:'Late morning: past the inertia, well before the trough. The same conversation at '+shortClock(DIP_FROM+40)+' '+ampm(DIP_FROM)+' meets a version of you running 18 points lower.' },
+};
+
+function renderA(){
+  const river = document.getElementById('a-river');
+  const svg = document.getElementById('a-svg');
+  const W = 357, H = 200, MID = 98;
+  let scrub = NOW;            // the minute the finger is on
+  let slot = 'focus';
+
+  const xOf = (min) => ((min - DAY_START) / (DAY_END - DAY_START)) * W;
+  const minOf = (x) => DAY_START + (Math.max(0, Math.min(W, x)) / W) * (DAY_END - DAY_START);
+  const thick = (e) => 6 + (e / 100) * 66;
+
+  function ribbon(){
+    const steps = 110;
+    const top = [], bot = [];
+    for (let i = 0; i <= steps; i++){
+      const min = DAY_START + (DAY_END - DAY_START) * i / steps;
+      const e = energyAt(min / 60, DEBT, WAKE);
+      const t = thick(e) / 2, x = (i / steps) * W;
+      top.push(`${x.toFixed(1)},${(MID - t).toFixed(1)}`);
+      bot.push(`${x.toFixed(1)},${(MID + t).toFixed(1)}`);
+    }
+    return 'M' + top.join(' L') + ' L' + bot.reverse().join(' L') + ' Z';
+  }
+  /* The gradient is the day: one stop per half hour, coloured by its band. */
+  function stops(){
+    let out = '';
+    for (let min = DAY_START; min <= DAY_END; min += 30){
+      const e = energyAt(min / 60, DEBT, WAKE);
+      const col = min >= WINDDOWN ? HEX.violet : scale(e);
+      out += `<stop offset="${(((min - DAY_START) / (DAY_END - DAY_START)) * 100).toFixed(1)}%" stop-color="${col}"/>`;
+    }
+    return out;
+  }
+  const RIBBON = ribbon();
+
+  function draw(){
+    const e = energyAt(scrub / 60, DEBT, WAKE);
+    const sx = xOf(scrub);
+    const t = thick(e) / 2;
+    const live = Math.abs(scrub - NOW) < 8;
+    const bandKey = scrub >= WINDDOWN ? 'violet' : band(e);
+
+    let s = `<defs>
+      <linearGradient id="riv" x1="0" y1="0" x2="1" y2="0">${stops()}</linearGradient>
+      <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#fff" stop-opacity="1"/><stop offset="100%" stop-color="#fff" stop-opacity="1"/>
+      </linearGradient>
+      <clipPath id="pastClip"><rect x="0" y="0" width="${sx.toFixed(1)}" height="${H}"/></clipPath>
+      <filter id="glow" x="-40%" y="-60%" width="180%" height="220%">
+        <feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>`;
+
+    /* the whole day, dim; then everything up to the finger, lit */
+    s += `<path d="${RIBBON}" fill="url(#riv)" opacity=".26"/>`;
+    s += `<g clip-path="url(#pastClip)"><path d="${RIBBON}" fill="url(#riv)" opacity=".95" filter="url(#glow)"/></g>`;
+
+    /* the windows named on the plan, ticked along the top */
+    [[FOCUS_FROM, FOCUS_TO, 'focus', HEX.teal], [DIP_FROM, DIP_TO, 'dip', HEX.coral],
+     [SECOND_FROM, SECOND_TO, '2nd wind', HEX.amber], [WINDDOWN, DAY_END, 'night', HEX.violet]]
+      .forEach(([f, t2, lbl, col]) => {
+        const x1 = xOf(f), x2 = xOf(t2);
+        const cx = Math.max(26, Math.min(W - 26, (x1 + x2) / 2));
+        s += `<rect x="${x1.toFixed(1)}" y="9" width="${(x2-x1).toFixed(1)}" height="3" rx="1.5" fill="${col}" opacity=".6"/>`;
+        s += `<text x="${cx.toFixed(1)}" y="25" fill="${col}" fill-opacity=".85" font-size="8.5"
+          font-family="Inter" font-weight="600" letter-spacing="1" text-anchor="middle">${lbl.toUpperCase()}</text>`;
+      });
+
+    /* the handle */
+    s += `<line x1="${sx.toFixed(1)}" y1="32" x2="${sx.toFixed(1)}" y2="${H - 42}" stroke="#fff" stroke-opacity=".55" stroke-width="1"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="${(t + 9).toFixed(1)}" fill="${HEX[bandKey]}" opacity=".16"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="9" fill="#0b0a12" stroke="#fff" stroke-width="2.4"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="3.4" fill="${HEX[bandKey]}"/>`;
+    const bx = Math.max(34, Math.min(W - 34, sx));
+    s += `<rect x="${(bx - 33).toFixed(1)}" y="${H - 40}" width="66" height="21" rx="10.5" fill="rgba(255,255,255,.96)"/>`;
+    s += `<text x="${bx.toFixed(1)}" y="${H - 25.5}" fill="#09080f" font-size="11" font-weight="700"
+      font-family="JetBrains Mono" text-anchor="middle">${shortClock(scrub)}${ampm(scrub)[0]}</text>`;
+
+    /* the now mark stays visible wherever the finger is */
+    if (!live){
+      const nx = xOf(NOW);
+      s += `<line x1="${nx.toFixed(1)}" y1="36" x2="${nx.toFixed(1)}" y2="${H - 48}" stroke="#fff" stroke-opacity=".3" stroke-dasharray="3,3"/>`;
+      s += `<text x="${nx.toFixed(1)}" y="${H - 52}" fill="rgba(255,255,255,.5)" font-size="8.5"
+        font-family="JetBrains Mono" text-anchor="middle">now</text>`;
+    }
+    [[7,'7a'],[10,'10a'],[13,'1p'],[16,'4p'],[19,'7p'],[22,'10p']].forEach(([h, lbl]) => {
+      s += `<text x="${xOf(h*60).toFixed(1)}" y="${H - 4}" fill="rgba(255,255,255,.32)" font-size="9"
+        font-family="JetBrains Mono" text-anchor="middle">${lbl}</text>`;
+    });
+    svg.innerHTML = s;
+
+    /* the readout follows the finger */
+    document.getElementById('a-num').textContent = e;
+    document.getElementById('a-note').textContent =
+      'Your 44% index, shaped by the hour — ' + hm(NEED_MIN) + ' need, 5.9 h behind.';
+    document.getElementById('a-clock').textContent = clock(scrub) + (live ? ' · now' : ' · scrubbing');
+    document.getElementById('a-kicker').textContent = live ? 'Live · ' + clock(NOW) : 'Reading ' + clock(scrub);
+    const statePill = document.getElementById('a-state');
+    const stateName = scrub >= WINDDOWN ? 'Wind-down'
+      : scrub >= DIP_FROM && scrub < DIP_TO ? 'Afternoon dip'
+      : scrub >= FOCUS_FROM && scrub < FOCUS_TO ? 'Focus window'
+      : scrub >= SECOND_FROM && scrub < SECOND_TO ? 'Second wind'
+      : scrub < INERTIA_END ? 'Grogginess' : BAND_NAME[band(e)];
+    statePill.textContent = stateName;
+    statePill.style.color = HEX[bandKey];
+    statePill.style.background = HEX[bandKey] + '1f';
+    statePill.style.border = '1px solid ' + HEX[bandKey] + '44';
+
+    const next = PLAN.find((p) => p.at > scrub);
+    document.getElementById('a-lead').innerHTML = live
+      ? `<b>${hm(NOW - DIP_FROM)}</b> into the trough, and it lifts at <b>${clock(DIP_TO)}</b>. ` +
+        `The cutoff passed at <b>${shortClock(CUTOFF)}${ampm(CUTOFF)}</b>, so the one lever left today is the ` +
+        `<b>${shortClock(WINDDOWN)}${ampm(WINDDOWN)} wind-down</b>.`
+      : `At <b>${clock(scrub)}</b> you read <b>${e}%</b> — ${stateName.toLowerCase()}. ` +
+        (next ? `Next: <b>${next.title.toLowerCase()}</b> at <b>${clock(next.at)}</b>.` : 'Nothing after this but sleep.');
+
+    /* the plan reads from the same minute */
+    const inWindow = PLAN.findIndex((p) => p.to && scrub >= p.at && scrub < p.to);
+    const liveIndex = inWindow >= 0 ? inWindow
+      : PLAN.reduce((best, p, i) => (scrub >= p.at && scrub < p.at + 45 ? i : best), -1);
+    document.getElementById('a-plan').innerHTML = PLAN.map((p, i) => {
+      const past = scrub >= (p.to ?? p.at) && i !== liveIndex;
+      const isLive = i === liveIndex;
+      return `<div class="row ${past ? 'past' : ''} ${isLive ? 'live' : ''} rowdot-${p.band}">
+        <div class="rail"><div class="t">${shortClock(p.at)}</div><div class="m">${p.to ? shortClock(p.to) : ampm(p.at).toUpperCase()}</div></div>
+        <div class="spine"><span class="dot"></span><span class="ln"></span></div>
+        <div class="bd"><div class="t"><span class="nm" style="${isLive ? '' : 'display:none'}">NOW</span>${p.title}
+          <span class="chip ${p.chip[0]}">${p.chip[1]}</span></div>
+          <div class="d">${p.desc}</div></div></div>`;
+    }).join('');
+  }
+
+  /* drag anywhere on the river */
+  const move = (ev) => {
+    const rect = river.getBoundingClientRect();
+    const x = ((ev.clientX - rect.left) / rect.width) * W;
+    scrub = Math.round(minOf(x) / 5) * 5;
+    draw();
+  };
+  river.addEventListener('pointerdown', (ev) => { river.setPointerCapture(ev.pointerId); move(ev); });
+  river.addEventListener('pointermove', (ev) => { if (ev.pressure > 0 || ev.buttons) move(ev); });
+  river.addEventListener('dblclick', () => { scrub = NOW; draw(); });
+
+  /* the slots */
+  const slotEls = [...document.querySelectorAll('#a-slots .slot')];
+  function paintSlots(){
+    slotEls.forEach((el) => {
+      const s = SLOTS[el.dataset.k];
+      el.classList.toggle('on', el.dataset.k === slot);
+      el.querySelector('.w').textContent = shortClock(s.from) + '–' + shortClock(s.to);
+    });
+    const s = SLOTS[slot];
+    const mid = (s.from + s.to) / 2;
+    document.getElementById('a-slotcopy').innerHTML =
+      `<div class="t">${s.label} sits best at <span>${clock(s.from)} – ${clock(s.to)}</span></div>
+       <div class="d">${s.copy} You read <b>${energyAt(mid/60, DEBT, WAKE)}%</b> across that window today.</div>`;
+  }
+  slotEls.forEach((el) => el.addEventListener('click', () => { slot = el.dataset.k; paintSlots(); }));
+
+  /* Motion, by the hour */
+  const STEPS = [0,0,0,0,0,0,40,620,1420,260,180,210,290,140,0,0,0,0];
+  const done = STEPS.filter((_, i) => (6 + i) <= NOW/60).reduce((a,b) => a+b, 0);
+  const max = Math.max(...STEPS);
+  document.getElementById('a-steps-h').textContent = done.toLocaleString() + ' steps so far';
+  document.getElementById('a-steps-d').textContent =
+    'Nothing since 12:30. On the four days this fortnight you were under 2,000 by now, the dip read about ' +
+    '9 points deeper — ten minutes outside is the cheapest thing on this page.';
+  document.getElementById('a-steps').innerHTML = STEPS.map((s, i) =>
+    `<i class="${(6+i) <= NOW/60 ? '' : 'dim'}" style="height:${Math.max(3,(s/max)*44).toFixed(1)}px"></i>`).join('');
+
+  document.getElementById('a-aria').innerHTML =
+    'The trough lifts at <em>3:40</em>. Ten minutes outside now and the 5 PM block is yours — ' +
+    'then hold the <em>9:45 wind-down</em>, because that is the hour that decides tomorrow.';
+
+  paintSlots();
+  draw();
+}
+
+/* ═════════════════════════════ B · Tonight ═════════════════════════════ */
+function projectDebt(bedMin){
+  const bed = bedMin >= 1440 ? bedMin - 1440 : bedMin;
+  const inBed = ((ALARM + 1440) - bed) % 1440;
+  const asleep = Math.max(0, inBed - 22);          // this sleeper's latency + wake-ups
+  const gapH = (NEED_MIN - asleep) / 60;
+  return { asleep, debt: Math.max(0, Math.round((DEBT + Math.max(-2, Math.min(2.2, gapH))) * 10) / 10) };
+}
+const USUAL_BED = 1452;
+
+function renderB(){
+  const slider = document.getElementById('b-slider');
+  const BREAK_EVEN = ALARM + 1440 - (NEED_MIN + 22);
+  const mark = document.querySelector('.breakeven span');
+  mark.textContent = 'break-even ' + clock(BREAK_EVEN);
+  mark.style.left = (((BREAK_EVEN - Number(slider.min)) / (Number(slider.max) - Number(slider.min))) * 100).toFixed(1) + '%';
+
+  const spark = (el, debtH, colour) => {
+    const W = 150, H = 40;
+    let d = '';
+    for (let h = 6; h <= 22; h += .5){
+      const x = ((h - 6) / 16) * W;
+      const y = H - (energyAt(h, debtH, ALARM) / 100) * (H - 8) - 4;
+      d += (h === 6 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    el.innerHTML = `<path d="${d} L${W},${H} L0,${H} Z" fill="${colour}" opacity=".14"/>` +
+      `<path d="${d}" fill="none" stroke="${colour}" stroke-width="2" stroke-linecap="round"/>`;
+  };
+
+  const draw = () => {
+    const bedMin = Number(slider.value);
+    const { asleep, debt } = projectDebt(bedMin);
+    const ghost = projectDebt(USUAL_BED);
+    const e9 = energyAt(9, debt, ALARM), g9 = energyAt(9, ghost.debt, ALARM);
+    const todayE9 = energyAt(9, DEBT, ALARM);
+    const debtDelta = Math.round((debt - DEBT) * 10) / 10;
+
+    document.getElementById('b-time').textContent = clock(bedMin);
+    document.getElementById('b-dur').innerHTML =
+      `<b>${hm(asleep).replace(' ', '&nbsp;')}</b> asleep before your 6:57 alarm`;
+
+    /* two mornings, side by side */
+    document.getElementById('b-vs-h').textContent =
+      e9 - g9 >= 8 ? 'A different morning entirely'
+      : e9 - g9 >= 3 ? 'A better morning, measurably'
+      : e9 - g9 <= -3 ? 'The worse of the two' : 'Near enough the same morning';
+    document.getElementById('b-ghost-time').textContent = clock(USUAL_BED);
+    document.getElementById('b-pick-time').textContent = clock(bedMin);
+    document.getElementById('b-ghost-val').textContent = g9 + '%';
+    document.getElementById('b-ghost-val').style.color = HEX[band(g9)];
+    document.getElementById('b-pick-val').textContent = e9 + '%';
+    document.getElementById('b-pick-val').style.color = HEX[band(e9)];
+    document.getElementById('b-ghost-sub').textContent = ghost.debt.toFixed(1) + 'h debt · ' + hm(ghost.asleep);
+    document.getElementById('b-pick-sub').textContent = debt.toFixed(1) + 'h debt · ' + hm(asleep);
+    document.getElementById('b-vcard-pick').classList.toggle('win', e9 >= g9);
+    document.getElementById('b-vcard-ghost').classList.toggle('win', g9 > e9);
+    spark(document.getElementById('b-spark-ghost'), ghost.debt, 'rgba(255,255,255,.5)');
+    spark(document.getElementById('b-spark-pick'), debt, HEX[band(e9)]);
+    document.getElementById('b-vs-line').textContent =
+      e9 === g9 ? 'The same 9 AM, either way.'
+      : `${Math.abs(e9 - g9)} points at 9 AM, and ${Math.abs(Math.round((ghost.debt - debt) * 10) / 10).toFixed(1)} h of debt, between those two lights-outs.`;
+
+    document.getElementById('b-shape-h').textContent =
+      debtDelta <= -0.5 ? 'A morning you can use' : debtDelta < 0.3 ? 'Tomorrow holds, roughly' : 'Tomorrow pays for tonight';
+    document.getElementById('b-shape-d').textContent =
+      'Your 9 AM reads ' + e9 + '% and the dip bottoms at ' + energyAt(14.5, debt, ALARM) +
+      '%. The dashed line is tonight repeating last night — ' + clock(USUAL_BED) + ', 6 h 45 m.';
+
+    const W = 357, H = 116, from = 6, to = 22;
+    const path = (dh) => {
+      let p = '';
+      for (let h = from; h <= to; h += .5){
+        const x = ((h - from) / (to - from)) * W;
+        const y = H - (energyAt(h, dh, ALARM) / 100) * (H - 16) - 8;
+        p += (h === from ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+      }
+      return p;
+    };
+    let out = `<defs>
+      <linearGradient id="bline" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#2dd4bf"/><stop offset="55%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#fb7185"/></linearGradient>
+      <linearGradient id="bfill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity=".30"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></linearGradient></defs>`;
+    [25,50,75].forEach((p) => {
+      const y = H - (p/100)*(H-16) - 8;
+      out += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(255,255,255,.05)"/>`;
+    });
+    out += `<path d="${path(debt)} L${W},${H} L0,${H} Z" fill="url(#bfill)"/>`;
+    out += `<path d="${path(ghost.debt)}" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-dasharray="5,4"/>`;
+    out += `<path d="${path(debt)}" fill="none" stroke="url(#bline)" stroke-width="2.8" stroke-linecap="round"/>`;
+    const px = ((9 - from) / (to - from)) * W, py = H - (e9/100)*(H-16) - 8;
+    out += `<circle cx="${px}" cy="${py}" r="10" fill="#fbbf24" opacity=".18"/><circle cx="${px}" cy="${py}" r="4.6" fill="#fbbf24"/><circle cx="${px}" cy="${py}" r="1.8" fill="#fff"/>`;
+    out += `<text x="${px}" y="${py - 14}" fill="#fbbf24" font-size="10" font-family="JetBrains Mono" text-anchor="middle">${e9}% at 9a</text>`;
+    document.getElementById('b-curve').innerHTML = out;
+
+    document.getElementById('b-trade-h').textContent =
+      'Thirty minutes earlier is worth ' + (Math.round((projectDebt(bedMin - 30).debt - debt) * -10) / 10).toFixed(1) + ' h';
+    document.getElementById('b-trade-d').textContent =
+      'Measured against your own 7 h 45 m need, and capped the way the ledger caps one night: ' +
+      'you can pay back two hours in a night, never the whole five.';
+    const rungs = [-60,-30,0,30,60].map((off) => {
+      const b = bedMin + off, r = projectDebt(b);
+      return { label: shortClock(b) + ' ' + ampm(b), debt: r.debt, me: off === 0 };
+    });
+    const worst = Math.max(...rungs.map((r) => r.debt)), bestR = Math.min(...rungs.map((r) => r.debt));
+    document.getElementById('b-ladder').innerHTML = rungs.map((r) => {
+      const w = 16 + ((r.debt - bestR) / Math.max(.4, worst - bestR)) * 84;
+      const col = r.debt <= bestR + (worst - bestR) * .34 ? HEX.teal
+        : r.debt <= bestR + (worst - bestR) * .67 ? HEX.amber : HEX.coral;
+      return `<div class="lrow"><div class="n" style="${r.me ? 'color:#fbbf24;font-weight:700' : ''}">${r.label}</div>
+        <div class="bar"><i style="width:${w.toFixed(1)}%;background:${col};opacity:${r.me ? 1 : .45}"></i></div>
+        <div class="v" style="${r.me ? 'color:#fbbf24' : ''}">${r.debt.toFixed(1)}h</div></div>`;
+    }).join('');
+
+    /* Plus: the same bedtime, seven nights running */
+    const WK = 321, WH = 92;
+    let d = 5.9, pts = [{ d: 5.9 }];
+    for (let i = 0; i < 7; i++){
+      const gap = (NEED_MIN - projectDebt(bedMin).asleep) / 60;
+      d = Math.max(0, Math.round((d + Math.max(-2, Math.min(2.2, gap))) * 10) / 10);
+      pts.push({ d });
+    }
+    const maxD = Math.max(6, ...pts.map((p) => p.d));
+    let wk = '', area = '';
+    pts.forEach((p, i) => {
+      const x = (i / (pts.length - 1)) * WK, y = WH - (p.d / maxD) * (WH - 22) - 14;
+      wk += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+    });
+    let wkOut = `<defs><linearGradient id="wkl" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>`;
+    wkOut += `<path d="${wk}" fill="none" stroke="url(#wkl)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+    pts.forEach((p, i) => {
+      const x = (i / (pts.length - 1)) * WK, y = WH - (p.d / maxD) * (WH - 22) - 14;
+      wkOut += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i === 0 || i === pts.length - 1 ? 4 : 2.4}"
+        fill="${i === pts.length - 1 ? '#2dd4bf' : i === 0 ? '#fb7185' : 'rgba(255,255,255,.5)'}"/>`;
+    });
+    wkOut += `<text x="0" y="${WH - 1}" fill="rgba(255,255,255,.45)" font-size="9" font-family="JetBrains Mono">today 5.9h</text>`;
+    wkOut += `<text x="${WK}" y="${WH - 1}" fill="#2dd4bf" font-size="9" font-family="JetBrains Mono" text-anchor="end">day 7 · ${pts[pts.length-1].d.toFixed(1)}h</text>`;
+    document.getElementById('b-week').innerHTML = wkOut;
+
+    document.getElementById('b-aria').innerHTML =
+      debtDelta <= -0.3
+        ? `Lights out at <em>${clock(bedMin)}</em> and you wake with <em>${debt.toFixed(1)} h</em> instead of 5.9 — the first night this fortnight that gives something back.`
+        : debtDelta < 0.3
+        ? `<em>${clock(bedMin)}</em> keeps you level. Nothing lost, nothing paid — and tomorrow’s dip will feel like today’s.`
+        : `At <em>${clock(bedMin)}</em> tomorrow opens at <em>${e9}%</em>. That would be the fourth short night running, and the fortnight is already carrying three.`;
+
+    document.querySelectorAll('#b-presets .preset').forEach((p) => p.classList.toggle('on', Number(p.dataset.min) === bedMin));
+  };
+  slider.addEventListener('input', draw);
+  document.querySelectorAll('#b-presets .preset').forEach((p) =>
+    p.addEventListener('click', () => { slider.value = p.dataset.min; draw(); }));
+  draw();
+}
+
+/* ══════════════════════════ C · The fingerprint ══════════════════════════
+   One ring per night, 24 hours around the circle, midnight at the top.
+   Violet is the sleep you actually had; every other hour is the energy that
+   morning's debt and your own wake time predict.                           */
+function renderC(){
+  const svg = document.getElementById('c-svg');
+  const CX = 178.5, CY = 178.5, R0 = 48, R1 = 168;
+  const RING = (R1 - R0) / NIGHTS.length;
+  let picked = NIGHTS.length - 1;
+
+  const wakeOf = (n) => {
+    const bed = n.bed < 240 ? n.bed : n.bed - 1440;
+    return (((bed + n.obtained + 33) % 1440) + 1440) % 1440;
+  };
+  const asleepAt = (n, h) => {
+    const bedH = n.bed < 240 ? n.bed / 60 : n.bed / 60 - 24;
+    const wakeH = bedH + (n.obtained + 33) / 60;
+    return h + 0.5 >= bedH && h + 0.5 <= wakeH ? true : (h + 0.5 >= n.bed / 60 && n.bed >= 240);
+  };
+  const seg = (r0, r1, a0, a1) => {
+    const p = (r, a) => [(CX + r * Math.sin(a)).toFixed(2), (CY - r * Math.cos(a)).toFixed(2)];
+    const [x0,y0] = p(r1,a0), [x1,y1] = p(r1,a1), [x2,y2] = p(r0,a1), [x3,y3] = p(r0,a0);
+    return `M${x0},${y0} A${r1},${r1} 0 0 1 ${x1},${y1} L${x2},${y2} A${r0},${r0} 0 0 0 ${x3},${y3} Z`;
+  };
+
+  function draw(){
+    const sel = NIGHTS[picked];
+    let s = `<defs><filter id="pglow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="#07060e"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="none" stroke="rgba(255,255,255,.06)"/>`;
+
+    NIGHTS.forEach((n, i) => {
+      const r0 = R0 + i * RING + 0.5, r1 = R0 + (i + 1) * RING - 0.5;
+      const wake = wakeOf(n), today = i === NIGHTS.length - 1;
+      const dim = i === picked ? 1 : .64;
+      for (let h = 0; h < 24; h++){
+        const a0 = (h / 24) * Math.PI * 2 + 0.006, a1 = ((h + 1) / 24) * Math.PI * 2 - 0.006;
+        const asleep = asleepAt(n, h);
+        let fill, op;
+        if (asleep){ fill = HEX.violet; op = (i === picked ? .8 : .34); }
+        else if (today && h + .5 > NOW / 60){ fill = '#ffffff'; op = .05; }
+        else {
+          const e = energyAt(h + .5, n.debt, wake);
+          fill = scale(e);
+          op = ((.42 + (e / 100) * .58) * dim).toFixed(2);
+        }
+        s += `<path d="${seg(r0, r1, a0, a1)}" fill="${fill}" opacity="${op}"/>`;
+      }
+      if (i === picked){
+        s += `<circle cx="${CX}" cy="${CY}" r="${(r1 + 2.2).toFixed(1)}" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="1.3"/>`;
+        s += `<circle cx="${CX}" cy="${CY}" r="${(r0 - 1.6).toFixed(1)}" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1"/>`;
+      }
+    });
+
+    /* the hours, around the outside */
+    [[0,'12a'],[6,'6a'],[12,'12p'],[18,'6p']].forEach(([h, lbl]) => {
+      const a = (h / 24) * Math.PI * 2;
+      const x = CX + (R1 + 17) * Math.sin(a), y = CY - (R1 + 17) * Math.cos(a) + 3.4;
+      s += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="rgba(255,255,255,.45)" font-size="9.5"
+        font-family="JetBrains Mono" text-anchor="middle">${lbl}</text>`;
+    });
+
+    /* the middle reads the ring you are on */
+    const wake = wakeOf(sel), open = energyFromDebt(sel.debt);
+    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 4}" fill="#06050c"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 4}" fill="none" stroke="rgba(255,255,255,.1)"/>`;
+    s += `<text x="${CX}" y="${CY - 16}" fill="rgba(255,255,255,.5)" font-size="9" font-family="Inter"
+      font-weight="600" letter-spacing="1.8" text-anchor="middle">${sel.dow.toUpperCase()} ${Number(sel.date.slice(8))}</text>`;
+    s += `<text x="${CX}" y="${CY + 7}" fill="${HEX[band(open)]}" font-size="25" font-family="JetBrains Mono"
+      font-weight="700" letter-spacing="-1" text-anchor="middle" filter="url(#pglow)">${hm(sel.obtained).replace(' ','')}</text>`;
+    s += `<text x="${CX}" y="${CY + 24}" fill="rgba(255,255,255,.82)" font-size="10" font-family="JetBrains Mono"
+      text-anchor="middle">${shortClock(sel.bed)}${ampm(sel.bed)} → ${shortClock(wake)}a</text>`;
+    s += `<text x="${CX}" y="${CY + 39}" fill="rgba(255,255,255,.62)" font-size="9.5" font-family="Inter"
+      text-anchor="middle">opened at ${open}% · ${sel.debt.toFixed(1)}h debt</text>`;
+    svg.innerHTML = s;
+
+    document.querySelectorAll('#c-bar i').forEach((el, i) => el.classList.toggle('on', i === picked));
+  }
+
+  /* the night bar under the print — a fortnight of sleep lengths */
+  const maxObt = Math.max(...NIGHTS.map((n) => n.obtained));
+  document.getElementById('c-bar').innerHTML = NIGHTS.map((n, i) => {
+    const open = energyFromDebt(n.debt);
+    return `<i data-i="${i}" title="${n.dow} ${Number(n.date.slice(8))}"
+      style="background:linear-gradient(180deg,${scale(open)},${scale(open).replace('rgb','rgba').replace(')',',.25)')});
+             height:${(16 + (n.obtained / maxObt) * 16).toFixed(1)}px;align-self:flex-end"></i>`;
+  }).join('');
+  document.querySelectorAll('#c-bar i').forEach((el) =>
+    el.addEventListener('click', () => { picked = Number(el.dataset.i); draw(); }));
+
+  const print = document.getElementById('c-print');
+  print.addEventListener('pointerdown', (ev) => {
+    const rect = print.getBoundingClientRect();
+    const x = ((ev.clientX - rect.left) / rect.width) * 357 - CX;
+    const y = ((ev.clientY - rect.top) / rect.height) * 357 - CY;
+    const r = Math.hypot(x, y);
+    if (r < R0 || r > R1) return;
+    picked = Math.max(0, Math.min(NIGHTS.length - 1, Math.floor((r - R0) / RING)));
+    draw();
+  });
+
+  /* what the fortnight says — all of it measured off the array above */
+  const beds = NIGHTS.map((n) => (n.bed < 240 ? n.bed + 1440 : n.bed));
+  const spread = Math.max(...beds) - Math.min(...beds);
+  const late = NIGHTS.filter((n) => n.bed < 240);
+  const lateE = Math.round(late.reduce((a, n) => a + energyFromDebt(n.debt), 0) / late.length);
+  const early = NIGHTS.filter((n) => n.bed >= 240);
+  const earlyE = Math.round(early.reduce((a, n) => a + energyFromDebt(n.debt), 0) / early.length);
+  const bedOf = (n) => (n.bed < 240 ? n.bed + 1440 : n.bed);
+  const earliest = NIGHTS.reduce((a, b) => (bedOf(b) < bedOf(a) ? b : a));
+  const latest = NIGHTS.reduce((a, b) => (bedOf(b) > bedOf(a) ? b : a));
+  const best = NIGHTS.reduce((a, b) => (b.obtained > a.obtained ? b : a));
+  const worst = NIGHTS.reduce((a, b) => (b.obtained < a.obtained ? b : a));
+  const avg = Math.round(NIGHTS.reduce((a, n) => a + n.obtained, 0) / NIGHTS.length);
+  const mondays = NIGHTS.filter((n) => n.dow === 'Mon');
+
+  document.getElementById('c-head').textContent =
+    'The print has one broken edge, and it is ' + late.length + ' nights wide';
+  document.getElementById('c-sub').textContent =
+    'Fourteen nights, averaging ' + hm(avg) + ' against a ' + hm(NEED_MIN) + ' need. ' +
+    'Where the violet starts late, the ring that follows goes coral.';
+  document.getElementById('c-finds').innerHTML = [
+    { c:'coral', k:late.length + '×', t:'Midnight is the switch',
+      d:'The ' + late.length + ' nights you crossed it — ' + late.map((n) => n.dow + ' ' + Number(n.date.slice(8))).join(', ') +
+        ' — are the ' + late.length + ' mornings that open near ' + lateE + '%. Every other morning opens near ' + earlyE + '%.' },
+    { c:'amber', k:(Math.round(spread/60*10)/10) + 'h', t:'Your bedtime swings ' + Math.round(spread) + ' minutes',
+      d:'From ' + clock(earliest.bed) + ' the evening before ' + earliest.dow + ' ' + Number(earliest.date.slice(8)) +
+        ', to ' + clock(latest.bed) + ' on ' + latest.dow + ' ' + Number(latest.date.slice(8)) +
+        '. The width of that window costs you more than any single short night.' },
+    { c:'teal', k:'Mon', t:'Mondays arrive paid for',
+      d:'Both Mondays open above the days around them — ' + mondays.map((n) => energyFromDebt(n.debt) + '%').join(' and ') +
+        ' — because the weekend put ' + hm(Math.round(mondays.reduce((a, n) => a + n.obtained, 0) / mondays.length)) +
+        ' a night in first. Nothing you did on a Monday caused it.' },
+  ].map((f) => `<div class="find"><div class="ic ${f.c}">${f.k}</div>
+    <div><div class="t">${f.t}</div><div class="d">${f.d}</div></div></div>`).join('');
+
+  document.getElementById('c-pair').innerHTML = `
+    <div class="pcard"><div class="k" style="color:#2dd4bf">Best · ${best.dow} ${Number(best.date.slice(8))}</div>
+      <div class="v">${hm(best.obtained)}</div>
+      <div class="d">Bed ${shortClock(best.bed)} PM, woke ${shortClock(wakeOf(best))} AM<br>Opened at ${energyFromDebt(best.debt)}%</div></div>
+    <div class="pcard"><div class="k" style="color:#fb7185">Worst · ${worst.dow} ${Number(worst.date.slice(8))}</div>
+      <div class="v">${hm(worst.obtained)}</div>
+      <div class="d">Bed ${shortClock(worst.bed)} AM, woke ${shortClock(wakeOf(worst))} AM<br>Opened at ${energyFromDebt(worst.debt)}%</div></div>`;
+  document.getElementById('c-pair-d').textContent =
+    hm(best.obtained - worst.obtained) + ' apart, and the gap shows up in every hour of the day that followed.';
+  document.getElementById('c-aria').innerHTML =
+    'Your fortnight has one lever in it, and it is not how long you sleep — it is <em>when you start</em>. ' +
+    late.map((n) => n.dow + ' ' + Number(n.date.slice(8))).join(', ') + ' went past midnight, and they are carrying the whole <em>5.9 h</em>.';
+
+  draw();
+}
+
+/* ──────────────────────────────── boot ────────────────────────────────── */
+const want = (new URLSearchParams(location.search).get('v') || 'a').toLowerCase();
+const view = ['a','b','c'].includes(want) ? want : 'a';
+document.getElementById('v-' + view).classList.add('on');
+document.querySelectorAll('.switch a').forEach((a) => a.classList.toggle('on', a.dataset.v === view));
+if (view === 'a') renderA();
+if (view === 'b') renderB();
+if (view === 'c') renderC();
+document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>
