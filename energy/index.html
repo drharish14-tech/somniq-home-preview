@@ -31,25 +31,44 @@
   --hairline:rgba(255,255,255,0.08);
   --border:rgba(255,255,255,0.10);
   --teal:#2dd4bf;
+  --teal-lit:#5eead4;
+  --emerald:#34d399;
   --amber:#fbbf24;
+  --amber-lit:#fde68a;
+  --orange:#fb923c;
   --coral:#fb7185;
+  --coral-lit:#fda4af;
   --violet:#a78bfa;
+  --violet-lit:#c4b5fd;
   --r:22px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
-html{background:#07070f;}
-body{background:#07070f;color:var(--ink);font-family:'Inter',-apple-system,system-ui,sans-serif;min-height:100%;
+html{background:#06050e;}
+body{color:var(--ink);font-family:'Inter',-apple-system,system-ui,sans-serif;min-height:100%;
+  background:
+    radial-gradient(135% 72% at 50% -10%,rgba(86,56,180,.34),rgba(10,9,24,0) 58%),
+    radial-gradient(120% 56% at 50% 106%,rgba(46,30,104,.46),rgba(6,5,14,0) 62%),
+    #06050e;
+  background-attachment:fixed;
   -webkit-tap-highlight-color:transparent;}
 
 /* --- aurora backdrop (GlassScreen palette="dawn") ------------------------ */
 .sky{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none;}
 .sky i{position:absolute;display:block;border-radius:50%;filter:blur(64px);}
-.b1{width:380px;height:380px;left:-130px;top:-160px;background:rgba(76,58,140,.40);}
-.b2{width:320px;height:320px;right:-150px;top:80px;background:rgba(30,36,92,.45);}
-.b3{width:360px;height:360px;left:-90px;top:600px;background:rgba(167,139,250,.28);}
-.b4{width:300px;height:300px;right:-120px;top:1020px;background:rgba(45,212,191,.20);}
+.sky{background:
+    radial-gradient(420px 420px at 112% 1560px,rgba(251,113,133,.17),transparent 68%),
+    radial-gradient(460px 460px at -12% 1980px,rgba(167,139,250,.24),transparent 68%),
+    radial-gradient(420px 420px at 112% 2420px,rgba(45,212,191,.16),transparent 68%);}
+.b1{width:430px;height:430px;left:-145px;top:-175px;
+  background:radial-gradient(circle,rgba(126,84,236,.62),rgba(76,58,140,.26) 58%,rgba(76,58,140,0) 72%);}
+.b2{width:350px;height:350px;right:-155px;top:70px;
+  background:radial-gradient(circle,rgba(40,48,134,.66),rgba(30,36,92,.26) 58%,rgba(30,36,92,0) 72%);}
+.b3{width:380px;height:380px;left:-100px;top:580px;
+  background:radial-gradient(circle,rgba(167,139,250,.44),rgba(139,92,246,.16) 58%,rgba(139,92,246,0) 72%);}
+.b4{width:330px;height:330px;right:-130px;top:1000px;
+  background:radial-gradient(circle,rgba(45,212,191,.36),rgba(16,185,129,.11) 58%,rgba(16,185,129,0) 72%);}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(120% 60% at 50% 0%,rgba(0,0,0,0) 38%,rgba(0,0,0,.6) 100%);}
+  background:radial-gradient(130% 62% at 50% 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,.52) 100%);}
 
 /* --- page ---------------------------------------------------------------- */
 .page{position:relative;z-index:2;width:393px;margin:0 auto;padding:0 18px 76px;}
@@ -70,23 +89,47 @@ body{background:#07070f;color:var(--ink);font-family:'Inter',-apple-system,syste
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.45;transform:scale(.8);}}
 
 /* --- glass --------------------------------------------------------------- */
-.card{position:relative;border-radius:var(--r);border:1px solid var(--border);
+.card{--c:255,255,255;position:relative;border-radius:var(--r);border:1px solid var(--border);
   background:rgba(16,14,24,.34);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
-  overflow:hidden;margin-bottom:14px;box-shadow:0 10px 26px rgba(0,0,0,.4);}
+  overflow:hidden;margin-bottom:14px;
+  box-shadow:0 16px 34px rgba(0,0,0,.46),0 1px 0 rgba(255,255,255,.07) inset;}
 .card::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(140deg,rgba(255,255,255,.075),rgba(255,255,255,.015));}
-.card::after{content:'';position:absolute;top:0;left:18px;right:18px;height:1px;pointer-events:none;
-  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.34),rgba(255,255,255,0));}
-.card.hero{border-color:rgba(255,255,255,.14);}
-.card.hero::before{background:linear-gradient(140deg,rgba(255,255,255,.08),rgba(167,139,250,.04));}
-.card.teal::before{background:linear-gradient(140deg,rgba(45,212,191,.15),rgba(255,255,255,.015));}
-.card.violet::before{background:linear-gradient(140deg,rgba(167,139,250,.17),rgba(255,255,255,.015));}
+  background:
+    radial-gradient(130% 86% at 50% -6%,rgba(var(--c),.18),rgba(var(--c),0) 62%),
+    linear-gradient(142deg,rgba(255,255,255,.085),rgba(255,255,255,.012) 48%);}
+.card::after{content:'';position:absolute;top:0;left:14px;right:14px;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(var(--c),0),rgba(var(--c),.75),rgba(var(--c),0));}
+.card.hero{--c:167,139,250;border-color:rgba(167,139,250,.24);
+  box-shadow:0 20px 46px rgba(0,0,0,.5),0 0 54px -26px rgba(139,92,246,.95),
+             0 1px 0 rgba(255,255,255,.09) inset;}
+.card.teal{--c:45,212,191;border-color:rgba(45,212,191,.26);
+  box-shadow:0 18px 40px rgba(0,0,0,.46),0 0 50px -26px rgba(45,212,191,.9),
+             0 1px 0 rgba(255,255,255,.08) inset;}
+.card.violet{--c:167,139,250;border-color:rgba(167,139,250,.28);
+  box-shadow:0 18px 40px rgba(0,0,0,.46),0 0 52px -24px rgba(139,92,246,.95),
+             0 1px 0 rgba(255,255,255,.08) inset;}
+.card.plus{--c:251,146,60;border-color:rgba(251,146,60,.24);
+  box-shadow:0 18px 40px rgba(0,0,0,.46),0 0 52px -26px rgba(251,146,60,.8),
+             0 1px 0 rgba(255,255,255,.08) inset;}
+/* a plain card borrows the colour of the eyebrow it carries, so every
+   moment on the page arrives in its own glass */
+.card:not(.hero):not(.teal):not(.violet):not(.plus):has(.eye.teal){--c:45,212,191;
+  border-color:rgba(45,212,191,.18);box-shadow:0 16px 36px rgba(0,0,0,.46),
+    0 0 46px -28px rgba(45,212,191,.9),0 1px 0 rgba(255,255,255,.07) inset;}
+.card:not(.hero):not(.teal):not(.violet):not(.plus):has(.eye.amber){--c:251,191,36;
+  border-color:rgba(251,191,36,.18);box-shadow:0 16px 36px rgba(0,0,0,.46),
+    0 0 46px -28px rgba(251,191,36,.85),0 1px 0 rgba(255,255,255,.07) inset;}
+.card:not(.hero):not(.teal):not(.violet):not(.plus):has(.eye.coral){--c:251,113,133;
+  border-color:rgba(251,113,133,.18);box-shadow:0 16px 36px rgba(0,0,0,.46),
+    0 0 46px -28px rgba(251,113,133,.9),0 1px 0 rgba(255,255,255,.07) inset;}
 .card.flush .in{padding:18px 0 16px;}
 .in{position:relative;z-index:1;padding:18px;}
 
 .eye{font-size:9px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);}
-.eye.teal{color:var(--teal);} .eye.amber{color:var(--amber);} .eye.coral{color:var(--coral);}
-.eye.violet{color:var(--violet);}
+.eye.teal{color:var(--teal-lit);text-shadow:0 0 18px rgba(45,212,191,.6);}
+.eye.amber{color:var(--amber-lit);text-shadow:0 0 18px rgba(251,191,36,.55);}
+.eye.coral{color:var(--coral-lit);text-shadow:0 0 18px rgba(251,113,133,.6);}
+.eye.violet{color:var(--violet-lit);text-shadow:0 0 18px rgba(167,139,250,.6);}
 .h2{font-size:17px;font-weight:700;letter-spacing:-.25px;margin-top:6px;}
 .sub{font-size:12.5px;line-height:18.5px;color:var(--muted);margin-top:6px;}
 .pad{padding:0 18px;}
@@ -94,9 +137,10 @@ body{background:#07070f;color:var(--ink);font-family:'Inter',-apple-system,syste
 /* --- A: the living day --------------------------------------------------- */
 .readout{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
 .readout .big{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:54px;line-height:52px;
-  letter-spacing:-3px;background:linear-gradient(100deg,#fbbf24,#fb7185);
-  -webkit-background-clip:text;background-clip:text;color:transparent;}
-.readout .pc{font-family:'JetBrains Mono',monospace;font-size:19px;color:var(--faint);margin-left:2px;}
+  letter-spacing:-3px;background:linear-gradient(104deg,#fde68a,#fbbf24 30%,#fb923c 64%,#fb7185);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px rgba(251,146,60,.45));}
+.readout .pc{font-family:'JetBrains Mono',monospace;font-size:19px;color:rgba(251,191,36,.6);margin-left:2px;}
 .readout .rt{text-align:right;flex:none;}
 .statepill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
   font-size:11px;font-weight:600;letter-spacing:.2px;white-space:nowrap;}
@@ -109,95 +153,141 @@ body{background:#07070f;color:var(--ink);font-family:'Inter',-apple-system,syste
 .river:active{cursor:grabbing;}
 .river svg{display:block;width:100%;height:200px;}
 .hint{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:6px;
-  font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.30);}
-.hint i{width:14px;height:1px;background:rgba(255,255,255,.25);display:block;}
+  font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:rgba(196,181,253,.46);}
+.hint i{width:16px;height:1px;display:block;
+  background:linear-gradient(90deg,rgba(167,139,250,0),rgba(167,139,250,.6));}
+.hint i:last-child{background:linear-gradient(90deg,rgba(167,139,250,.6),rgba(167,139,250,0));}
 
 .slots{display:flex;gap:7px;padding:0 18px;margin-top:4px;}
-.slot{flex:1;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.045);
-  padding:10px 8px;text-align:center;cursor:pointer;transition:transform .14s ease,border-color .14s,background .14s;}
+.slot{--c:255,255,255;flex:1;border-radius:14px;border:1px solid rgba(var(--c),.24);
+  background:linear-gradient(160deg,rgba(var(--c),.15),rgba(var(--c),.035));
+  padding:10px 8px;text-align:center;cursor:pointer;
+  box-shadow:0 1px 0 rgba(255,255,255,.07) inset;
+  transition:transform .14s ease,border-color .14s,background .14s,box-shadow .14s;}
+.slot[data-k=focus]{--c:45,212,191;} .slot[data-k=train]{--c:251,191,36;} .slot[data-k=talk]{--c:251,113,133;}
 .slot:active{transform:scale(.97);}
-.slot.on{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.08);}
-.slot .ic{font-size:15px;line-height:17px;}
+.slot.on{border-color:rgba(var(--c),.6);
+  background:linear-gradient(160deg,rgba(var(--c),.34),rgba(var(--c),.08));
+  box-shadow:0 0 0 1px rgba(var(--c),.2),0 12px 26px -12px rgba(var(--c),1),
+             0 1px 0 rgba(255,255,255,.14) inset;}
+.slot .ic{font-size:15px;line-height:17px;color:rgb(var(--c));
+  filter:drop-shadow(0 0 10px rgba(var(--c),.8));}
 .slot .k{font-size:10px;font-weight:600;margin-top:5px;color:rgba(255,255,255,.78);}
 .slot.on .k{color:#fff;}
 .slot .w{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);margin-top:2px;}
-.slot.on .w{color:var(--amber);}
+.slot.on .w{color:rgb(var(--c));}
 .slotcopy{margin:14px 18px 0;padding:13px 14px;border-radius:14px;
-  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);}
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+  transition:background .18s,border-color .18s,box-shadow .18s;}
 .slotcopy .t{font-size:13px;font-weight:600;}
 .slotcopy .t span{font-family:'JetBrains Mono',monospace;color:var(--amber);}
 .slotcopy .d{font-size:11.5px;line-height:17px;color:var(--muted);margin-top:4px;}
 
 .plan{margin-top:2px;}
-.row{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--hairline);}
+.row{--c:255,255,255;display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--hairline);
+  background:linear-gradient(100deg,rgba(var(--c),.12),rgba(var(--c),0) 64%);}
 .row:first-child{border-top:0;}
 .rail{width:36px;flex:none;text-align:right;}
-.rail .t{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:rgba(255,255,255,.74);}
+.rail .t{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:rgb(var(--c));
+  text-shadow:0 0 14px rgba(var(--c),.45);}
 .rail .m{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
 .spine{width:12px;flex:none;position:relative;display:flex;justify-content:center;}
-.spine .dot{width:9px;height:9px;border-radius:50%;margin-top:4px;background:var(--faint);z-index:1;}
-.spine .ln{position:absolute;top:14px;bottom:-12px;width:1.5px;background:var(--hairline);}
+.spine .dot{width:9px;height:9px;border-radius:50%;margin-top:4px;background:rgb(var(--c));z-index:1;
+  box-shadow:0 0 0 3px rgba(var(--c),.14),0 0 12px rgba(var(--c),.8);}
+.spine .ln{position:absolute;top:14px;bottom:-12px;width:1.5px;
+  background:linear-gradient(180deg,rgba(var(--c),.40),rgba(255,255,255,.06));}
 .row:last-child .spine .ln{display:none;}
 .bd{flex:1;min-width:0;}
 .bd .t{font-size:14px;font-weight:600;letter-spacing:-.1px;display:flex;align-items:center;gap:7px;}
 .bd .t .nm{flex:none;}
 .bd .d{font-size:12px;line-height:17.5px;color:var(--muted);margin-top:3px;}
 .chip{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 7px;border-radius:7px;
-  white-space:nowrap;flex:none;margin-left:auto;}
-.chip.teal{color:var(--teal);background:rgba(45,212,191,.13);}
-.chip.amber{color:var(--amber);background:rgba(251,191,36,.13);}
-.chip.coral{color:var(--coral);background:rgba(251,113,133,.13);}
-.chip.violet{color:var(--violet);background:rgba(167,139,250,.15);}
+  white-space:nowrap;flex:none;margin-left:auto;border:1px solid transparent;}
+.chip.teal{color:var(--teal-lit);border-color:rgba(45,212,191,.36);
+  background:linear-gradient(135deg,rgba(45,212,191,.28),rgba(45,212,191,.07));
+  box-shadow:0 3px 12px -4px rgba(45,212,191,.8);}
+.chip.amber{color:var(--amber-lit);border-color:rgba(251,191,36,.36);
+  background:linear-gradient(135deg,rgba(251,191,36,.28),rgba(251,146,60,.07));
+  box-shadow:0 3px 12px -4px rgba(251,191,36,.8);}
+.chip.coral{color:var(--coral-lit);border-color:rgba(251,113,133,.38);
+  background:linear-gradient(135deg,rgba(251,113,133,.28),rgba(251,113,133,.07));
+  box-shadow:0 3px 12px -4px rgba(251,113,133,.8);}
+.chip.violet{color:var(--violet-lit);border-color:rgba(167,139,250,.40);
+  background:linear-gradient(135deg,rgba(167,139,250,.30),rgba(167,139,250,.07));
+  box-shadow:0 3px 12px -4px rgba(167,139,250,.8);}
 .row.past{opacity:.4;}
 .row.live .bd .t{color:var(--coral);}
 .row.live .spine .dot{background:var(--coral);box-shadow:0 0 0 4px rgba(251,113,133,.15),0 0 14px rgba(251,113,133,.75);}
 .nm{font-size:8px;font-weight:700;letter-spacing:1px;color:#1a0b0f;background:var(--coral);
   padding:2px 5px;border-radius:4px;}
-.rowdot-teal .dot{background:var(--teal);} .rowdot-amber .dot{background:var(--amber);}
-.rowdot-violet .dot{background:var(--violet);} .rowdot-coral .dot{background:var(--coral);}
+.rowdot-teal{--c:45,212,191;} .rowdot-amber{--c:251,191,36;}
+.rowdot-violet{--c:167,139,250;} .rowdot-coral{--c:251,113,133;}
 
 .steps{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:14px;}
-.steps i{flex:1;border-radius:2px 2px 0 0;display:block;
-  background:linear-gradient(180deg,rgba(45,212,191,.9),rgba(45,212,191,.16));}
-.steps i.dim{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04));}
+.steps i{flex:1;border-radius:3px 3px 0 0;display:block;
+  background:linear-gradient(180deg,#5eead4,rgba(45,212,191,.92) 34%,rgba(16,185,129,.14));
+  box-shadow:0 0 12px -3px rgba(45,212,191,.9);}
+.steps i.dim{background:linear-gradient(180deg,rgba(167,139,250,.30),rgba(167,139,250,.05));
+  box-shadow:none;}
 .axis{display:flex;justify-content:space-between;margin-top:6px;}
 .axis span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
 
 /* --- B: tonight ---------------------------------------------------------- */
 .bigtime{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:46px;line-height:48px;
   letter-spacing:-2.4px;white-space:nowrap;margin-top:6px;
-  background:linear-gradient(100deg,#2dd4bf,#fbbf24);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  background:linear-gradient(100deg,#5eead4,#2dd4bf 20%,#fbbf24 64%,#fb923c);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px rgba(45,212,191,.4));}
 .undertime{font-size:12.5px;color:var(--muted);margin-top:7px;}
 .undertime b{color:#fff;font-weight:600;}
 .slidewrap{margin-top:20px;}
 .breakeven{position:relative;height:15px;}
 .breakeven span{position:absolute;transform:translateX(-50%);white-space:nowrap;
   font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.6);}
-.breakeven span::after{content:'';position:absolute;left:50%;top:13px;width:1px;height:15px;background:rgba(255,255,255,.42);}
+.breakeven span::after{content:'';position:absolute;left:50%;top:13px;width:1px;height:15px;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.18));}
 input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:30px;background:transparent;cursor:pointer;}
-input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;
-  background:linear-gradient(90deg,#2dd4bf 0%,#fbbf24 46%,#fb7185 100%);}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;margin-top:-10px;
-  border-radius:50%;background:#fff;border:5px solid #14121e;box-shadow:0 0 0 1px rgba(255,255,255,.35),0 6px 18px rgba(0,0,0,.6);}
-input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:linear-gradient(90deg,#2dd4bf,#fbbf24,#fb7185);}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:999px;
+  background:linear-gradient(90deg,#5eead4 0%,#34d399 24%,#fbbf24 52%,#fb923c 76%,#fb7185 100%);
+  box-shadow:0 0 20px -5px rgba(45,212,191,.75),0 0 20px -5px rgba(251,113,133,.65),
+             inset 0 1px 0 rgba(255,255,255,.35);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:26px;height:26px;margin-top:-9px;
+  border-radius:50%;background:#fff;border:5px solid #16122a;
+  box-shadow:0 0 0 1px rgba(255,255,255,.5),0 0 24px rgba(255,255,255,.4),0 6px 18px rgba(0,0,0,.6);}
+input[type=range]::-moz-range-track{height:8px;border-radius:999px;
+  background:linear-gradient(90deg,#5eead4,#fbbf24,#fb7185);}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:5px solid #14121e;}
 .ticks{display:flex;justify-content:space-between;margin-top:2px;}
 .ticks span{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint);}
 .presets{display:flex;gap:7px;margin-top:14px;}
-.preset{flex:1;border:1px solid var(--border);background:rgba(255,255,255,.045);border-radius:12px;
-  padding:8px 6px;text-align:center;cursor:pointer;transition:background .14s,border-color .14s;}
-.preset.on{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.08);}
+.preset{--c:255,255,255;flex:1;border:1px solid rgba(var(--c),.22);border-radius:12px;
+  background:linear-gradient(160deg,rgba(var(--c),.13),rgba(var(--c),.03));
+  padding:8px 6px;text-align:center;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.06) inset;
+  transition:background .14s,border-color .14s,box-shadow .14s;}
+.preset:nth-child(1){--c:251,113,133;} .preset:nth-child(2){--c:251,191,36;} .preset:nth-child(3){--c:45,212,191;}
+.preset.on{border-color:rgba(var(--c),.58);
+  background:linear-gradient(160deg,rgba(var(--c),.30),rgba(var(--c),.07));
+  box-shadow:0 0 0 1px rgba(var(--c),.18),0 12px 26px -12px rgba(var(--c),1),
+             0 1px 0 rgba(255,255,255,.13) inset;}
 .preset .k{font-size:9px;letter-spacing:.9px;text-transform:uppercase;color:var(--faint);}
-.preset .v{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;margin-top:3px;}
-.preset.on .v{color:var(--amber);}
+.preset.on .k{color:rgba(var(--c),.9);}
+.preset .v{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;margin-top:3px;
+  color:rgba(255,255,255,.88);}
+.preset.on .v{color:rgb(var(--c));text-shadow:0 0 14px rgba(var(--c),.7);}
 
 .versus{display:flex;gap:10px;margin-top:4px;}
-.vcard{flex:1;border-radius:16px;padding:13px 12px;border:1px solid var(--hairline);background:rgba(255,255,255,.035);}
-.vcard.win{border-color:rgba(45,212,191,.34);background:rgba(45,212,191,.09);}
+.vcard{flex:1;border-radius:16px;padding:13px 12px;border:1px solid rgba(167,139,250,.16);
+  background:linear-gradient(160deg,rgba(167,139,250,.10),rgba(255,255,255,.02));
+  box-shadow:0 1px 0 rgba(255,255,255,.06) inset;transition:box-shadow .2s,border-color .2s,background .2s;}
+.vcard.win{border-color:rgba(45,212,191,.44);
+  background:linear-gradient(160deg,rgba(45,212,191,.22),rgba(16,185,129,.04));
+  box-shadow:0 0 0 1px rgba(45,212,191,.12),0 16px 32px -16px rgba(45,212,191,1),
+             0 1px 0 rgba(255,255,255,.14) inset;}
 .vcard .k{font-size:8.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);}
 .vcard .tm{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;margin-top:5px;}
 .vcard svg{display:block;width:100%;height:40px;margin-top:9px;}
 .vcard .mt{font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;letter-spacing:-.8px;margin-top:8px;}
+.vcard.win .k{color:rgba(94,234,212,.75);}
 .vcard .mm{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:14.5px;}
 .vsline{text-align:center;font-size:11px;color:var(--faint);margin:12px 0 0;letter-spacing:.3px;}
 
@@ -216,7 +306,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .ladder{margin-top:4px;}
 .lrow{display:flex;align-items:center;gap:10px;padding:7px 0;}
 .lrow .n{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--faint);width:62px;flex:none;}
-.lrow .bar{flex:1;height:9px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;}
+.lrow .bar{flex:1;height:9px;border-radius:999px;overflow:hidden;
+  background:rgba(255,255,255,.055);box-shadow:inset 0 1px 2px rgba(0,0,0,.5);}
 .lrow .bar i{display:block;height:100%;border-radius:999px;}
 .lrow .v{font-family:'JetBrains Mono',monospace;font-size:11px;width:40px;text-align:right;flex:none;color:rgba(255,255,255,.82);}
 
@@ -226,13 +317,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .printkey{display:flex;justify-content:center;gap:13px;margin-top:2px;}
 .printkey span{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;letter-spacing:.6px;
   text-transform:uppercase;color:var(--faint);}
-.printkey i{width:7px;height:7px;border-radius:2px;display:block;}
+.printkey i{width:8px;height:8px;border-radius:50%;display:block;}
 .printhint{text-align:center;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;
   color:rgba(255,255,255,.3);margin-top:9px;}
 .nightbar{display:flex;gap:3px;padding:0 18px;margin-top:14px;}
 .nightbar i{flex:1;height:30px;border-radius:5px;display:block;cursor:pointer;position:relative;
-  border:1px solid transparent;}
-.nightbar i.on{border-color:rgba(255,255,255,.8);transform:scaleY(1.14);}
+  border:1px solid transparent;transition:transform .16s ease,box-shadow .16s;}
+.nightbar i.on{border-color:rgba(255,255,255,.85);transform:scaleY(1.14);
+  box-shadow:0 0 0 1px rgba(255,255,255,.25),0 6px 18px -6px rgba(255,255,255,.5);}
 .nbaxis{display:flex;justify-content:space-between;padding:0 18px;margin-top:5px;}
 .nbaxis span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--faint);}
 
@@ -241,13 +333,26 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .find:first-child{border-top:0;}
 .find .ic{width:36px;height:36px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;
   font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;}
-.find .ic.teal{color:var(--teal);background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.24);}
-.find .ic.amber{color:var(--amber);background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.24);}
-.find .ic.coral{color:var(--coral);background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.24);}
+.find .ic.teal{color:var(--teal-lit);border:1px solid rgba(45,212,191,.42);
+  background:linear-gradient(145deg,rgba(45,212,191,.34),rgba(45,212,191,.06));
+  box-shadow:0 10px 22px -12px rgba(45,212,191,1),inset 0 1px 0 rgba(255,255,255,.16);}
+.find .ic.amber{color:var(--amber-lit);border:1px solid rgba(251,191,36,.42);
+  background:linear-gradient(145deg,rgba(251,191,36,.34),rgba(251,146,60,.06));
+  box-shadow:0 10px 22px -12px rgba(251,191,36,1),inset 0 1px 0 rgba(255,255,255,.16);}
+.find .ic.coral{color:var(--coral-lit);border:1px solid rgba(251,113,133,.42);
+  background:linear-gradient(145deg,rgba(251,113,133,.34),rgba(251,113,133,.06));
+  box-shadow:0 10px 22px -12px rgba(251,113,133,1),inset 0 1px 0 rgba(255,255,255,.16);}
+.find:has(.ic.teal){background:linear-gradient(100deg,rgba(45,212,191,.085),transparent 62%);}
+.find:has(.ic.amber){background:linear-gradient(100deg,rgba(251,191,36,.085),transparent 62%);}
+.find:has(.ic.coral){background:linear-gradient(100deg,rgba(251,113,133,.085),transparent 62%);}
 .find .t{font-size:13.5px;font-weight:600;}
 .find .d{font-size:11.5px;line-height:17px;color:var(--muted);margin-top:3px;}
 .pair{display:flex;gap:10px;margin-top:14px;}
-.pcard{flex:1;border-radius:14px;border:1px solid var(--hairline);background:rgba(255,255,255,.04);padding:12px;}
+.pcard{--c:255,255,255;flex:1;border-radius:14px;padding:12px;
+  border:1px solid rgba(var(--c),.28);
+  background:linear-gradient(155deg,rgba(var(--c),.18),rgba(var(--c),.035));
+  box-shadow:0 12px 26px -16px rgba(var(--c),1),inset 0 1px 0 rgba(255,255,255,.1);}
+.pcard:nth-child(1){--c:45,212,191;} .pcard:nth-child(2){--c:251,113,133;}
 .pcard .k{font-size:9px;letter-spacing:1.3px;text-transform:uppercase;}
 .pcard .v{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;margin-top:6px;letter-spacing:-.5px;}
 .pcard .d{font-size:10.5px;color:var(--muted);margin-top:5px;line-height:15px;}
@@ -255,21 +360,27 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 /* --- aria + plus --------------------------------------------------------- */
 .aria{display:flex;align-items:center;gap:10px;}
 .orb{width:26px;height:26px;border-radius:50%;flex:none;position:relative;
-  background:conic-gradient(from 210deg,#a78bfa,#2dd4bf,#fb7185,#a78bfa);}
-.orb::after{content:'';position:absolute;inset:4px;border-radius:50%;background:#0b0a14;}
+  background:conic-gradient(from 210deg,#a78bfa,#5eead4,#fbbf24,#fb7185,#a78bfa);
+  box-shadow:0 0 20px -2px rgba(167,139,250,.75);}
+.orb::after{content:'';position:absolute;inset:4px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#17122c,#0b0a14 70%);}
 .aria .n{font-size:12px;font-weight:600;}
 .aria .e{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);}
 .serif{font-family:'Instrument Serif',Georgia,serif;font-size:21px;line-height:28px;margin-top:12px;
   color:rgba(255,255,255,.95);letter-spacing:.1px;}
-.serif em{font-style:italic;color:var(--amber);}
+.serif em{font-style:italic;color:var(--amber-lit);text-shadow:0 0 20px rgba(251,191,36,.5);}
 .plustag{font-size:8.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#120d04;
-  background:linear-gradient(100deg,#fbbf24,#fb7185);padding:3px 7px;border-radius:5px;}
+  background:linear-gradient(100deg,#fde68a,#fbbf24 42%,#fb7185);padding:3px 7px;border-radius:5px;
+  box-shadow:0 6px 18px -8px rgba(251,146,60,1);}
 .plus .t{font-size:13.5px;font-weight:600;margin-top:11px;}
 .plus .d{font-size:11.5px;line-height:17px;color:var(--muted);margin-top:4px;}
 .cta{display:block;margin-top:13px;text-align:center;border-radius:13px;padding:11px;
-  background:rgba(255,255,255,.95);color:#07070c;font-size:12.5px;font-weight:600;text-decoration:none;}
+  background:linear-gradient(100deg,#5eead4,#2dd4bf 36%,#a78bfa);color:#08060f;
+  font-size:12.5px;font-weight:700;text-decoration:none;letter-spacing:.1px;
+  box-shadow:0 14px 30px -14px rgba(94,234,212,.95),0 1px 0 rgba(255,255,255,.4) inset;}
 .ghost{display:block;margin-top:9px;text-align:center;border-radius:13px;padding:10px;
-  border:1px solid var(--border);background:rgba(255,255,255,.05);color:#fff;font-size:12px;font-weight:600;text-decoration:none;}
+  border:1px solid rgba(167,139,250,.34);color:#ddd6fe;font-size:12px;font-weight:600;text-decoration:none;
+  background:linear-gradient(140deg,rgba(167,139,250,.16),rgba(167,139,250,.04));}
 .foot{margin-top:18px;font-size:10px;line-height:16px;color:rgba(255,255,255,.3);}
 .view{display:none;} .view.on{display:block;}
 </style>
@@ -427,8 +538,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
         <div class="curvewrap"><svg id="b-curve" viewBox="0 0 357 136"></svg></div>
         <div class="curvelabel"><span>6a</span><span>9a</span><span>12p</span><span>3p</span><span>6p</span><span>9p</span></div>
         <div class="legend">
-          <span><i style="background:rgba(255,255,255,.4)"></i>Last night repeated</span>
-          <span><i style="background:linear-gradient(90deg,#2dd4bf,#fbbf24)"></i>This bedtime</span>
+          <span><i style="background:rgba(196,181,253,.55)"></i>Last night repeated</span>
+          <span><i style="background:linear-gradient(90deg,#5eead4,#fbbf24,#fb923c);box-shadow:0 0 10px rgba(251,191,36,.6)"></i>This bedtime</span>
         </div>
       </div>
     </div>
@@ -474,10 +585,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <div class="in">
         <div class="print" id="c-print"><svg id="c-svg" viewBox="0 0 357 357"></svg></div>
         <div class="printkey">
-          <span><i style="background:#a78bfa"></i>Asleep</span>
-          <span><i style="background:#fb7185"></i>Low</span>
-          <span><i style="background:#fbbf24"></i>Steady</span>
-          <span><i style="background:#2dd4bf"></i>High</span>
+          <span><i style="background:#a78bfa;box-shadow:0 0 11px rgba(167,139,250,.95)"></i>Asleep</span>
+          <span><i style="background:#fb7185;box-shadow:0 0 11px rgba(251,113,133,.95)"></i>Low</span>
+          <span><i style="background:#fbbf24;box-shadow:0 0 11px rgba(251,191,36,.95)"></i>Steady</span>
+          <span><i style="background:#2dd4bf;box-shadow:0 0 11px rgba(45,212,191,.95)"></i>High</span>
         </div>
         <div class="printhint">tap a ring · or a night below</div>
         <div class="nightbar" id="c-bar"></div>
@@ -579,16 +690,28 @@ const ampm = (min) => (Math.floor((((min % 1440) + 1440) % 1440) / 60) >= 12 ? '
 const hm = (min) => { const h = Math.floor(min/60), m = Math.round(min%60);
   return h === 0 ? `${m}m` : `${h}h ${String(m).padStart(2,'0')}m`; };
 const band = (e) => e >= 66 ? 'teal' : e >= 44 ? 'amber' : 'coral';
-/** Continuous coral → amber → teal, for surfaces that need range, not bands. */
-function scale(e){
-  const stops = [[18,[251,113,133]], [46,[251,191,36]], [78,[45,212,191]]];
-  const v = Math.max(stops[0][0], Math.min(stops[2][0], e));
-  const [lo, hi] = v <= stops[1][0] ? [stops[0], stops[1]] : [stops[1], stops[2]];
+/** Continuous rose → coral → amber → emerald → teal. Interpolated around the
+    hue wheel rather than through RGB, so the middle of the ramp stays vivid
+    instead of turning to olive. `lift` brightens a stop for gradients. */
+function hsl2rgb(h, s, l){
+  s /= 100; l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) => Math.round(255 * (l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)))));
+  return `rgb(${f(0)},${f(8)},${f(4)})`;
+}
+function scale(e, lift = 0){
+  const stops = [[10,[352,88,60]], [27,[12,92,58]], [44,[38,96,55]], [53,[48,96,54]],
+                 [57,[152,74,46]], [62,[170,84,45]], [96,[176,88,62]]];
+  const v = Math.max(stops[0][0], Math.min(stops[stops.length-1][0], e));
+  let i = 0; while (i < stops.length - 2 && v > stops[i+1][0]) i++;
+  const lo = stops[i], hi = stops[i+1];
   const t = (v - lo[0]) / (hi[0] - lo[0]);
-  const c = lo[1].map((x, i) => Math.round(x + (hi[1][i] - x) * t));
-  return `rgb(${c[0]},${c[1]},${c[2]})`;
+  const c = lo[1].map((x, j) => x + (hi[1][j] - x) * t);
+  return hsl2rgb(c[0], Math.min(100, c[1] + lift * .4), Math.max(6, Math.min(78, c[2] + lift)));
 }
 const HEX = { teal:'#2dd4bf', amber:'#fbbf24', coral:'#fb7185', violet:'#a78bfa' };
+const LIT = { teal:'#5eead4', amber:'#fde68a', coral:'#fda4af', violet:'#c4b5fd' };
 const BAND_NAME = { teal:'Peak', amber:'Steady', coral:'Dip' };
 
 /* ═══════════════════════════ A · The living day ═══════════════════════════
@@ -658,11 +781,11 @@ function renderA(){
     return 'M' + top.join(' L') + ' L' + bot.reverse().join(' L') + ' Z';
   }
   /* The gradient is the day: one stop per half hour, coloured by its band. */
-  function stops(){
+  function stops(lift){
     let out = '';
     for (let min = DAY_START; min <= DAY_END; min += 30){
       const e = energyAt(min / 60, DEBT, WAKE);
-      const col = min >= WINDDOWN ? HEX.violet : scale(e);
+      const col = min >= WINDDOWN ? (lift ? LIT.violet : HEX.violet) : scale(e, lift);
       out += `<stop offset="${(((min - DAY_START) / (DAY_END - DAY_START)) * 100).toFixed(1)}%" stop-color="${col}"/>`;
     }
     return out;
@@ -677,19 +800,39 @@ function renderA(){
     const bandKey = scrub >= WINDDOWN ? 'violet' : band(e);
 
     let s = `<defs>
-      <linearGradient id="riv" x1="0" y1="0" x2="1" y2="0">${stops()}</linearGradient>
-      <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#fff" stop-opacity="1"/><stop offset="100%" stop-color="#fff" stop-opacity="1"/>
+      <linearGradient id="riv" x1="0" y1="0" x2="1" y2="0">${stops(0)}</linearGradient>
+      <linearGradient id="rivLit" x1="0" y1="0" x2="1" y2="0">${stops(12)}</linearGradient>
+      <linearGradient id="rivV" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity=".46"/>
+        <stop offset="26%" stop-color="#ffffff" stop-opacity=".08"/>
+        <stop offset="58%" stop-color="#000000" stop-opacity=".10"/>
+        <stop offset="100%" stop-color="#000000" stop-opacity=".42"/>
       </linearGradient>
+      <radialGradient id="hglow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="${HEX[bandKey]}" stop-opacity=".62"/>
+        <stop offset="60%" stop-color="${HEX[bandKey]}" stop-opacity=".16"/>
+        <stop offset="100%" stop-color="${HEX[bandKey]}" stop-opacity="0"/>
+      </radialGradient>
       <clipPath id="pastClip"><rect x="0" y="0" width="${sx.toFixed(1)}" height="${H}"/></clipPath>
+      <clipPath id="ribClip"><path d="${RIBBON}"/></clipPath>
       <filter id="glow" x="-40%" y="-60%" width="180%" height="220%">
         <feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
+      <filter id="bloom" x="-40%" y="-80%" width="180%" height="260%">
+        <feGaussianBlur stdDeviation="17"/>
+      </filter>
+      <filter id="tglow" x="-120%" y="-400%" width="340%" height="900%">
+        <feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
     </defs>`;
 
+    /* a wide colour bloom under the lit stretch, so the glass picks it up */
+    s += `<g clip-path="url(#pastClip)"><path d="${RIBBON}" fill="url(#rivLit)" opacity=".5" filter="url(#bloom)"/></g>`;
     /* the whole day, dim; then everything up to the finger, lit */
-    s += `<path d="${RIBBON}" fill="url(#riv)" opacity=".26"/>`;
-    s += `<g clip-path="url(#pastClip)"><path d="${RIBBON}" fill="url(#riv)" opacity=".95" filter="url(#glow)"/></g>`;
+    s += `<path d="${RIBBON}" fill="url(#riv)" opacity=".36"/>`;
+    s += `<g clip-path="url(#pastClip)"><path d="${RIBBON}" fill="url(#rivLit)" opacity="1" filter="url(#glow)"/></g>`;
+    /* top light, bottom shadow — the ribbon reads as a surface, not a fill */
+    s += `<g clip-path="url(#ribClip)"><rect x="0" y="${MID - 40}" width="${W}" height="80" fill="url(#rivV)"/></g>`;
 
     /* the windows named on the plan, ticked along the top */
     [[FOCUS_FROM, FOCUS_TO, 'focus', HEX.teal], [DIP_FROM, DIP_TO, 'dip', HEX.coral],
@@ -697,16 +840,18 @@ function renderA(){
       .forEach(([f, t2, lbl, col]) => {
         const x1 = xOf(f), x2 = xOf(t2);
         const cx = Math.max(26, Math.min(W - 26, (x1 + x2) / 2));
-        s += `<rect x="${x1.toFixed(1)}" y="9" width="${(x2-x1).toFixed(1)}" height="3" rx="1.5" fill="${col}" opacity=".6"/>`;
-        s += `<text x="${cx.toFixed(1)}" y="25" fill="${col}" fill-opacity=".85" font-size="8.5"
-          font-family="Inter" font-weight="600" letter-spacing="1" text-anchor="middle">${lbl.toUpperCase()}</text>`;
+        s += `<rect x="${x1.toFixed(1)}" y="8" width="${(x2-x1).toFixed(1)}" height="4" rx="2"
+          fill="${col}" opacity=".9" filter="url(#tglow)"/>`;
+        s += `<text x="${cx.toFixed(1)}" y="25" fill="${col}" fill-opacity="1" font-size="8.5"
+          font-family="Inter" font-weight="700" letter-spacing="1" text-anchor="middle">${lbl.toUpperCase()}</text>`;
       });
 
     /* the handle */
     s += `<line x1="${sx.toFixed(1)}" y1="32" x2="${sx.toFixed(1)}" y2="${H - 42}" stroke="#fff" stroke-opacity=".55" stroke-width="1"/>`;
-    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="${(t + 9).toFixed(1)}" fill="${HEX[bandKey]}" opacity=".16"/>`;
-    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="9" fill="#0b0a12" stroke="#fff" stroke-width="2.4"/>`;
-    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="3.4" fill="${HEX[bandKey]}"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="${(t + 34).toFixed(1)}" fill="url(#hglow)"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="${(t + 9).toFixed(1)}" fill="${LIT[bandKey]}" opacity=".2"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="10" fill="#0b0a12" stroke="#fff" stroke-width="2.4"/>`;
+    s += `<circle cx="${sx.toFixed(1)}" cy="${MID}" r="4" fill="${LIT[bandKey]}" filter="url(#tglow)"/>`;
     const bx = Math.max(34, Math.min(W - 34, sx));
     s += `<rect x="${(bx - 33).toFixed(1)}" y="${H - 40}" width="66" height="21" rx="10.5" fill="rgba(255,255,255,.96)"/>`;
     s += `<text x="${bx.toFixed(1)}" y="${H - 25.5}" fill="#09080f" font-size="11" font-weight="700"
@@ -720,7 +865,7 @@ function renderA(){
         font-family="JetBrains Mono" text-anchor="middle">now</text>`;
     }
     [[7,'7a'],[10,'10a'],[13,'1p'],[16,'4p'],[19,'7p'],[22,'10p']].forEach(([h, lbl]) => {
-      s += `<text x="${xOf(h*60).toFixed(1)}" y="${H - 4}" fill="rgba(255,255,255,.32)" font-size="9"
+      s += `<text x="${xOf(h*60).toFixed(1)}" y="${H - 4}" fill="rgba(221,214,254,.46)" font-size="9"
         font-family="JetBrains Mono" text-anchor="middle">${lbl}</text>`;
     });
     svg.innerHTML = s;
@@ -738,9 +883,10 @@ function renderA(){
       : scrub >= SECOND_FROM && scrub < SECOND_TO ? 'Second wind'
       : scrub < INERTIA_END ? 'Grogginess' : BAND_NAME[band(e)];
     statePill.textContent = stateName;
-    statePill.style.color = HEX[bandKey];
-    statePill.style.background = HEX[bandKey] + '1f';
-    statePill.style.border = '1px solid ' + HEX[bandKey] + '44';
+    statePill.style.color = LIT[bandKey];
+    statePill.style.background = `linear-gradient(135deg,${HEX[bandKey]}3d,${HEX[bandKey]}0f)`;
+    statePill.style.border = '1px solid ' + HEX[bandKey] + '66';
+    statePill.style.boxShadow = `0 8px 22px -10px ${HEX[bandKey]}, inset 0 1px 0 rgba(255,255,255,.16)`;
 
     const next = PLAN.find((p) => p.at > scrub);
     document.getElementById('a-lead').innerHTML = live
@@ -787,8 +933,13 @@ function renderA(){
     });
     const s = SLOTS[slot];
     const mid = (s.from + s.to) / 2;
-    document.getElementById('a-slotcopy').innerHTML =
-      `<div class="t">${s.label} sits best at <span>${clock(s.from)} – ${clock(s.to)}</span></div>
+    const key = { focus:'teal', train:'amber', talk:'coral' }[slot];
+    const col = HEX[key], box = document.getElementById('a-slotcopy');
+    box.style.borderColor = col + '4d';
+    box.style.background = `linear-gradient(145deg,${col}26,${col}08)`;
+    box.style.boxShadow = `0 14px 30px -18px ${col}, inset 0 1px 0 rgba(255,255,255,.12)`;
+    box.innerHTML =
+      `<div class="t">${s.label} sits best at <span style="color:${LIT[key]};text-shadow:0 0 16px ${col}99">${clock(s.from)} – ${clock(s.to)}</span></div>
        <div class="d">${s.copy} You read <b>${energyAt(mid/60, DEBT, WAKE)}%</b> across that window today.</div>`;
   }
   slotEls.forEach((el) => el.addEventListener('click', () => { slot = el.dataset.k; paintSlots(); }));
@@ -829,7 +980,7 @@ function renderB(){
   mark.textContent = 'break-even ' + clock(BREAK_EVEN);
   mark.style.left = (((BREAK_EVEN - Number(slider.min)) / (Number(slider.max) - Number(slider.min))) * 100).toFixed(1) + '%';
 
-  const spark = (el, debtH, colour) => {
+  const spark = (el, debtH, colour, id, lit) => {
     const W = 150, H = 40;
     let d = '';
     for (let h = 6; h <= 22; h += .5){
@@ -837,8 +988,18 @@ function renderB(){
       const y = H - (energyAt(h, debtH, ALARM) / 100) * (H - 8) - 4;
       d += (h === 6 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
     }
-    el.innerHTML = `<path d="${d} L${W},${H} L0,${H} Z" fill="${colour}" opacity=".14"/>` +
-      `<path d="${d}" fill="none" stroke="${colour}" stroke-width="2" stroke-linecap="round"/>`;
+    el.innerHTML = `<defs>
+        <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${colour}" stop-opacity=".46"/>
+          <stop offset="100%" stop-color="${colour}" stop-opacity="0"/></linearGradient>
+        <linearGradient id="${id}s" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="${lit}"/><stop offset="100%" stop-color="${colour}"/></linearGradient>
+        <filter id="${id}g" x="-20%" y="-60%" width="140%" height="240%">
+          <feGaussianBlur stdDeviation="2.6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>` +
+      `<path d="${d} L${W},${H} L0,${H} Z" fill="url(#${id}f)"/>` +
+      `<path d="${d}" fill="none" stroke="url(#${id}s)" stroke-width="2.2" stroke-linecap="round" filter="url(#${id}g)"/>`;
   };
 
   const draw = () => {
@@ -868,8 +1029,8 @@ function renderB(){
     document.getElementById('b-pick-sub').textContent = debt.toFixed(1) + 'h debt · ' + hm(asleep);
     document.getElementById('b-vcard-pick').classList.toggle('win', e9 >= g9);
     document.getElementById('b-vcard-ghost').classList.toggle('win', g9 > e9);
-    spark(document.getElementById('b-spark-ghost'), ghost.debt, 'rgba(255,255,255,.5)');
-    spark(document.getElementById('b-spark-pick'), debt, HEX[band(e9)]);
+    spark(document.getElementById('b-spark-ghost'), ghost.debt, 'rgba(196,181,253,.62)', 'sg', 'rgba(221,214,254,.85)');
+    spark(document.getElementById('b-spark-pick'), debt, HEX[band(e9)], 'sp', LIT[band(e9)]);
     document.getElementById('b-vs-line').textContent =
       e9 === g9 ? 'The same 9 AM, either way.'
       : `${Math.abs(e9 - g9)} points at 9 AM, and ${Math.abs(Math.round((ghost.debt - debt) * 10) / 10).toFixed(1)} h of debt, between those two lights-outs.`;
@@ -892,19 +1053,30 @@ function renderB(){
     };
     let out = `<defs>
       <linearGradient id="bline" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#2dd4bf"/><stop offset="55%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#fb7185"/></linearGradient>
+        <stop offset="0%" stop-color="#5eead4"/><stop offset="28%" stop-color="#34d399"/>
+        <stop offset="56%" stop-color="#fbbf24"/><stop offset="80%" stop-color="#fb923c"/>
+        <stop offset="100%" stop-color="#fb7185"/></linearGradient>
       <linearGradient id="bfill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#fbbf24" stop-opacity=".30"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></linearGradient></defs>`;
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity=".38"/>
+        <stop offset="48%" stop-color="#fb7185" stop-opacity=".18"/>
+        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/></linearGradient>
+      <radialGradient id="bdot" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fde68a" stop-opacity=".55"/>
+        <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+      <filter id="bglow" x="-10%" y="-60%" width="120%" height="260%">
+        <feGaussianBlur stdDeviation="4" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
     [25,50,75].forEach((p) => {
       const y = H - (p/100)*(H-16) - 8;
-      out += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(255,255,255,.05)"/>`;
+      out += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(196,181,253,.09)"/>`;
     });
     out += `<path d="${path(debt)} L${W},${H} L0,${H} Z" fill="url(#bfill)"/>`;
-    out += `<path d="${path(ghost.debt)}" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.5" stroke-dasharray="5,4"/>`;
-    out += `<path d="${path(debt)}" fill="none" stroke="url(#bline)" stroke-width="2.8" stroke-linecap="round"/>`;
+    out += `<path d="${path(ghost.debt)}" fill="none" stroke="rgba(196,181,253,.5)" stroke-width="1.5" stroke-dasharray="5,4"/>`;
+    out += `<path d="${path(debt)}" fill="none" stroke="url(#bline)" stroke-width="3" stroke-linecap="round" filter="url(#bglow)"/>`;
     const px = ((9 - from) / (to - from)) * W, py = H - (e9/100)*(H-16) - 8;
-    out += `<circle cx="${px}" cy="${py}" r="10" fill="#fbbf24" opacity=".18"/><circle cx="${px}" cy="${py}" r="4.6" fill="#fbbf24"/><circle cx="${px}" cy="${py}" r="1.8" fill="#fff"/>`;
-    out += `<text x="${px}" y="${py - 14}" fill="#fbbf24" font-size="10" font-family="JetBrains Mono" text-anchor="middle">${e9}% at 9a</text>`;
+    out += `<circle cx="${px}" cy="${py}" r="22" fill="url(#bdot)"/>`;
+    out += `<circle cx="${px}" cy="${py}" r="5" fill="#fde68a"/><circle cx="${px}" cy="${py}" r="2" fill="#fff"/>`;
+    out += `<text x="${px}" y="${py - 16}" fill="#fde68a" font-size="10" font-weight="600" font-family="JetBrains Mono" text-anchor="middle">${e9}% at 9a</text>`;
     document.getElementById('b-curve').innerHTML = out;
 
     document.getElementById('b-trade-h').textContent =
@@ -919,11 +1091,13 @@ function renderB(){
     const worst = Math.max(...rungs.map((r) => r.debt)), bestR = Math.min(...rungs.map((r) => r.debt));
     document.getElementById('b-ladder').innerHTML = rungs.map((r) => {
       const w = 16 + ((r.debt - bestR) / Math.max(.4, worst - bestR)) * 84;
-      const col = r.debt <= bestR + (worst - bestR) * .34 ? HEX.teal
-        : r.debt <= bestR + (worst - bestR) * .67 ? HEX.amber : HEX.coral;
-      return `<div class="lrow"><div class="n" style="${r.me ? 'color:#fbbf24;font-weight:700' : ''}">${r.label}</div>
-        <div class="bar"><i style="width:${w.toFixed(1)}%;background:${col};opacity:${r.me ? 1 : .45}"></i></div>
-        <div class="v" style="${r.me ? 'color:#fbbf24' : ''}">${r.debt.toFixed(1)}h</div></div>`;
+      const k = r.debt <= bestR + (worst - bestR) * .34 ? 'teal'
+        : r.debt <= bestR + (worst - bestR) * .67 ? 'amber' : 'coral';
+      return `<div class="lrow"><div class="n" style="${r.me ? 'color:#fde68a;font-weight:700' : ''}">${r.label}</div>
+        <div class="bar"><i style="width:${w.toFixed(1)}%;
+          background:linear-gradient(90deg,${HEX[k]},${LIT[k]});opacity:${r.me ? 1 : .5};
+          box-shadow:${r.me ? `0 0 16px -2px ${HEX[k]}` : 'none'}"></i></div>
+        <div class="v" style="${r.me ? 'color:#fde68a;text-shadow:0 0 14px rgba(251,191,36,.6)' : ''}">${r.debt.toFixed(1)}h</div></div>`;
     }).join('');
 
     /* Plus: the same bedtime, seven nights running */
@@ -941,15 +1115,24 @@ function renderB(){
       wk += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
     });
     let wkOut = `<defs><linearGradient id="wkl" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#2dd4bf"/></linearGradient></defs>`;
-    wkOut += `<path d="${wk}" fill="none" stroke="url(#wkl)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+      <stop offset="0%" stop-color="#fb7185"/><stop offset="42%" stop-color="#fb923c"/>
+      <stop offset="72%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#5eead4"/></linearGradient>
+      <linearGradient id="wka" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fb923c" stop-opacity=".26"/>
+        <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0"/></linearGradient>
+      <filter id="wkg" x="-10%" y="-60%" width="120%" height="260%">
+        <feGaussianBlur stdDeviation="3.4" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+    wkOut += `<path d="${wk} L${WK},${WH} L0,${WH} Z" fill="url(#wka)"/>`;
+    wkOut += `<path d="${wk}" fill="none" stroke="url(#wkl)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#wkg)"/>`;
     pts.forEach((p, i) => {
       const x = (i / (pts.length - 1)) * WK, y = WH - (p.d / maxD) * (WH - 22) - 14;
-      wkOut += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i === 0 || i === pts.length - 1 ? 4 : 2.4}"
-        fill="${i === pts.length - 1 ? '#2dd4bf' : i === 0 ? '#fb7185' : 'rgba(255,255,255,.5)'}"/>`;
+      wkOut += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i === 0 || i === pts.length - 1 ? 4.2 : 2.4}"
+        fill="${i === pts.length - 1 ? '#5eead4' : i === 0 ? '#fda4af' : 'rgba(255,255,255,.55)'}"
+        ${i === 0 || i === pts.length - 1 ? 'filter="url(#wkg)"' : ''}/>`;
     });
-    wkOut += `<text x="0" y="${WH - 1}" fill="rgba(255,255,255,.45)" font-size="9" font-family="JetBrains Mono">today 5.9h</text>`;
-    wkOut += `<text x="${WK}" y="${WH - 1}" fill="#2dd4bf" font-size="9" font-family="JetBrains Mono" text-anchor="end">day 7 · ${pts[pts.length-1].d.toFixed(1)}h</text>`;
+    wkOut += `<text x="0" y="${WH - 1}" fill="#fda4af" font-size="9" font-family="JetBrains Mono">today 5.9h</text>`;
+    wkOut += `<text x="${WK}" y="${WH - 1}" fill="#5eead4" font-size="9" font-weight="600" font-family="JetBrains Mono" text-anchor="end">day 7 · ${pts[pts.length-1].d.toFixed(1)}h</text>`;
     document.getElementById('b-week').innerHTML = wkOut;
 
     document.getElementById('b-aria').innerHTML =
@@ -995,53 +1178,94 @@ function renderC(){
   function draw(){
     const sel = NIGHTS[picked];
     let s = `<defs><filter id="pglow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
-    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="#07060e"/>`;
-    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="none" stroke="rgba(255,255,255,.06)"/>`;
+      <feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="ringglow" x="-25%" y="-25%" width="150%" height="150%">
+        <feGaussianBlur stdDeviation="4"/></filter>
+      <radialGradient id="aura" cx="50%" cy="50%" r="50%">
+        <stop offset="40%" stop-color="#7c3aed" stop-opacity=".30"/>
+        <stop offset="72%" stop-color="#a78bfa" stop-opacity=".16"/>
+        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
+      <radialGradient id="disc" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#140e2c"/><stop offset="70%" stop-color="#0a0818"/>
+        <stop offset="100%" stop-color="#06050e"/></radialGradient>
+      <radialGradient id="depth" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#000000" stop-opacity=".45"/>
+        <stop offset="26%" stop-color="#000000" stop-opacity="0"/>
+        <stop offset="91%" stop-color="#000000" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#1a0f2e" stop-opacity=".40"/></radialGradient>
+      <linearGradient id="sheen" x1="0" y1="0" x2=".7" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity=".07"/>
+        <stop offset="40%" stop-color="#ffffff" stop-opacity=".01"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+      <radialGradient id="core" cx="40%" cy="32%" r="78%">
+        <stop offset="0%" stop-color="#1b1338"/><stop offset="100%" stop-color="#06050c"/></radialGradient>
+      </defs>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 34}" fill="url(#aura)"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="url(#disc)"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="none" stroke="rgba(196,181,253,.14)"/>`;
 
     NIGHTS.forEach((n, i) => {
       const r0 = R0 + i * RING + 0.5, r1 = R0 + (i + 1) * RING - 0.5;
       const wake = wakeOf(n), today = i === NIGHTS.length - 1;
-      const dim = i === picked ? 1 : .64;
+      const dim = i === picked ? 1 : .92;
+      /* outer rings run a touch brighter than inner ones, so the print has
+         depth rather than reading as one flat disc */
+      const depth = 0.88 + (i / (NIGHTS.length - 1)) * 0.12;
       for (let h = 0; h < 24; h++){
         const a0 = (h / 24) * Math.PI * 2 + 0.006, a1 = ((h + 1) / 24) * Math.PI * 2 - 0.006;
         const asleep = asleepAt(n, h);
         let fill, op;
-        if (asleep){ fill = HEX.violet; op = (i === picked ? .8 : .34); }
-        else if (today && h + .5 > NOW / 60){ fill = '#ffffff'; op = .05; }
+        if (asleep){
+          fill = i === picked ? LIT.violet : '#8b5cf6';
+          op = (i === picked ? .97 : .78);
+        }
+        else if (today && h + .5 > NOW / 60){ fill = '#c4b5fd'; op = .07; }
         else {
           const e = energyAt(h + .5, n.debt, wake);
-          fill = scale(e);
-          op = ((.42 + (e / 100) * .58) * dim).toFixed(2);
+          fill = scale(e, i === picked ? 10 : 0);
+          op = Math.min(1, (.80 + (e / 100) * .30) * dim * depth).toFixed(2);
         }
         s += `<path d="${seg(r0, r1, a0, a1)}" fill="${fill}" opacity="${op}"/>`;
       }
       if (i === picked){
-        s += `<circle cx="${CX}" cy="${CY}" r="${(r1 + 2.2).toFixed(1)}" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="1.3"/>`;
-        s += `<circle cx="${CX}" cy="${CY}" r="${(r0 - 1.6).toFixed(1)}" fill="none" stroke="#fff" stroke-opacity=".32" stroke-width="1"/>`;
+        /* the chosen night, lifted out of the print with its own halo */
+        s += `<circle cx="${CX}" cy="${CY}" r="${(r1 + 3).toFixed(1)}" fill="none"
+          stroke="#c4b5fd" stroke-opacity=".75" stroke-width="2" filter="url(#ringglow)"/>`;
+        s += `<circle cx="${CX}" cy="${CY}" r="${(r0 - 3).toFixed(1)}" fill="none"
+          stroke="#c4b5fd" stroke-opacity=".45" stroke-width="2" filter="url(#ringglow)"/>`;
+        s += `<circle cx="${CX}" cy="${CY}" r="${(r1 + 2.2).toFixed(1)}" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="1.3"/>`;
+        s += `<circle cx="${CX}" cy="${CY}" r="${(r0 - 1.6).toFixed(1)}" fill="none" stroke="#fff" stroke-opacity=".34" stroke-width="1"/>`;
       }
     });
+    /* glass over the whole print: vignette, then one soft highlight */
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="url(#depth)"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R1 + 8}" fill="url(#sheen)"/>`;
 
     /* the hours, around the outside */
     [[0,'12a'],[6,'6a'],[12,'12p'],[18,'6p']].forEach(([h, lbl]) => {
       const a = (h / 24) * Math.PI * 2;
       const x = CX + (R1 + 17) * Math.sin(a), y = CY - (R1 + 17) * Math.cos(a) + 3.4;
-      s += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="rgba(255,255,255,.45)" font-size="9.5"
+      s += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="rgba(221,214,254,.62)" font-size="9.5"
         font-family="JetBrains Mono" text-anchor="middle">${lbl}</text>`;
     });
 
     /* the middle reads the ring you are on */
-    const wake = wakeOf(sel), open = energyFromDebt(sel.debt);
-    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 4}" fill="#06050c"/>`;
-    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 4}" fill="none" stroke="rgba(255,255,255,.1)"/>`;
-    s += `<text x="${CX}" y="${CY - 16}" fill="rgba(255,255,255,.5)" font-size="9" font-family="Inter"
-      font-weight="600" letter-spacing="1.8" text-anchor="middle">${sel.dow.toUpperCase()} ${Number(sel.date.slice(8))}</text>`;
-    s += `<text x="${CX}" y="${CY + 7}" fill="${HEX[band(open)]}" font-size="25" font-family="JetBrains Mono"
+    const wake = wakeOf(sel), open = energyFromDebt(sel.debt), oband = band(open);
+    s += `<circle cx="${CX}" cy="${CY}" r="${R0 + 4}" fill="${HEX[oband]}" opacity=".16" filter="url(#ringglow)"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 4}" fill="url(#core)"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 4}" fill="none" stroke="${HEX[oband]}" stroke-opacity=".42"/>`;
+    s += `<circle cx="${CX}" cy="${CY}" r="${R0 - 6.5}" fill="none" stroke="rgba(255,255,255,.08)"/>`;
+    s += `<text x="${CX}" y="${CY - 16}" fill="rgba(221,214,254,.68)" font-size="9" font-family="Inter"
+      font-weight="700" letter-spacing="1.8" text-anchor="middle">${sel.dow.toUpperCase()} ${Number(sel.date.slice(8))}</text>`;
+    s += `<text x="${CX}" y="${CY + 7}" fill="${LIT[oband]}" font-size="25" font-family="JetBrains Mono"
       font-weight="700" letter-spacing="-1" text-anchor="middle" filter="url(#pglow)">${hm(sel.obtained).replace(' ','')}</text>`;
-    s += `<text x="${CX}" y="${CY + 24}" fill="rgba(255,255,255,.82)" font-size="10" font-family="JetBrains Mono"
-      text-anchor="middle">${shortClock(sel.bed)}${ampm(sel.bed)} → ${shortClock(wake)}a</text>`;
-    s += `<text x="${CX}" y="${CY + 39}" fill="rgba(255,255,255,.62)" font-size="9.5" font-family="Inter"
-      text-anchor="middle">opened at ${open}% · ${sel.debt.toFixed(1)}h debt</text>`;
+    /* these two lines run past the core and over the rings — a dark halo on the
+       glyphs themselves keeps them readable without a plate behind them */
+    const halo = 'stroke="#07060f" stroke-opacity=".88" stroke-width="3.4" stroke-linejoin="round" style="paint-order:stroke"';
+    s += `<text x="${CX}" y="${CY + 24}" fill="rgba(255,255,255,.94)" font-size="10" font-family="JetBrains Mono"
+      text-anchor="middle" ${halo}>${shortClock(sel.bed)}${ampm(sel.bed)} → ${shortClock(wake)}a</text>`;
+    s += `<text x="${CX}" y="${CY + 39}" fill="rgba(237,233,254,.86)" font-size="9.5" font-family="Inter"
+      text-anchor="middle" ${halo}>opened at ${open}% · ${sel.debt.toFixed(1)}h debt</text>`;
     svg.innerHTML = s;
 
     document.querySelectorAll('#c-bar i').forEach((el, i) => el.classList.toggle('on', i === picked));
@@ -1051,8 +1275,10 @@ function renderC(){
   const maxObt = Math.max(...NIGHTS.map((n) => n.obtained));
   document.getElementById('c-bar').innerHTML = NIGHTS.map((n, i) => {
     const open = energyFromDebt(n.debt);
+    const top = scale(open, 14), base = scale(open, -8).replace('rgb(', 'rgba(').replace(')', ',.35)');
     return `<i data-i="${i}" title="${n.dow} ${Number(n.date.slice(8))}"
-      style="background:linear-gradient(180deg,${scale(open)},${scale(open).replace('rgb','rgba').replace(')',',.25)')});
+      style="background:linear-gradient(180deg,${top},${base});
+             box-shadow:0 6px 16px -8px ${scale(open)},inset 0 1px 0 rgba(255,255,255,.22);
              height:${(16 + (n.obtained / maxObt) * 16).toFixed(1)}px;align-self:flex-end"></i>`;
   }).join('');
   document.querySelectorAll('#c-bar i').forEach((el) =>
@@ -1105,10 +1331,10 @@ function renderC(){
     <div><div class="t">${f.t}</div><div class="d">${f.d}</div></div></div>`).join('');
 
   document.getElementById('c-pair').innerHTML = `
-    <div class="pcard"><div class="k" style="color:#2dd4bf">Best · ${best.dow} ${Number(best.date.slice(8))}</div>
+    <div class="pcard"><div class="k" style="color:#5eead4;text-shadow:0 0 16px rgba(45,212,191,.6)">Best · ${best.dow} ${Number(best.date.slice(8))}</div>
       <div class="v">${hm(best.obtained)}</div>
       <div class="d">Bed ${shortClock(best.bed)} PM, woke ${shortClock(wakeOf(best))} AM<br>Opened at ${energyFromDebt(best.debt)}%</div></div>
-    <div class="pcard"><div class="k" style="color:#fb7185">Worst · ${worst.dow} ${Number(worst.date.slice(8))}</div>
+    <div class="pcard"><div class="k" style="color:#fda4af;text-shadow:0 0 16px rgba(251,113,133,.6)">Worst · ${worst.dow} ${Number(worst.date.slice(8))}</div>
       <div class="v">${hm(worst.obtained)}</div>
       <div class="d">Bed ${shortClock(worst.bed)} AM, woke ${shortClock(wakeOf(worst))} AM<br>Opened at ${energyFromDebt(worst.debt)}%</div></div>`;
   document.getElementById('c-pair-d').textContent =
