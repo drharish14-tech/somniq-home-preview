@@ -738,7 +738,7 @@ function energyAt(hourFloat, debtHours, wakeMin, chronotype='moderate'){
   const awake=((hourFloat-wakeMin/60)%24+24)%24;
   const shift=chronotype==='early' ? -1 : chronotype==='late' ? 1 : 0;
   const phase=awake-shift;
-  const circadian=12*Math.cos(2*Math.PI*(phase-6)/24)+10*Math.cos(4*Math.PI*(phase-4)/24);
+  const circadian=18*Math.exp(-((phase-4)**2)/8)-12*Math.exp(-((phase-9)**2)/1.5)+14*Math.exp(-((phase-12.5)**2)/4);
   const pressure=30*(1-Math.exp(-awake/16));
   const inertia=28*Math.exp(-awake/.65);
   const penalty=35*(1-Math.exp(-Math.max(0,debtHours)/5));
@@ -749,7 +749,7 @@ function modelWindows(wakeMin, bedMin, chronotype='moderate'){
   const phase=wakeMin+shift;
   return {inertiaEnd:wakeMin+120,focusFrom:phase+180,focusTo:phase+360,
     dipFrom:phase+480,dipTo:phase+600,secondFrom:phase+600,secondTo:phase+720,
-    windDown:bedMin-120,cutoff:((bedMin-540)%1440+1440)%1440};
+    windDown:bedMin-120,cutoff:Math.max(660,Math.min(900,((bedMin-540)%1440+1440)%1440))};
 }
 const clock = (min) => {
   const m = ((Math.round(min) % 1440) + 1440) % 1440, h = Math.floor(m / 60);
@@ -792,7 +792,7 @@ const BAND_NAME = { teal:'Peak', amber:'Steady', coral:'Dip' };
 /* ═══════════════════════════ A · The living day ═══════════════════════════
    Every moment below is derived: the wake is last night's real one, the dip
    is the circadian trough after it, the cutoff is nine hours before tonight's
-   target lights-out, the wind-down an hour before it. Timing only.         */
+   target lights-out, the wind-down two hours before it. Timing only.         */
 const windows = modelWindows(WAKE,TARGET_BED);
 const INERTIA_END=windows.inertiaEnd;
 const FOCUS_FROM=windows.focusFrom, FOCUS_TO=windows.focusTo;
