@@ -18,8 +18,8 @@
 
    Sample data is the fortnight the review render uses
    (scripts/review-render/data-energy.ts): 14 nights, 5.9 h of debt, a 7 h 45 m
-   need, last night 00:12 → 06:57. Every number on the page is computed from
-   it in the script at the bottom — nothing is typed in twice.
+   need, last night 00:12 → 06:57. The script includes illustrative hourly and projection models, not
+   production engine outputs. Historical debt values are mock fixtures.
 
    Theme follows src/constants/theme.ts: Inter + JetBrains Mono, glass over an
    aurora, teal / amber / coral. No blue anywhere.
@@ -149,7 +149,7 @@ body{color:var(--ink);font-family:'Inter',-apple-system,system-ui,sans-serif;min
 .leadline{font-size:13px;line-height:19.5px;color:rgba(255,255,255,.84);margin-top:12px;}
 .leadline b{font-weight:600;color:#fff;}
 
-.river{position:relative;margin-top:4px;touch-action:none;cursor:grab;user-select:none;}
+.river{position:relative;margin-top:4px;touch-action:pan-y;cursor:grab;user-select:none;}
 .river:active{cursor:grabbing;}
 .river svg{display:block;width:100%;height:200px;}
 .hint{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:6px;
@@ -312,7 +312,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .lrow .v{font-family:'JetBrains Mono',monospace;font-size:11px;width:40px;text-align:right;flex:none;color:rgba(255,255,255,.82);}
 
 /* --- C: fingerprint ------------------------------------------------------ */
-.print{position:relative;touch-action:none;user-select:none;}
+.print{position:relative;touch-action:pan-y;user-select:none;}
 .print svg{display:block;width:100%;height:357px;}
 .printkey{display:flex;justify-content:center;gap:13px;margin-top:2px;}
 .printkey span{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;letter-spacing:.6px;
@@ -491,12 +491,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
         <div class="undertime" id="b-dur">—</div>
         <div class="slidewrap">
           <div class="breakeven"><span id="b-break">break-even</span></div>
-          <input id="b-slider" type="range" min="1260" max="1560" step="5" value="1335" aria-label="Tonight's lights-out">
+          <input id="b-slider" type="range" min="1260" max="1560" step="1" value="1335" aria-label="Tonight's lights-out">
           <div class="ticks"><span>9 PM</span><span>10 PM</span><span>11 PM</span><span>12 AM</span><span>1 AM</span><span>2 AM</span></div>
         </div>
         <div class="presets" id="b-presets">
-          <div class="preset" data-min="1452"><div class="k">Your usual</div><div class="v">12:12 AM</div></div>
-          <div class="preset" data-min="1380"><div class="k">Your target</div><div class="v">11:00 PM</div></div>
+          <div class="preset" data-min="1452"><div class="k">Last night</div><div class="v">12:12 AM</div></div>
+          <div class="preset" data-min="1380"><div class="k">11 PM option</div><div class="v">11:00 PM</div></div>
           <div class="preset" data-min="1335"><div class="k">Catch-up</div><div class="v">10:15 PM</div></div>
         </div>
       </div>
@@ -570,7 +570,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
         <a class="cta" href="#">Project my week</a>
       </div>
     </div>
-    <p class="foot">A projection from your own nights and your 7 h 45 m need. Not a promise, and not medical advice.</p>
+    <p class="foot">Illustrative model with a 7 h 45 m need and 22 min awake. Not the production ledger or medical advice.</p>
   </section>
 
   <!-- ══════════════════════════════ C ══════════════════════════════ -->
@@ -585,7 +585,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <div class="in">
         <div class="print" id="c-print"><svg id="c-svg" viewBox="0 0 357 357"></svg></div>
         <div class="printkey">
-          <span><i style="background:#a78bfa;box-shadow:0 0 11px rgba(167,139,250,.95)"></i>Asleep</span>
+          <span><i style="background:#a78bfa;box-shadow:0 0 11px rgba(167,139,250,.95)"></i>Sleep window</span>
           <span><i style="background:#fb7185;box-shadow:0 0 11px rgba(251,113,133,.95)"></i>Low</span>
           <span><i style="background:#fbbf24;box-shadow:0 0 11px rgba(251,191,36,.95)"></i>Steady</span>
           <span><i style="background:#2dd4bf;box-shadow:0 0 11px rgba(45,212,191,.95)"></i>High</span>
@@ -608,7 +608,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     <div class="card">
       <div class="in">
         <div class="eye coral">Two nights, side by side</div>
-        <div class="h2">Your best and your worst</div>
+        <div class="h2">Your longest and shortest</div>
         <div class="pair" id="c-pair"></div>
         <p class="sub" id="c-pair-d"></p>
       </div>
@@ -630,15 +630,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
         <a class="cta" href="#">Unlock 14 rings</a>
       </div>
     </div>
-    <p class="foot">Violet is sleep. Every other hour is coloured by the energy that morning's
-      debt and your own wake time predict.</p>
+    <p class="foot">Violet is the sleep window. Other colours show an illustrative model,
+      not measured energy or a personal circadian rhythm.</p>
   </section>
 </div>
 
 <script>
 /* ===========================================================================
    The fortnight — the same seeds as scripts/review-render/data-energy.ts,
-   with the debt the ledger published on each of those mornings.
+   with illustrative debt values, not a replay of the production ledger.
    bed/wake are minutes from midnight; bed < 240 means after midnight.
 =========================================================================== */
 const NIGHTS = [
@@ -679,11 +679,11 @@ function energyAt(hourFloat, debtHours, wakeMin){
   return Math.max(6, Math.min(100, Math.round(energyFromDebt(debtHours) + (wave(hourFloat, wakeMin) - 60) * 0.55)));
 }
 const clock = (min) => {
-  const m = ((min % 1440) + 1440) % 1440, h = Math.floor(m / 60);
+  const m = ((Math.round(min) % 1440) + 1440) % 1440, h = Math.floor(m / 60);
   return `${((h % 12) || 12)}:${String(m % 60).padStart(2,'0')} ${h >= 12 ? 'PM' : 'AM'}`;
 };
 const shortClock = (min) => {
-  const m = ((min % 1440) + 1440) % 1440, h = Math.floor(m / 60);
+  const m = ((Math.round(min) % 1440) + 1440) % 1440, h = Math.floor(m / 60);
   return `${((h % 12) || 12)}:${String(m % 60).padStart(2,'0')}`;
 };
 const ampm = (min) => (Math.floor((((min % 1440) + 1440) % 1440) / 60) >= 12 ? 'pm' : 'am');
@@ -722,39 +722,39 @@ const INERTIA_END = WAKE + 63;
 const FOCUS_FROM = WAKE + 2*60 + 13, FOCUS_TO = WAKE + 5*60 + 13;
 const CUTOFF = TARGET_BED - 9*60;
 const DIP_FROM = WAKE + 7*60 + 3, DIP_TO = WAKE + 8*60 + 43;
-const NAP_FROM = DIP_FROM + 15, NAP_TO = NAP_FROM + 25;
+const NAP_FROM = DIP_FROM + 15, NAP_TO = NAP_FROM + 20;
 const SECOND_FROM = WAKE + 10*60 + 3, SECOND_TO = WAKE + 11*60 + 43;
 const WINDDOWN = TARGET_BED - 60;
 
 const PLAN = [
-  { at:WAKE, title:'Woke', band:'violet', chip:['violet','6h45'],
-    desc:'6 h 45 m, 00:12 → 06:57. Health had the stages; Motion had the window.' },
-  { at:INERTIA_END, title:'Grogginess clears', band:'coral', chip:['coral','until '+shortClock(INERTIA_END)],
-    desc:'Sleep inertia runs about an hour past a short night. Light and water before anything hard.' },
+  { at:WAKE, title:'Woke', band:'violet', chip:['violet','6h12'],
+    desc:'6 h 12 m asleep within 00:12 → 06:57. The 6 h 45 m window includes time awake.' },
+  { at:INERTIA_END, title:'Grogginess may ease', band:'coral', chip:['coral','until '+shortClock(INERTIA_END)],
+    desc:'Grogginess can last after waking, especially after a short night. Ease into demanding tasks.' },
   { at:FOCUS_FROM, to:FOCUS_TO, title:'Focus window', band:'teal', chip:['teal','3h'],
-    desc:'Your highest hours today. One deep block, decisions first — this is the stretch 5.9 h of debt has least hold over.' },
+    desc:'A typical morning focus window. Try a deep work block here; the curve does not measure your alertness.' },
   { at:CUTOFF, title:'Caffeine cutoff', band:'amber', chip:['amber','9h before bed'],
-    desc:'Last cup by now to keep a '+shortClock(TARGET_BED)+' lights-out clean. Later coffee is what turned the last three late nights into 00:20 bedtimes.' },
-  { at:DIP_FROM, to:DIP_TO, title:'Afternoon dip', band:'coral', chip:['coral','−18 pts'],
-    desc:'The trough your own curve falls into every day. Walk it, or take the nap below — do not schedule the hard call.' },
-  { at:NAP_FROM, to:NAP_TO, title:'Nap window', band:'teal', chip:['teal','+0.4h'],
-    desc:'25 minutes inside the dip pays about 0.4 h of debt and still leaves tonight intact. Later than '+shortClock(NAP_TO+60)+' and it starts costing you.' },
+    desc:'An example cutoff, nine hours before '+clock(TARGET_BED)+'. Caffeine can affect sleep for hours; sensitivity varies.' },
+  { at:DIP_FROM, to:DIP_TO, title:'Afternoon dip', band:'coral', chip:['coral','estimate'],
+    desc:'A typical afternoon lull, not a measured personal low. Consider a walk or a short rest if you feel sleepy.' },
+  { at:NAP_FROM, to:NAP_TO, title:'Nap window', band:'teal', chip:['teal','20 min'],
+    desc:'A short early-afternoon nap may help alertness. Logged sleep credits the next morning; late naps may affect bedtime.' },
   { at:SECOND_FROM, to:SECOND_TO, title:'Second wind', band:'amber', chip:['amber','rebound'],
     desc:'Good for movement, review and planning. Not a second place to put the hard call.' },
   { at:WINDDOWN, title:'Wind-down', band:'violet', chip:['violet','60 min'],
     desc:'Dim the room and put the screens down. The hour before bed is the one you actually control.' },
-  { at:TARGET_BED, title:'Lights out', band:'violet', chip:['teal','−1.1h debt'],
-    desc:'A '+shortClock(TARGET_BED)+' lights-out with your 6:57 alarm is 8 h 12 m — the first night this fortnight that pays debt back instead of adding to it.' },
+  { at:TARGET_BED, title:'Lights out', band:'violet', chip:['teal','8h12 in bed'],
+    desc:'A '+clock(TARGET_BED)+' lights-out with a 6:57 AM alarm allows 8 h 12 m in bed. Actual sleep may be shorter.' },
 ];
 
-/** Where each kind of work belongs, found in the curve rather than assumed. */
+/** Illustrative activity windows; these are not production engine outputs. */
 const SLOTS = {
   focus: { label:'Deep work', from:FOCUS_FROM, to:FOCUS_TO,
-    copy:'Your curve is highest here and the debt has least hold on it. One block, phone face down — and nothing that needs a decision after '+shortClock(DIP_FROM)+' '+ampm(DIP_FROM)+'.' },
+    copy:'A typical morning focus window. Try one block with your phone face down, and adjust to how alert you feel.' },
   train: { label:'Workout', from:SECOND_FROM, to:SECOND_TO,
-    copy:'Body temperature peaks on the second wind, and a session here lands far enough from a '+shortClock(TARGET_BED)+' lights-out to leave tonight alone.' },
+    copy:'An example late-afternoon slot for movement. Adjust the timing and intensity to how you feel and how it affects your sleep.' },
   talk:  { label:'Hard call', from:WAKE+3*60+3, to:WAKE+4*60+33,
-    copy:'Late morning: past the inertia, well before the trough. The same conversation at '+shortClock(DIP_FROM+40)+' '+ampm(DIP_FROM)+' meets a version of you running 18 points lower.' },
+    copy:'Late morning may suit a demanding conversation. This typical-day curve cannot predict your performance on a call.' },
 };
 
 function renderA(){
@@ -763,6 +763,11 @@ function renderA(){
   const W = 357, H = 200, MID = 98;
   let scrub = NOW;            // the minute the finger is on
   let slot = 'focus';
+  river.setAttribute('role', 'slider');
+  river.setAttribute('tabindex', '0');
+  river.setAttribute('aria-label', 'Explore the illustrative day by time');
+  river.setAttribute('aria-valuemin', DAY_START);
+  river.setAttribute('aria-valuemax', DAY_END);
 
   const xOf = (min) => ((min - DAY_START) / (DAY_END - DAY_START)) * W;
   const minOf = (x) => DAY_START + (Math.max(0, Math.min(W, x)) / W) * (DAY_END - DAY_START);
@@ -793,6 +798,8 @@ function renderA(){
   const RIBBON = ribbon();
 
   function draw(){
+    river.setAttribute('aria-valuenow', scrub);
+    river.setAttribute('aria-valuetext', clock(scrub));
     const e = energyAt(scrub / 60, DEBT, WAKE);
     const sx = xOf(scrub);
     const t = thick(e) / 2;
@@ -873,9 +880,9 @@ function renderA(){
     /* the readout follows the finger */
     document.getElementById('a-num').textContent = e;
     document.getElementById('a-note').textContent =
-      'Your 44% index, shaped by the hour — ' + hm(NEED_MIN) + ' need, 5.9 h behind.';
+      'Illustrative hourly estimate · debt index ' + energyFromDebt(DEBT) + '/100 · ' + hm(NEED_MIN) + ' need.';
     document.getElementById('a-clock').textContent = clock(scrub) + (live ? ' · now' : ' · scrubbing');
-    document.getElementById('a-kicker').textContent = live ? 'Live · ' + clock(NOW) : 'Reading ' + clock(scrub);
+    document.getElementById('a-kicker').textContent = live ? 'Demo · ' + clock(NOW) : 'Reading ' + clock(scrub);
     const statePill = document.getElementById('a-state');
     const stateName = scrub >= WINDDOWN ? 'Wind-down'
       : scrub >= DIP_FROM && scrub < DIP_TO ? 'Afternoon dip'
@@ -891,7 +898,7 @@ function renderA(){
     const next = PLAN.find((p) => p.at > scrub);
     document.getElementById('a-lead').innerHTML = live
       ? `<b>${hm(NOW - DIP_FROM)}</b> into the trough, and it lifts at <b>${clock(DIP_TO)}</b>. ` +
-        `The cutoff passed at <b>${shortClock(CUTOFF)}${ampm(CUTOFF)}</b>, so the one lever left today is the ` +
+        `The cutoff passed at <b>${shortClock(CUTOFF)}${ampm(CUTOFF)}</b>, and you can plan a ` +
         `<b>${shortClock(WINDDOWN)}${ampm(WINDDOWN)} wind-down</b>.`
       : `At <b>${clock(scrub)}</b> you read <b>${e}%</b> — ${stateName.toLowerCase()}. ` +
         (next ? `Next: <b>${next.title.toLowerCase()}</b> at <b>${clock(next.at)}</b>.` : 'Nothing after this but sleep.');
@@ -906,7 +913,7 @@ function renderA(){
       return `<div class="row ${past ? 'past' : ''} ${isLive ? 'live' : ''} rowdot-${p.band}">
         <div class="rail"><div class="t">${shortClock(p.at)}</div><div class="m">${p.to ? shortClock(p.to) : ampm(p.at).toUpperCase()}</div></div>
         <div class="spine"><span class="dot"></span><span class="ln"></span></div>
-        <div class="bd"><div class="t"><span class="nm" style="${isLive ? '' : 'display:none'}">NOW</span>${p.title}
+        <div class="bd"><div class="t"><span class="nm" style="${isLive ? '' : 'display:none'}">${live ? 'NOW' : 'THEN'}</span>${p.title}
           <span class="chip ${p.chip[0]}">${p.chip[1]}</span></div>
           <div class="d">${p.desc}</div></div></div>`;
     }).join('');
@@ -921,6 +928,14 @@ function renderA(){
   };
   river.addEventListener('pointerdown', (ev) => { river.setPointerCapture(ev.pointerId); move(ev); });
   river.addEventListener('pointermove', (ev) => { if (ev.pressure > 0 || ev.buttons) move(ev); });
+  river.addEventListener('keydown', (ev) => {
+    const delta = { ArrowLeft:-5, ArrowDown:-5, ArrowRight:5, ArrowUp:5 }[ev.key];
+    if (delta == null && !['Home','End'].includes(ev.key)) return;
+    ev.preventDefault();
+    scrub = ev.key === 'Home' ? DAY_START : ev.key === 'End' ? DAY_END
+      : Math.max(DAY_START, Math.min(DAY_END, scrub + delta));
+    draw();
+  });
   river.addEventListener('dblclick', () => { scrub = NOW; draw(); });
 
   /* the slots */
@@ -929,6 +944,7 @@ function renderA(){
     slotEls.forEach((el) => {
       const s = SLOTS[el.dataset.k];
       el.classList.toggle('on', el.dataset.k === slot);
+      el.setAttribute('aria-pressed', String(el.dataset.k === slot));
       el.querySelector('.w').textContent = shortClock(s.from) + '–' + shortClock(s.to);
     });
     const s = SLOTS[slot];
@@ -940,7 +956,7 @@ function renderA(){
     box.style.boxShadow = `0 14px 30px -18px ${col}, inset 0 1px 0 rgba(255,255,255,.12)`;
     box.innerHTML =
       `<div class="t">${s.label} sits best at <span style="color:${LIT[key]};text-shadow:0 0 16px ${col}99">${clock(s.from)} – ${clock(s.to)}</span></div>
-       <div class="d">${s.copy} You read <b>${energyAt(mid/60, DEBT, WAKE)}%</b> across that window today.</div>`;
+       <div class="d">${s.copy} The example reads <b>${energyAt(mid/60, DEBT, WAKE)}%</b> at the midpoint.</div>`;
   }
   slotEls.forEach((el) => el.addEventListener('click', () => { slot = el.dataset.k; paintSlots(); }));
 
@@ -950,14 +966,13 @@ function renderA(){
   const max = Math.max(...STEPS);
   document.getElementById('a-steps-h').textContent = done.toLocaleString() + ' steps so far';
   document.getElementById('a-steps-d').textContent =
-    'Nothing since 12:30. On the four days this fortnight you were under 2,000 by now, the dip read about ' +
-    '9 points deeper — ten minutes outside is the cheapest thing on this page.';
+    'Example hourly step counts, not live Motion data. Future bars are placeholders; a short walk may help you feel more alert.';
   document.getElementById('a-steps').innerHTML = STEPS.map((s, i) =>
     `<i class="${(6+i) <= NOW/60 ? '' : 'dim'}" style="height:${Math.max(3,(s/max)*44).toFixed(1)}px"></i>`).join('');
 
   document.getElementById('a-aria').innerHTML =
-    'The trough lifts at <em>3:40</em>. Ten minutes outside now and the 5 PM block is yours — ' +
-    'then hold the <em>9:45 wind-down</em>, because that is the hour that decides tomorrow.';
+    'The example dip ends at <em>3:40 PM</em>. A short walk may help you feel more alert — ' +
+    'then try the <em>9:45 PM wind-down</em> to leave time for sleep tonight.';
 
   paintSlots();
   draw();
@@ -967,7 +982,7 @@ function renderA(){
 function projectDebt(bedMin){
   const bed = bedMin >= 1440 ? bedMin - 1440 : bedMin;
   const inBed = ((ALARM + 1440) - bed) % 1440;
-  const asleep = Math.max(0, inBed - 22);          // this sleeper's latency + wake-ups
+  const asleep = Math.max(0, inBed - 22);          // illustrative awake-time assumption, not measured
   const gapH = (NEED_MIN - asleep) / 60;
   return { asleep, debt: Math.max(0, Math.round((DEBT + Math.max(-2, Math.min(2.2, gapH))) * 10) / 10) };
 }
@@ -1004,6 +1019,7 @@ function renderB(){
 
   const draw = () => {
     const bedMin = Number(slider.value);
+    slider.setAttribute('aria-valuetext', clock(bedMin));
     const { asleep, debt } = projectDebt(bedMin);
     const ghost = projectDebt(USUAL_BED);
     const e9 = energyAt(9, debt, ALARM), g9 = energyAt(9, ghost.debt, ALARM);
@@ -1012,12 +1028,12 @@ function renderB(){
 
     document.getElementById('b-time').textContent = clock(bedMin);
     document.getElementById('b-dur').innerHTML =
-      `<b>${hm(asleep).replace(' ', '&nbsp;')}</b> asleep before your 6:57 alarm`;
+      `<b>${hm(asleep).replace(' ', '&nbsp;')}</b> estimated sleep before a 6:57 AM alarm`;
 
     /* two mornings, side by side */
     document.getElementById('b-vs-h').textContent =
       e9 - g9 >= 8 ? 'A different morning entirely'
-      : e9 - g9 >= 3 ? 'A better morning, measurably'
+      : e9 - g9 >= 3 ? 'A higher model estimate'
       : e9 - g9 <= -3 ? 'The worse of the two' : 'Near enough the same morning';
     document.getElementById('b-ghost-time').textContent = clock(USUAL_BED);
     document.getElementById('b-pick-time').textContent = clock(bedMin);
@@ -1038,8 +1054,8 @@ function renderB(){
     document.getElementById('b-shape-h').textContent =
       debtDelta <= -0.5 ? 'A morning you can use' : debtDelta < 0.3 ? 'Tomorrow holds, roughly' : 'Tomorrow pays for tonight';
     document.getElementById('b-shape-d').textContent =
-      'Your 9 AM reads ' + e9 + '% and the dip bottoms at ' + energyAt(14.5, debt, ALARM) +
-      '%. The dashed line is tonight repeating last night — ' + clock(USUAL_BED) + ', 6 h 45 m.';
+      'The 9 AM example reads ' + e9 + '% and the dip bottoms at ' + energyAt(14.5, debt, ALARM) +
+      '%. The dashed line repeats the bedtime — ' + clock(USUAL_BED) + ', with ' + hm(ghost.asleep) + ' estimated sleep.';
 
     const W = 357, H = 116, from = 6, to = 22;
     const path = (dh) => {
@@ -1082,8 +1098,8 @@ function renderB(){
     document.getElementById('b-trade-h').textContent =
       'Thirty minutes earlier is worth ' + (Math.round((projectDebt(bedMin - 30).debt - debt) * -10) / 10).toFixed(1) + ' h';
     document.getElementById('b-trade-d').textContent =
-      'Measured against your own 7 h 45 m need, and capped the way the ledger caps one night: ' +
-      'you can pay back two hours in a night, never the whole five.';
+      'An illustrative calculation against a 7 h 45 m need, with fixed awake time. ' +
+      'The real ledger also fades older debt and checks source confidence.';
     const rungs = [-60,-30,0,30,60].map((off) => {
       const b = bedMin + off, r = projectDebt(b);
       return { label: shortClock(b) + ' ' + ampm(b), debt: r.debt, me: off === 0 };
@@ -1137,12 +1153,16 @@ function renderB(){
 
     document.getElementById('b-aria').innerHTML =
       debtDelta <= -0.3
-        ? `Lights out at <em>${clock(bedMin)}</em> and you wake with <em>${debt.toFixed(1)} h</em> instead of 5.9 — the first night this fortnight that gives something back.`
+        ? `Lights out at <em>${clock(bedMin)}</em> and you wake with <em>${debt.toFixed(1)} h</em> instead of 5.9 — a lower balance in this example model.`
         : debtDelta < 0.3
-        ? `<em>${clock(bedMin)}</em> keeps you level. Nothing lost, nothing paid — and tomorrow’s dip will feel like today’s.`
-        : `At <em>${clock(bedMin)}</em> tomorrow opens at <em>${e9}%</em>. That would be the fourth short night running, and the fortnight is already carrying three.`;
+        ? `<em>${clock(bedMin)}</em> keeps you level. Nothing lost, nothing paid — the example dip stays similar.`
+        : `At <em>${clock(bedMin)}</em> tomorrow opens at <em>${e9}%</em>. This example assumes a fixed alarm and awake time; actual sleep may differ.`;
 
-    document.querySelectorAll('#b-presets .preset').forEach((p) => p.classList.toggle('on', Number(p.dataset.min) === bedMin));
+    document.querySelectorAll('#b-presets .preset').forEach((p) => {
+      const selected = Number(p.dataset.min) === bedMin;
+      p.classList.toggle('on', selected);
+      p.setAttribute('aria-pressed', String(selected));
+    });
   };
   slider.addEventListener('input', draw);
   document.querySelectorAll('#b-presets .preset').forEach((p) =>
@@ -1162,11 +1182,11 @@ function renderC(){
 
   const wakeOf = (n) => {
     const bed = n.bed < 240 ? n.bed : n.bed - 1440;
-    return (((bed + n.obtained + 33) % 1440) + 1440) % 1440;
+    return (((bed + n.obtained + (n.src === 'health' ? 33 : 0)) % 1440) + 1440) % 1440;
   };
   const asleepAt = (n, h) => {
     const bedH = n.bed < 240 ? n.bed / 60 : n.bed / 60 - 24;
-    const wakeH = bedH + (n.obtained + 33) / 60;
+    const wakeH = bedH + (n.obtained + (n.src === 'health' ? 33 : 0)) / 60;
     return h + 0.5 >= bedH && h + 0.5 <= wakeH ? true : (h + 0.5 >= n.bed / 60 && n.bed >= 240);
   };
   const seg = (r0, r1, a0, a1) => {
@@ -1268,7 +1288,12 @@ function renderC(){
       text-anchor="middle" ${halo}>opened at ${open}% · ${sel.debt.toFixed(1)}h debt</text>`;
     svg.innerHTML = s;
 
-    document.querySelectorAll('#c-bar i').forEach((el, i) => el.classList.toggle('on', i === picked));
+    document.querySelectorAll('#c-bar i').forEach((el, i) => {
+      el.classList.toggle('on', i === picked);
+      el.setAttribute('aria-pressed', String(i === picked));
+    });
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', `${sel.dow} ${sel.date}: ${hm(sel.obtained)} recorded, ${clock(sel.bed)} to ${clock(wake)}, illustrative debt ${sel.debt} hours.`);
   }
 
   /* the night bar under the print — a fortnight of sleep lengths */
@@ -1276,7 +1301,7 @@ function renderC(){
   document.getElementById('c-bar').innerHTML = NIGHTS.map((n, i) => {
     const open = energyFromDebt(n.debt);
     const top = scale(open, 14), base = scale(open, -8).replace('rgb(', 'rgba(').replace(')', ',.35)');
-    return `<i data-i="${i}" title="${n.dow} ${Number(n.date.slice(8))}"
+    return `<i data-i="${i}" aria-label="${n.dow} ${n.date}, ${hm(n.obtained)} recorded" title="${n.dow} ${Number(n.date.slice(8))}"
       style="background:linear-gradient(180deg,${top},${base});
              box-shadow:0 6px 16px -8px ${scale(open)},inset 0 1px 0 rgba(255,255,255,.22);
              height:${(16 + (n.obtained / maxObt) * 16).toFixed(1)}px;align-self:flex-end"></i>`;
@@ -1285,7 +1310,7 @@ function renderC(){
     el.addEventListener('click', () => { picked = Number(el.dataset.i); draw(); }));
 
   const print = document.getElementById('c-print');
-  print.addEventListener('pointerdown', (ev) => {
+  print.addEventListener('click', (ev) => {
     const rect = print.getBoundingClientRect();
     const x = ((ev.clientX - rect.left) / rect.width) * 357 - CX;
     const y = ((ev.clientY - rect.top) / rect.height) * 357 - CY;
@@ -1311,37 +1336,37 @@ function renderC(){
   const mondays = NIGHTS.filter((n) => n.dow === 'Mon');
 
   document.getElementById('c-head').textContent =
-    'The print has one broken edge, and it is ' + late.length + ' nights wide';
+    late.length + ' nights started after midnight';
   document.getElementById('c-sub').textContent =
     'Fourteen nights, averaging ' + hm(avg) + ' against a ' + hm(NEED_MIN) + ' need. ' +
-    'Where the violet starts late, the ring that follows goes coral.';
+    'The colours show a model, not measured alertness or a midnight threshold.';
   document.getElementById('c-finds').innerHTML = [
-    { c:'coral', k:late.length + '×', t:'Midnight is the switch',
-      d:'The ' + late.length + ' nights you crossed it — ' + late.map((n) => n.dow + ' ' + Number(n.date.slice(8))).join(', ') +
-        ' — are the ' + late.length + ' mornings that open near ' + lateE + '%. Every other morning opens near ' + earlyE + '%.' },
+    { c:'coral', k:late.length + '×', t:'Later starts, lower estimates',
+      d:'The ' + late.length + ' nights after midnight — ' + late.map((n) => n.dow + ' ' + Number(n.date.slice(8))).join(', ') +
+        ' — average ' + lateE + '% in this model. The other mornings average ' + earlyE + '%.' },
     { c:'amber', k:(Math.round(spread/60*10)/10) + 'h', t:'Your bedtime swings ' + Math.round(spread) + ' minutes',
       d:'From ' + clock(earliest.bed) + ' the evening before ' + earliest.dow + ' ' + Number(earliest.date.slice(8)) +
         ', to ' + clock(latest.bed) + ' on ' + latest.dow + ' ' + Number(latest.date.slice(8)) +
-        '. The width of that window costs you more than any single short night.' },
-    { c:'teal', k:'Mon', t:'Mondays arrive paid for',
-      d:'Both Mondays open above the days around them — ' + mondays.map((n) => energyFromDebt(n.debt) + '%').join(' and ') +
-        ' — because the weekend put ' + hm(Math.round(mondays.reduce((a, n) => a + n.obtained, 0) / mondays.length)) +
-        ' a night in first. Nothing you did on a Monday caused it.' },
+        '. This spread alone cannot explain your sleep debt.' },
+    { c:'teal', k:'Mon', t:'The two Monday estimates',
+      d:'The Monday model estimates are ' + mondays.map((n) => energyFromDebt(n.debt) + '%').join(' and ') +
+        ' — with ' + hm(Math.round(mondays.reduce((a, n) => a + n.obtained, 0) / mondays.length)) +
+        ' average sleep on those nights. This does not establish a weekend effect.' },
   ].map((f) => `<div class="find"><div class="ic ${f.c}">${f.k}</div>
     <div><div class="t">${f.t}</div><div class="d">${f.d}</div></div></div>`).join('');
 
   document.getElementById('c-pair').innerHTML = `
-    <div class="pcard"><div class="k" style="color:#5eead4;text-shadow:0 0 16px rgba(45,212,191,.6)">Best · ${best.dow} ${Number(best.date.slice(8))}</div>
+    <div class="pcard"><div class="k" style="color:#5eead4;text-shadow:0 0 16px rgba(45,212,191,.6)">Longest · ${best.dow} ${Number(best.date.slice(8))}</div>
       <div class="v">${hm(best.obtained)}</div>
-      <div class="d">Bed ${shortClock(best.bed)} PM, woke ${shortClock(wakeOf(best))} AM<br>Opened at ${energyFromDebt(best.debt)}%</div></div>
-    <div class="pcard"><div class="k" style="color:#fda4af;text-shadow:0 0 16px rgba(251,113,133,.6)">Worst · ${worst.dow} ${Number(worst.date.slice(8))}</div>
+      <div class="d">Bed ${clock(best.bed)}, woke ${clock(wakeOf(best))}<br>Opened at ${energyFromDebt(best.debt)}%</div></div>
+    <div class="pcard"><div class="k" style="color:#fda4af;text-shadow:0 0 16px rgba(251,113,133,.6)">Shortest · ${worst.dow} ${Number(worst.date.slice(8))}</div>
       <div class="v">${hm(worst.obtained)}</div>
-      <div class="d">Bed ${shortClock(worst.bed)} AM, woke ${shortClock(wakeOf(worst))} AM<br>Opened at ${energyFromDebt(worst.debt)}%</div></div>`;
+      <div class="d">Bed ${clock(worst.bed)}, woke ${clock(wakeOf(worst))}<br>Opened at ${energyFromDebt(worst.debt)}%</div></div>`;
   document.getElementById('c-pair-d').textContent =
-    hm(best.obtained - worst.obtained) + ' apart, and the gap shows up in every hour of the day that followed.';
+    hm(best.obtained - worst.obtained) + ' apart. Duration alone does not tell us how either day felt.';
   document.getElementById('c-aria').innerHTML =
-    'Your fortnight has one lever in it, and it is not how long you sleep — it is <em>when you start</em>. ' +
-    late.map((n) => n.dow + ' ' + Number(n.date.slice(8))).join(', ') + ' went past midnight, and they are carrying the whole <em>5.9 h</em>.';
+    'Both <em>sleep duration and timing</em> matter. ' +
+    late.map((n) => n.dow + ' ' + Number(n.date.slice(8))).join(', ') + ' started after midnight. These nights alone do not explain the <em>5.9 h</em> example balance.';
 
   draw();
 }
@@ -1350,10 +1375,24 @@ function renderC(){
 const want = (new URLSearchParams(location.search).get('v') || 'a').toLowerCase();
 const view = ['a','b','c'].includes(want) ? want : 'a';
 document.getElementById('v-' + view).classList.add('on');
-document.querySelectorAll('.switch a').forEach((a) => a.classList.toggle('on', a.dataset.v === view));
+document.querySelectorAll('.switch a').forEach((a) => {
+  const active = a.dataset.v === view;
+  a.classList.toggle('on', active);
+  if (active) a.setAttribute('aria-current', 'page');
+});
 if (view === 'a') renderA();
 if (view === 'b') renderB();
 if (view === 'c') renderC();
+// Keep the approved element styling while exposing keyboard activation.
+document.querySelectorAll('.view.on .slot, .view.on .preset, .view.on .nightbar i').forEach((el) => {
+  el.setAttribute('role', 'button');
+  el.setAttribute('tabindex', '0');
+  el.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Enter' && ev.key !== ' ') return;
+    ev.preventDefault();
+    el.click();
+  });
+});
 document.documentElement.dataset.ready = '1';
 </script>
 </body>
