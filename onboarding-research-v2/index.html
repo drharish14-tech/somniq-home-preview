@@ -15,7 +15,7 @@ html,body{height:100%;background:#06070d;color:#eef0f7;font-family:Inter,-apple-
 .eye{font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#8b8fa8}
 h1{font:400 38px/1.05 'Instrument Serif',serif;margin-top:10px;letter-spacing:-.01em}
 h1 em{font-style:italic;background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
-.big{margin-top:26px;font:700 76px/1 Inter;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.big{margin-top:14px;font:700 64px/1 Inter;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
 .big small{font-size:26px;font-weight:600;color:#9aa0b8;margin-left:6px;letter-spacing:0}
 .big.coral{background:linear-gradient(90deg,#ff8a80,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
 .big.teal{background:linear-gradient(90deg,#5eead4,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -34,10 +34,11 @@ svg{width:100%;height:auto;overflow:visible}
 <div class="top"><div class="dots"><i class="on"></i><i></i></div><button class="src" id="srcBtn">Sources</button></div>
 
 <section class="scr" id="s1">
- <div class="eye" data-k="title">Example week</div>
- <h1 data-k="title">Short nights <em>stack up</em>.<br>You barely feel it.</h1>
+ <div class="eye" data-k="title">What is sleep debt?</div>
+ <h1 data-k="title">Sleep debt = the hours <em>you owe</em> your body.</h1>
+ <div class="cap" data-k="title" style="font-size:15px;margin-top:8px">It grows every night you sleep less than you need.</div>
  <div class="vis" data-k="vis"><svg id="v1" viewBox="0 0 342 300"></svg></div>
- <div data-k="num"><div class="big coral" id="n1">0.0<small>h owed</small></div><div class="cap">5 nights under 7 h</div></div>
+ <div data-k="num"><div class="big coral" id="n1">0.0<small>h owed</small></div><div class="cap">owed after 5 short nights</div><div class="cap" id="fact" style="color:#c9cce0;margin-top:10px;line-height:1.4">Why it matters: 2 weeks of 6-hour nights dulled focus like 1–2 nights awake, and people barely noticed.</div></div>
  <div data-k="btn" style="margin-top:22px"><button class="btn" id="next">See how Somniq fixes it</button></div>
 </section>
 
@@ -81,7 +82,7 @@ function build(svg,days,grad){svg.innerHTML='';const P=svg.id;defs(svg,P);
  // debt meter
  const my=262;el('rect',{x:0,y:my,width:342,height:14,rx:7,fill:'#ffffff0d',stroke:'#ffffff14'},svg);
  const mf=el('rect',{x:0,y:my,width:0,height:14,rx:7,fill:`url(#${P}gm)`,filter:`url(#${P}glow)`},svg);
- const ml=el('text',{x:0,y:my+34,class:'lbl'},svg);ml.textContent='SLEEP DEBT';
+ const ml=el('text',{x:0,y:my+34,class:'lbl'},svg);ml.textContent='HOURS OWED · ADDING UP';
  return{bars,mf,line,lt}}
 const W1=[['MON',6.2],['TUE',5.8],['WED',6.5],['THU',5.5],['FRI',6.0]];
 const W2=[['SAT',8.5],['SUN',8.5],['MON',8.0],['TUE',8.0]];
@@ -94,12 +95,12 @@ function stage(s,t,TT){s.querySelectorAll('[data-k]').forEach(n=>{const k=n.data
  if(k=='num'){const p=cl((t-TT.num)/450);o=cl(p*2);tr=`scale(${.6+.4*back(p)})`;n.style.transformOrigin='left center'}
  n.style.opacity=o;n.style.transform=tr})}
 function fmt(h){return h.toFixed(1)}
-function r1(t){stage($('s1'),t,{btn:2300,num:2650});let debt=0;
+function r1(t){stage($('s1'),t,{btn:3300,num:2650});let debt=0;
  v1.bars.forEach((b,i)=>{b.ghost.setAttribute('opacity',seg(t,350,900));const p=seg(t,1000+i*220,1450+i*220);const h=b.h*p;
   b.r.setAttribute('y',y(h));b.r.setAttribute('height',h*sc);b.v.setAttribute('y',y(h)-8);b.v.textContent=p>0?fmt(h):'';b.v.setAttribute('opacity',p);
   debt+=Math.max(0,7-h)*(p>0?1:0)*p});
  v1.mf.setAttribute('width',342*Math.min(1,debt/MAX));
- const shown=t<2650?0:debt*seg(t,2650,3100);$('n1').firstChild.nodeValue=fmt(shown)}
+ const shown=t<2650?0:debt*seg(t,2650,3100);$('n1').firstChild.nodeValue=fmt(shown);$('fact').style.opacity=seg(t,3100,3600)}
 function r2(t){stage($('s2'),t,{btn:4300,num:900});let debt=5.0;
  v2.bars.forEach((b,i)=>{b.ghost.setAttribute('opacity',seg(t,350,900));const p=seg(t,1100+i*750,1750+i*750);const h=b.h*p;
   b.r.setAttribute('y',y(h));b.r.setAttribute('height',h*sc);b.v.setAttribute('y',y(h)-8);b.v.textContent=p>0?'+'+fmt((b.h-7)*p):'';b.v.setAttribute('opacity',p);
