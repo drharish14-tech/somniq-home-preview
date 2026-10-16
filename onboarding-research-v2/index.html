@@ -35,6 +35,18 @@ svg{width:100%;height:auto;overflow:visible}
 .sell{font:400 15px/1.4 Inter;color:#c9cce0;margin-top:14px}.sell b{color:#eef0f7;font-weight:600}
 .ben{font:400 22px/1.2 'Instrument Serif',serif;margin-top:8px;background:linear-gradient(90deg,#5eead4,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
 #s2 .vis svg{max-height:100%}
+
+.scr{gap:0}
+.vis{flex:1 1 0;min-height:110px;margin:clamp(8px,2vh,18px) 0;position:relative}
+.vis svg{position:absolute;inset:0;width:100%;height:100%}
+h1{font-size:clamp(28px,4.6vh,38px)}
+.big{font-size:clamp(44px,7.5vh,64px);margin-top:4px}
+.big small{font-size:clamp(18px,3vh,26px)}
+.sell{font-size:clamp(13px,1.8vh,15px);margin-top:8px}.ben{font-size:clamp(18px,2.6vh,22px);margin-top:4px}
+.btn{height:clamp(46px,6.5vh,56px)}
+[data-k=btn]{margin-top:clamp(10px,2vh,22px)!important}
+.eye{flex:none}
+@media (max-height:720px){.foot{margin-top:6px}.chip{padding:6px 10px;font-size:11px}#fact{font-size:12px}}
 </style></head><body><div id="app">
 <div class="top"><div class="dots"><i class="on"></i><i></i></div><button class="src" id="srcBtn">Sources</button></div>
 
@@ -42,7 +54,7 @@ svg{width:100%;height:auto;overflow:visible}
  <div class="eye" data-k="title">What is sleep debt?</div>
  <h1 data-k="title">Sleep debt = the hours <em>you owe</em> your body.</h1>
  <div class="cap" data-k="title" style="font-size:15px;margin-top:8px">It grows every night you sleep less than you need.</div>
- <div class="vis" data-k="vis"><svg id="v1" viewBox="0 0 342 300"></svg></div>
+ <div class="vis" data-k="vis"><svg id="v1" viewBox="0 -4 342 306"></svg></div>
  <div data-k="num"><div class="big coral" id="n1">0.0<small>h owed</small></div><div class="cap">owed after 5 short nights</div><div class="cap" id="fact" style="color:#c9cce0;margin-top:10px;line-height:1.4">Why it matters: 2 weeks of 6-hour nights dulled focus like 1–2 nights awake, and people barely noticed.</div></div>
  <div data-k="btn" style="margin-top:22px"><button class="btn" id="next">See how Somniq fixes it</button></div>
 </section>
@@ -51,7 +63,7 @@ svg{width:100%;height:auto;overflow:visible}
  <div class="eye" data-k="title">Paying it back</div>
  <h1 data-k="title">It takes <em>days</em>, not one lie&#8209;in.</h1>
  <button class="chip" data-k="title" id="chip">~1 h of debt took ~4 days of extra sleep to repay · <u>Kitamura 2016</u></button>
- <div class="vis" data-k="vis"><svg id="v2" viewBox="0 0 342 300"></svg></div>
+ <div class="vis" data-k="vis"><svg id="v2" viewBox="0 -4 342 306"></svg></div>
  <div data-k="num"><div class="big coral" id="n2">1.0<small>h owed</small></div><div class="cap" id="c2">+15 min extra sleep a night</div></div>
  <div data-k="sell"><div class="sell">Somniq <b>tracks your debt every night</b> and <b>paces the payback</b>, so you know exactly how much extra sleep you need.</div><div class="ben">Feel sharp again, without guessing.</div></div>
  <div data-k="btn" style="margin-top:16px"><button class="btn" id="replay">Start tracking my sleep</button><div class="foot">Illustrative example · Not a medical device.</div></div>
