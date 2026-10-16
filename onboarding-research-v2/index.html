@@ -1,0 +1,121 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06070d"><title>Somniq · Sleep debt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#06070d;color:#eef0f7;font-family:Inter,-apple-system,sans-serif;overflow:hidden}
+#app{position:relative;height:100dvh;max-width:430px;margin:0 auto;overflow:hidden;
+ background:radial-gradient(120% 60% at 15% 0%,rgba(124,92,255,.16),transparent 60%),radial-gradient(90% 50% at 100% 100%,rgba(34,211,238,.10),transparent 60%),#06070d}
+.top{position:absolute;top:calc(env(safe-area-inset-top) + 18px);left:24px;right:24px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+.dots{display:flex;gap:6px}.dots i{width:22px;height:4px;border-radius:2px;background:#ffffff1f;transition:.4s}.dots i.on{background:linear-gradient(90deg,#a78bfa,#22d3ee)}
+.src{font:500 12px 'JetBrains Mono',monospace;color:#9aa0b8;background:#ffffff0d;border:1px solid #ffffff14;padding:7px 12px;border-radius:99px}
+.scr{position:absolute;inset:0;padding:calc(env(safe-area-inset-top) + 76px) 24px calc(env(safe-area-inset-bottom) + 28px);display:flex;flex-direction:column}
+.scr.hide{display:none}
+.eye{font:500 11px 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#8b8fa8}
+h1{font:400 38px/1.05 'Instrument Serif',serif;margin-top:10px;letter-spacing:-.01em}
+h1 em{font-style:italic;background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.big{margin-top:26px;font:700 76px/1 Inter;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.big small{font-size:26px;font-weight:600;color:#9aa0b8;margin-left:6px;letter-spacing:0}
+.big.coral{background:linear-gradient(90deg,#ff8a80,#ec4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.big.teal{background:linear-gradient(90deg,#5eead4,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cap{font:500 13px Inter;color:#9aa0b8;margin-top:6px}
+.vis{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+svg{width:100%;height:auto;overflow:visible}
+.lbl{font:500 11px 'JetBrains Mono',monospace;fill:#7d8299}
+.val{font:600 12px Inter;fill:#c9cce0}
+.btn{display:block;width:100%;height:56px;border:0;border-radius:18px;font:600 17px Inter;color:#0a0a12;background:linear-gradient(90deg,#a78bfa,#22d3ee);box-shadow:0 10px 40px -10px #7c5cffaa}
+.foot{font:400 11px Inter;color:#5f6480;text-align:center;margin-top:12px}
+.sheetbg{position:absolute;inset:0;background:#000a;opacity:0;pointer-events:none;transition:.3s;z-index:9}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#11131d;border-top:1px solid #ffffff14;border-radius:24px 24px 0 0;padding:22px 22px calc(env(safe-area-inset-bottom) + 22px);transform:translateY(100%);transition:.35s cubic-bezier(.2,.8,.2,1);z-index:10;max-height:70%;overflow:auto}
+.open .sheetbg{opacity:1;pointer-events:auto}.open .sheet{transform:none}
+.sheet h3{font:600 16px Inter;margin-bottom:12px}.sheet p{font:400 13px/1.45 Inter;color:#b5b9cc;margin-bottom:12px}.sheet a{color:#67e8f9}.sheet b{color:#eef0f7}
+</style></head><body><div id="app">
+<div class="top"><div class="dots"><i class="on"></i><i></i></div><button class="src" id="srcBtn">Sources</button></div>
+
+<section class="scr" id="s1">
+ <div class="eye" data-k="title">Example week</div>
+ <h1 data-k="title">Short nights <em>stack up</em>.<br>You barely feel it.</h1>
+ <div class="vis" data-k="vis"><svg id="v1" viewBox="0 0 342 300"></svg></div>
+ <div data-k="num"><div class="big coral" id="n1">0.0<small>h owed</small></div><div class="cap">5 nights under 7 h</div></div>
+ <div data-k="btn" style="margin-top:22px"><button class="btn" id="next">See how Somniq fixes it</button></div>
+</section>
+
+<section class="scr hide" id="s2">
+ <div class="eye" data-k="title">How Somniq helps</div>
+ <h1 data-k="title">Pay it back over <em>days</em>,<br>not one lie-in.</h1>
+ <div class="vis" data-k="vis"><svg id="v2" viewBox="0 0 342 300"></svg></div>
+ <div data-k="num"><div class="big coral" id="n2">5.0<small>h owed</small></div><div class="cap" id="c2">Somniq paces your recovery</div></div>
+ <div data-k="btn" style="margin-top:22px"><button class="btn" id="replay">Replay</button><div class="foot">Illustrative example · Not a medical device.</div></div>
+</section>
+
+<div class="sheetbg" id="bg"></div>
+<div class="sheet" id="sheet"><h3>Sources</h3>
+<p><b>Short nights add up unnoticed.</b> Two weeks of 6-hour nights impaired attention as much as 1–2 nights with no sleep, and people barely noticed. Van Dongen et al., <i>Sleep</i> 2003. <a href="https://doi.org/10.1093/sleep/26.2.117">doi</a></p>
+<p><b>7 h line.</b> Adults should regularly sleep 7 or more hours a night. Watson et al., AASM/SRS consensus, <i>Sleep</i> 2015. <a href="https://doi.org/10.5665/sleep.4716">doi</a></p>
+<p><b>Days, not one lie-in.</b> Repaying about 1 hour of hidden debt took about 4 days of extended sleep. Kitamura et al., <i>Sci Rep</i> 2016. <a href="https://doi.org/10.1038/srep35812">doi</a></p>
+<p><b>One recovery night isn't enough.</b> Performance hadn't returned to baseline after 3 recovery nights. Belenky et al., <i>J Sleep Res</i> 2003. <a href="https://doi.org/10.1046/j.1365-2869.2003.00337.x">doi</a></p>
+<p>Numbers on these screens are an illustrative example. Somniq estimates sleep debt from your sleep time and personal need, an approach based on sleep research. For wellness, not medical advice. Not a medical device.</p>
+</div></div>
+<script>
+const Q=new URLSearchParams(location.search),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FREEZE=Q.has('t')?+Q.get('t'):null;let scr=Q.get('s')=='2'?2:1;
+const NS='http://www.w3.org/2000/svg',el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+const cl=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-cl(x),3),seg=(t,a,b)=>ease((t-a)/(b-a));
+const back=x=>{x=cl(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+// shared layout: bars of hours, 7h line, + debt meter
+const H0=210,sc=22; const y=h=>H0-h*sc;
+function defs(s,P){const d=el('defs',{},s);
+ [['gc','#ff8a80','#ec4899'],['gv','#a78bfa','#22d3ee'],['gt','#5eead4','#22d3ee'],['gm','#ec4899','#a78bfa']].forEach(([id,a,b])=>{const g=el('linearGradient',{id:P+id,x1:0,y1:1,x2:0,y2:0},d);el('stop',{offset:0,'stop-color':a},g);el('stop',{offset:1,'stop-color':b},g)});
+ const f=el('filter',{id:P+'glow',x:'-50%',y:'-50%',width:'200%',height:'200%'},d);el('feGaussianBlur',{stdDeviation:6,result:'b'},f);const m=el('feMerge',{},f);el('feMergeNode',{in:'b'},m);el('feMergeNode',{in:'SourceGraphic'},m)}
+function build(svg,days,grad){svg.innerHTML='';const P=svg.id;defs(svg,P);
+ const line=el('line',{x1:0,x2:342,y1:y(7),y2:y(7),stroke:'#ffffff40','stroke-dasharray':'4 6'},svg);
+ const lt=el('text',{x:342,y:y(7)-8,'text-anchor':'end',class:'lbl'},svg);lt.textContent='7 h';
+ const w=42,gap=(342-days.length*w)/(days.length-1+.0001);
+ const bars=days.map((d,i)=>{const x=i*(w+gap);
+  const ghost=el('rect',{x,y:y(9),width:w,height:9*sc,rx:12,fill:'none',stroke:'#ffffff14'},svg);
+  const r=el('rect',{x,y:H0,width:w,height:0,rx:12,fill:`url(#${P}${grad})`},svg);
+  const v=el('text',{x:x+w/2,y:H0-6,'text-anchor':'middle',class:'val'},svg);
+  const l=el('text',{x:x+w/2,y:H0+20,'text-anchor':'middle',class:'lbl'},svg);l.textContent=d[0];
+  return{x,w,h:d[1],r,v,ghost}});
+ // debt meter
+ const my=262;el('rect',{x:0,y:my,width:342,height:14,rx:7,fill:'#ffffff0d',stroke:'#ffffff14'},svg);
+ const mf=el('rect',{x:0,y:my,width:0,height:14,rx:7,fill:`url(#${P}gm)`,filter:`url(#${P}glow)`},svg);
+ const ml=el('text',{x:0,y:my+34,class:'lbl'},svg);ml.textContent='SLEEP DEBT';
+ return{bars,mf,line,lt}}
+const W1=[['MON',6.2],['TUE',5.8],['WED',6.5],['THU',5.5],['FRI',6.0]];
+const W2=[['SAT',8.5],['SUN',8.5],['MON',8.0],['TUE',8.0]];
+const v1=build(document.getElementById('v1'),W1,'gc'),v2=build(document.getElementById('v2'),W2,'gt');
+const MAX=6; const $=id=>document.getElementById(id);
+function stage(s,t,TT){s.querySelectorAll('[data-k]').forEach(n=>{const k=n.dataset.k;let o=1,tr='';
+ if(k=='title'){const p=seg(t,0,500);o=p;tr=`translateY(${(1-p)*10}px)`}
+ if(k=='vis'){const p=seg(t,350,1100);o=.25+.75*p;tr=`scale(${.92+.08*p})`}
+ if(k=='btn'){const p=seg(t,TT.btn,TT.btn+500);o=p;tr=`translateY(${(1-p)*28}px)`}
+ if(k=='num'){const p=cl((t-TT.num)/450);o=cl(p*2);tr=`scale(${.6+.4*back(p)})`;n.style.transformOrigin='left center'}
+ n.style.opacity=o;n.style.transform=tr})}
+function fmt(h){return h.toFixed(1)}
+function r1(t){stage($('s1'),t,{btn:2300,num:2650});let debt=0;
+ v1.bars.forEach((b,i)=>{b.ghost.setAttribute('opacity',seg(t,350,900));const p=seg(t,1000+i*220,1450+i*220);const h=b.h*p;
+  b.r.setAttribute('y',y(h));b.r.setAttribute('height',h*sc);b.v.setAttribute('y',y(h)-8);b.v.textContent=p>0?fmt(h):'';b.v.setAttribute('opacity',p);
+  debt+=Math.max(0,7-h)*(p>0?1:0)*p});
+ v1.mf.setAttribute('width',342*Math.min(1,debt/MAX));
+ const shown=t<2650?0:debt*seg(t,2650,3100);$('n1').firstChild.nodeValue=fmt(shown)}
+function r2(t){stage($('s2'),t,{btn:4300,num:900});let debt=5.0;
+ v2.bars.forEach((b,i)=>{b.ghost.setAttribute('opacity',seg(t,350,900));const p=seg(t,1100+i*750,1750+i*750);const h=b.h*p;
+  b.r.setAttribute('y',y(h));b.r.setAttribute('height',h*sc);b.v.setAttribute('y',y(h)-8);b.v.textContent=p>0?'+'+fmt((b.h-7)*p):'';b.v.setAttribute('opacity',p);
+  debt-=(b.h-7)*p});
+ debt=Math.max(0,debt);v2.mf.setAttribute('width',342*debt/MAX);
+ const done=t>=4150,n=$('n2');n.firstChild.nodeValue=done?'0.0':fmt(debt);
+ n.className='big '+(done?'teal':'coral');n.lastChild.textContent=done?'h · debt cleared':'h owed';
+ if(done){const p=cl((t-4150)/500);n.style.transform=`scale(${1+.12*Math.sin(p*Math.PI)})`;n.style.transformOrigin='left center';
+  $('c2').textContent='Cleared in 4 nights ✦';v2.line.setAttribute('stroke',`rgba(94,234,212,${.25+.5*p})`)}
+ else{n.style.transform='';$('c2').textContent='Somniq paces your recovery';v2.line.setAttribute('stroke','#ffffff40')}}
+let t0=performance.now();
+function show(n){scr=n;$('s1').classList.toggle('hide',n!=1);$('s2').classList.toggle('hide',n!=2);
+ document.querySelectorAll('.dots i').forEach((d,i)=>d.classList.toggle('on',i<n));t0=performance.now()}
+function loop(now){const t=FREEZE!=null?FREEZE:RM?99999:now-t0;(scr==1?r1:r2)(t);if(FREEZE==null&&!RM&&t<6000)requestAnimationFrame(loop)}
+function go(n){show(n);requestAnimationFrame(loop)}
+$('next').onclick=()=>go(2);$('replay').onclick=()=>go(1);
+$('srcBtn').onclick=()=>$('app').classList.add('open');$('bg').onclick=()=>$('app').classList.remove('open');
+go(scr);
+</script></body></html>
