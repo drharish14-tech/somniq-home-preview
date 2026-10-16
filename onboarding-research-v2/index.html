@@ -47,6 +47,9 @@ h1{font-size:clamp(28px,4.6vh,38px)}
 [data-k=btn]{margin-top:clamp(10px,2vh,22px)!important}
 .eye{flex:none}
 @media (max-height:720px){.foot{margin-top:6px}.chip{padding:6px 10px;font-size:11px}#fact{font-size:12px}}
+.tie{font:500 clamp(13px,1.9vh,15px)/1.4 Inter;color:#ffb4ac;margin-top:8px;padding-left:10px;border-left:2px solid #ff8a80}.tie b{color:#fff}
+.est{font:500 10px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:#9aa0b8;border:1px solid #ffffff26;border-radius:6px;padding:1px 5px;margin-left:4px;white-space:nowrap}
+@media (max-height:640px){.ben{display:none}.eye{display:none}h1{margin-top:0}}
 </style></head><body><div id="app">
 <div class="top"><div class="dots"><i class="on"></i><i></i></div><button class="src" id="srcBtn">Sources</button></div>
 
@@ -65,7 +68,7 @@ h1{font-size:clamp(28px,4.6vh,38px)}
  <button class="chip" data-k="title" id="chip">~1 h of debt took ~4 days of extra sleep to repay · <u>Kitamura 2016</u></button>
  <div class="vis" data-k="vis"><svg id="v2" viewBox="0 -4 342 306"></svg></div>
  <div data-k="num"><div class="big coral" id="n2">1.0<small>h owed</small></div><div class="cap" id="c2">+15 min extra sleep a night</div></div>
- <div data-k="sell"><div class="sell">Somniq <b>tracks your debt every night</b> and <b>paces the payback</b>, so you know exactly how much extra sleep you need.</div><div class="ben">Feel sharp again, without guessing.</div></div>
+ <div data-k="sell"><div class="tie">Your <b>5 h</b> won't clear in a weekend. At +15 min a night, it takes <b>about 3 weeks</b> <span class="est">estimate</span></div><div class="sell">Somniq <b>tracks your debt every night</b> and <b>paces the payback</b>, so you know how much extra sleep you need.</div><div class="ben">Feel sharp again, without guessing.</div></div>
  <div data-k="btn" style="margin-top:16px"><button class="btn" id="replay">Start tracking my sleep</button><div class="foot">Illustrative example · Not a medical device.</div></div>
 </section>
 
@@ -75,7 +78,7 @@ h1{font-size:clamp(28px,4.6vh,38px)}
 <p><b>7 h line.</b> Adults should regularly sleep 7 or more hours a night. Watson et al., AASM/SRS consensus, <i>Sleep</i> 2015. <a href="https://doi.org/10.5665/sleep.4716">doi</a></p>
 <p><b>Days, not one lie-in.</b> Repaying about 1 hour of hidden debt took about 4 days of extra sleep. Kitamura et al., <i>Sci Rep</i> 2016. <a href="https://doi.org/10.1038/srep35812">doi</a></p>
 <p><b>One recovery night isn't enough.</b> Performance hadn't returned to baseline after 3 recovery nights. Belenky et al., <i>J Sleep Res</i> 2003. <a href="https://doi.org/10.1046/j.1365-2869.2003.00337.x">doi</a></p>
-<p>Numbers on these screens are an illustrative example. Somniq estimates sleep debt from your sleep time and personal need, an approach based on sleep research. For wellness, not medical advice. Not a medical device.</p>
+<p><b>"About 3 weeks" for 5 h</b> is our estimate, scaling Kitamura's ~4 days per hour at +15 min a night. Not a measured result.</p><p>Numbers on these screens are an illustrative example. Somniq estimates sleep debt from your sleep time and personal need, an approach based on sleep research. For wellness, not medical advice. Not a medical device.</p>
 </div></div>
 <script>
 const Q=new URLSearchParams(location.search),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
