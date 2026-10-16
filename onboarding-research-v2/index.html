@@ -30,6 +30,11 @@ svg{width:100%;height:auto;overflow:visible}
 .sheet{position:absolute;left:0;right:0;bottom:0;background:#11131d;border-top:1px solid #ffffff14;border-radius:24px 24px 0 0;padding:22px 22px calc(env(safe-area-inset-bottom) + 22px);transform:translateY(100%);transition:.35s cubic-bezier(.2,.8,.2,1);z-index:10;max-height:70%;overflow:auto}
 .open .sheetbg{opacity:1;pointer-events:auto}.open .sheet{transform:none}
 .sheet h3{font:600 16px Inter;margin-bottom:12px}.sheet p{font:400 13px/1.45 Inter;color:#b5b9cc;margin-bottom:12px}.sheet a{color:#67e8f9}.sheet b{color:#eef0f7}
+.chip{margin-top:12px;align-self:flex-start;font:500 12px/1.35 Inter;color:#a5f3fc;background:#22d3ee14;border:1px solid #22d3ee40;border-radius:12px;padding:8px 11px;text-align:left}
+.chip u{text-decoration:none;font-family:'JetBrains Mono',monospace;color:#67e8f9}
+.sell{font:400 15px/1.4 Inter;color:#c9cce0;margin-top:14px}.sell b{color:#eef0f7;font-weight:600}
+.ben{font:400 22px/1.2 'Instrument Serif',serif;margin-top:8px;background:linear-gradient(90deg,#5eead4,#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+#s2 .vis svg{max-height:100%}
 </style></head><body><div id="app">
 <div class="top"><div class="dots"><i class="on"></i><i></i></div><button class="src" id="srcBtn">Sources</button></div>
 
@@ -43,18 +48,20 @@ svg{width:100%;height:auto;overflow:visible}
 </section>
 
 <section class="scr hide" id="s2">
- <div class="eye" data-k="title">How Somniq helps</div>
- <h1 data-k="title">Pay it back over <em>days</em>,<br>not one lie-in.</h1>
+ <div class="eye" data-k="title">Paying it back</div>
+ <h1 data-k="title">It takes <em>days</em>, not one lie&#8209;in.</h1>
+ <button class="chip" data-k="title" id="chip">~1 h of debt took ~4 days of extra sleep to repay · <u>Kitamura 2016</u></button>
  <div class="vis" data-k="vis"><svg id="v2" viewBox="0 0 342 300"></svg></div>
- <div data-k="num"><div class="big coral" id="n2">5.0<small>h owed</small></div><div class="cap" id="c2">Somniq paces your recovery</div></div>
- <div data-k="btn" style="margin-top:22px"><button class="btn" id="replay">Replay</button><div class="foot">Illustrative example · Not a medical device.</div></div>
+ <div data-k="num"><div class="big coral" id="n2">1.0<small>h owed</small></div><div class="cap" id="c2">+15 min extra sleep a night</div></div>
+ <div data-k="sell"><div class="sell">Somniq <b>tracks your debt every night</b> and <b>paces the payback</b>, so you know exactly how much extra sleep you need.</div><div class="ben">Feel sharp again, without guessing.</div></div>
+ <div data-k="btn" style="margin-top:16px"><button class="btn" id="replay">Start tracking my sleep</button><div class="foot">Illustrative example · Not a medical device.</div></div>
 </section>
 
 <div class="sheetbg" id="bg"></div>
 <div class="sheet" id="sheet"><h3>Sources</h3>
 <p><b>Short nights add up unnoticed.</b> Two weeks of 6-hour nights impaired attention as much as 1–2 nights with no sleep, and people barely noticed. Van Dongen et al., <i>Sleep</i> 2003. <a href="https://doi.org/10.1093/sleep/26.2.117">doi</a></p>
 <p><b>7 h line.</b> Adults should regularly sleep 7 or more hours a night. Watson et al., AASM/SRS consensus, <i>Sleep</i> 2015. <a href="https://doi.org/10.5665/sleep.4716">doi</a></p>
-<p><b>Days, not one lie-in.</b> Repaying about 1 hour of hidden debt took about 4 days of extended sleep. Kitamura et al., <i>Sci Rep</i> 2016. <a href="https://doi.org/10.1038/srep35812">doi</a></p>
+<p><b>Days, not one lie-in.</b> Repaying about 1 hour of hidden debt took about 4 days of extra sleep. Kitamura et al., <i>Sci Rep</i> 2016. <a href="https://doi.org/10.1038/srep35812">doi</a></p>
 <p><b>One recovery night isn't enough.</b> Performance hadn't returned to baseline after 3 recovery nights. Belenky et al., <i>J Sleep Res</i> 2003. <a href="https://doi.org/10.1046/j.1365-2869.2003.00337.x">doi</a></p>
 <p>Numbers on these screens are an illustrative example. Somniq estimates sleep debt from your sleep time and personal need, an approach based on sleep research. For wellness, not medical advice. Not a medical device.</p>
 </div></div>
@@ -69,7 +76,7 @@ const H0=210,sc=22; const y=h=>H0-h*sc;
 function defs(s,P){const d=el('defs',{},s);
  [['gc','#ff8a80','#ec4899'],['gv','#a78bfa','#22d3ee'],['gt','#5eead4','#22d3ee'],['gm','#ec4899','#a78bfa']].forEach(([id,a,b])=>{const g=el('linearGradient',{id:P+id,x1:0,y1:1,x2:0,y2:0},d);el('stop',{offset:0,'stop-color':a},g);el('stop',{offset:1,'stop-color':b},g)});
  const f=el('filter',{id:P+'glow',x:'-50%',y:'-50%',width:'200%',height:'200%'},d);el('feGaussianBlur',{stdDeviation:6,result:'b'},f);const m=el('feMerge',{},f);el('feMergeNode',{in:'b'},m);el('feMergeNode',{in:'SourceGraphic'},m)}
-function build(svg,days,grad){svg.innerHTML='';const P=svg.id;defs(svg,P);
+function build(svg,days,grad,MX){svg.innerHTML='';const P=svg.id;defs(svg,P);
  const line=el('line',{x1:0,x2:342,y1:y(7),y2:y(7),stroke:'#ffffff40','stroke-dasharray':'4 6'},svg);
  const lt=el('text',{x:342,y:y(7)-8,'text-anchor':'end',class:'lbl'},svg);lt.textContent='7 h';
  const w=42,gap=(342-days.length*w)/(days.length-1+.0001);
@@ -83,16 +90,16 @@ function build(svg,days,grad){svg.innerHTML='';const P=svg.id;defs(svg,P);
  const my=262;el('rect',{x:0,y:my,width:342,height:14,rx:7,fill:'#ffffff0d',stroke:'#ffffff14'},svg);
  const mf=el('rect',{x:0,y:my,width:0,height:14,rx:7,fill:`url(#${P}gm)`,filter:`url(#${P}glow)`},svg);
  const ml=el('text',{x:0,y:my+34,class:'lbl'},svg);ml.textContent='HOURS OWED · ADDING UP';
- return{bars,mf,line,lt}}
+ return{bars,mf,line,lt,ml}}
 const W1=[['MON',6.2],['TUE',5.8],['WED',6.5],['THU',5.5],['FRI',6.0]];
-const W2=[['SAT',8.5],['SUN',8.5],['MON',8.0],['TUE',8.0]];
+const W2=[['NIGHT 1',7.25],['NIGHT 2',7.25],['NIGHT 3',7.25],['NIGHT 4',7.25]];
 const v1=build(document.getElementById('v1'),W1,'gc'),v2=build(document.getElementById('v2'),W2,'gt');
 const MAX=6; const $=id=>document.getElementById(id);
 function stage(s,t,TT){s.querySelectorAll('[data-k]').forEach(n=>{const k=n.dataset.k;let o=1,tr='';
  if(k=='title'){const p=seg(t,0,500);o=p;tr=`translateY(${(1-p)*10}px)`}
  if(k=='vis'){const p=seg(t,350,1100);o=.25+.75*p;tr=`scale(${.92+.08*p})`}
  if(k=='btn'){const p=seg(t,TT.btn,TT.btn+500);o=p;tr=`translateY(${(1-p)*28}px)`}
- if(k=='num'){const p=cl((t-TT.num)/450);o=cl(p*2);tr=`scale(${.6+.4*back(p)})`;n.style.transformOrigin='left center'}
+ if(k=='sell')return;if(k=='num'){const p=cl((t-TT.num)/450);o=cl(p*2);tr=`scale(${.6+.4*back(p)})`;n.style.transformOrigin='left center'}
  n.style.opacity=o;n.style.transform=tr})}
 function fmt(h){return h.toFixed(1)}
 function r1(t){stage($('s1'),t,{btn:3300,num:2650});let debt=0;
@@ -101,22 +108,23 @@ function r1(t){stage($('s1'),t,{btn:3300,num:2650});let debt=0;
   debt+=Math.max(0,7-h)*(p>0?1:0)*p});
  v1.mf.setAttribute('width',342*Math.min(1,debt/MAX));
  const shown=t<2650?0:debt*seg(t,2650,3100);$('n1').firstChild.nodeValue=fmt(shown);$('fact').style.opacity=seg(t,3100,3600)}
-function r2(t){stage($('s2'),t,{btn:4300,num:900});let debt=5.0;
+function r2(t){stage($('s2'),t,{btn:5200,num:900});let debt=1.0;
  v2.bars.forEach((b,i)=>{b.ghost.setAttribute('opacity',seg(t,350,900));const p=seg(t,1100+i*750,1750+i*750);const h=b.h*p;
-  b.r.setAttribute('y',y(h));b.r.setAttribute('height',h*sc);b.v.setAttribute('y',y(h)-8);b.v.textContent=p>0?'+'+fmt((b.h-7)*p):'';b.v.setAttribute('opacity',p);
+  b.r.setAttribute('y',y(h));b.r.setAttribute('height',h*sc);b.v.setAttribute('y',y(h)-8);b.v.textContent=p>0?'+'+Math.round((b.h-7)*60*p)+'m':'';b.v.setAttribute('opacity',p);
   debt-=(b.h-7)*p});
- debt=Math.max(0,debt);v2.mf.setAttribute('width',342*debt/MAX);
+ v2.lt.textContent='';v2.ml.textContent='HOURS OWED · PAYING DOWN';debt=Math.max(0,debt);v2.mf.setAttribute('width',342*debt/1.2);
  const done=t>=4150,n=$('n2');n.firstChild.nodeValue=done?'0.0':fmt(debt);
- n.className='big '+(done?'teal':'coral');n.lastChild.textContent=done?'h · debt cleared':'h owed';
+ n.className='big '+(done?'teal':'coral');n.lastChild.textContent=done?'h · repaid':'h owed';
+ const sl=$('s2').querySelector('[data-k=sell]'),q=seg(t,4500,5100);sl.style.opacity=q;sl.style.transform=`translateY(${(1-q)*12}px)`;
  if(done){const p=cl((t-4150)/500);n.style.transform=`scale(${1+.12*Math.sin(p*Math.PI)})`;n.style.transformOrigin='left center';
-  $('c2').textContent='Cleared in 4 nights ✦';v2.line.setAttribute('stroke',`rgba(94,234,212,${.25+.5*p})`)}
- else{n.style.transform='';$('c2').textContent='Somniq paces your recovery';v2.line.setAttribute('stroke','#ffffff40')}}
+  $('c2').textContent='1 hour repaid over 4 nights ✦';v2.line.setAttribute('stroke',`rgba(94,234,212,${.25+.5*p})`)}
+ else{n.style.transform='';$('c2').textContent='+15 min extra sleep a night';v2.line.setAttribute('stroke','#ffffff40')}}
 let t0=performance.now();
 function show(n){scr=n;$('s1').classList.toggle('hide',n!=1);$('s2').classList.toggle('hide',n!=2);
  document.querySelectorAll('.dots i').forEach((d,i)=>d.classList.toggle('on',i<n));t0=performance.now()}
-function loop(now){const t=FREEZE!=null?FREEZE:RM?99999:now-t0;(scr==1?r1:r2)(t);if(FREEZE==null&&!RM&&t<6000)requestAnimationFrame(loop)}
+function loop(now){const t=FREEZE!=null?FREEZE:RM?99999:now-t0;(scr==1?r1:r2)(t);if(FREEZE==null&&!RM&&t<6500)requestAnimationFrame(loop)}
 function go(n){show(n);requestAnimationFrame(loop)}
 $('next').onclick=()=>go(2);$('replay').onclick=()=>go(1);
-$('srcBtn').onclick=()=>$('app').classList.add('open');$('bg').onclick=()=>$('app').classList.remove('open');
+$('chip').onclick=()=>$('app').classList.add('open');$('srcBtn').onclick=()=>$('app').classList.add('open');$('bg').onclick=()=>$('app').classList.remove('open');
 go(scr);
 </script></body></html>
