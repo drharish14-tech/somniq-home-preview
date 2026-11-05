@@ -145,8 +145,9 @@
     </p>
     <div class="links">
       <a href="https://github.com/drharish14-tech/somniq-app/pull/136" target="_blank" rel="noopener">PR #136 ↗</a>
-      <a href="https://expo.dev/artifacts/eas/Bqdd9DNUBsRQKCdZIFpaz8UXSvOmQKVH3ywMA3o2l_s.apk" target="_blank" rel="noopener">Current APK ↗</a>
-      <a href="https://console.firebase.google.com/u/0/project/somniq-bb1fd/testlab/histories/bh.6647e783757c2e8a/matrices/8643804582143795714" target="_blank" rel="noopener">Firebase matrix ↗</a>
+      <a href="https://expo.dev/artifacts/eas/H4AOEYyhYWniqGp_vs85VDsgukIPYrhDq3iukKv5Miw.apk" target="_blank" rel="noopener">APK C (latest) ↗</a>
+      <a href="https://console.firebase.google.com/u/0/project/somniq-bb1fd/testlab/histories/bh.6647e783757c2e8a/matrices/7180902887046744250" target="_blank" rel="noopener">Firebase matrix (C) ↗</a>
+      <a href="https://console.firebase.google.com/u/0/project/somniq-bb1fd/testlab/histories/bh.6647e783757c2e8a/matrices/8643804582143795714" target="_blank" rel="noopener">Matrix (B) ↗</a>
     </div>
   </header>
 
@@ -155,8 +156,7 @@
   <div class="grid" id="grid"></div>
 
   <footer>
-    Glass on Android is Skia-drawn (iOS blur APIs don't exist). Profile / onboarding snoring hides and glow restores are in PR #136 code but not yet in the APK above — next build will show them.
-    Track / Insights / Energy full tabs were not reached by Robo. Health Connect version error is a Test Lab device issue.
+    Build C (APK C) on Pixel 7: Ask Aria removed from Home, Profile Concerns show Fatigue only, Track reached. Still broken: Insights shows snoring analysis copy. Older cards are Build B shots. Glass on Android is Skia-drawn.
   </footer>
 </div>
 
@@ -165,11 +165,107 @@
 <script id="issues-data" type="application/json">
 [
   {
+    "id": "c-home-26",
+    "screen": "Home",
+    "group": "Build C",
+    "name": "Build C \u00b7 Home",
+    "issue": "Ask Aria bar removed \u2014 confirmed on Pixel 7. Glass + aurora intact.",
+    "status": "exact",
+    "statusLabel": "Fixed on device",
+    "img": "images/c-robo-26.jpg",
+    "broken": false,
+    "wide": false
+  },
+  {
+    "id": "c-home-27",
+    "screen": "Home",
+    "group": "Build C",
+    "name": "Build C \u00b7 Home scrolled (Energy curve)",
+    "issue": "No Ask Aria bar; Energy curve + debt trend render on device.",
+    "status": "exact",
+    "statusLabel": "Fixed on device",
+    "img": "images/c-robo-27.jpg",
+    "broken": false,
+    "wide": false
+  },
+  {
+    "id": "c-track-28",
+    "screen": "Track",
+    "group": "Build C",
+    "name": "Build C \u00b7 Track",
+    "issue": "Track tab reached on device. No snoring controls.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/c-robo-28.jpg",
+    "broken": false,
+    "wide": false
+  },
+  {
+    "id": "c-track-29",
+    "screen": "Track",
+    "group": "Build C",
+    "name": "Build C \u00b7 Track scrolled",
+    "issue": "Automatic night tracking card + glass on device.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/c-robo-29.jpg",
+    "broken": false,
+    "wide": false
+  },
+  {
+    "id": "c-profile-30",
+    "screen": "Profile",
+    "group": "Build C",
+    "name": "Build C \u00b7 Profile",
+    "issue": "Concerns: Fatigue only \u2014 Snoring gone on device.",
+    "status": "exact",
+    "statusLabel": "Fixed on device",
+    "img": "images/c-robo-30.jpg",
+    "broken": false,
+    "wide": false
+  },
+  {
+    "id": "c-profile-32",
+    "screen": "Profile",
+    "group": "Build C",
+    "name": "Build C \u00b7 Profile settings",
+    "issue": "Concerns: Fatigue only; Health Connect wording.",
+    "status": "exact",
+    "statusLabel": "Fixed on device",
+    "img": "images/c-robo-32.jpg",
+    "broken": false,
+    "wide": false
+  },
+  {
+    "id": "c-insights-31",
+    "screen": "Insights",
+    "group": "Build C",
+    "name": "Build C \u00b7 Insights",
+    "issue": "Still shows \u201cWhen you snored\u201d / Snoring & sleep analysis copy \u2014 needs hide on Android.",
+    "status": "broken",
+    "statusLabel": "Still broken",
+    "img": "images/c-robo-31.jpg",
+    "broken": true,
+    "wide": false
+  },
+  {
+    "id": "c-results",
+    "screen": "Build C",
+    "group": "Build C",
+    "name": "Build C \u00b7 Firebase results",
+    "issue": "Robo on Pixel 7 (API 33), matrix 7180902887046744250.",
+    "status": "lab",
+    "statusLabel": "Test Lab",
+    "img": "images/c-results.jpg",
+    "broken": false,
+    "wide": true
+  },
+  {
     "id": "login-ba",
     "screen": "Login",
     "group": "Login",
-    "name": "Login — before vs after",
-    "issue": "Glass was flat grey; after APK glass is translucent with violet→cyan glow.",
+    "name": "Login \u2014 before vs after",
+    "issue": "Glass was flat grey; after APK glass is translucent with violet\u2192cyan glow.",
     "status": "exact",
     "statusLabel": "Improved",
     "img": "images/login-before-after.jpg",
@@ -180,7 +276,7 @@
     "id": "login-device",
     "screen": "Login",
     "group": "Login",
-    "name": "Login — Pixel 7",
+    "name": "Login \u2014 Pixel 7",
     "issue": "Device shot of new glass card. Close to iOS; rim still slightly softer.",
     "status": "exact",
     "statusLabel": "On device",
@@ -213,7 +309,7 @@
     "id": "onb-01",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · start",
+    "name": "Onboarding \u00b7 start",
     "issue": "Flow entry on Pixel 7 after Try Demo.",
     "status": "exact",
     "statusLabel": "On device",
@@ -224,7 +320,7 @@
     "id": "onb-03",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · step",
+    "name": "Onboarding \u00b7 step",
     "issue": "Layout parity OK; snoring chip hide is in code, not this APK.",
     "status": "needs-rebuild",
     "statusLabel": "Needs rebuild",
@@ -235,7 +331,7 @@
     "id": "onb-05",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · sleep prefs",
+    "name": "Onboarding \u00b7 sleep prefs",
     "issue": "Snoring concern chip still selectable in this APK (fixed in PR code).",
     "status": "fixed-in-code",
     "statusLabel": "Fixed in code",
@@ -246,7 +342,7 @@
     "id": "onb-07",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · Health Connect",
+    "name": "Onboarding \u00b7 Health Connect",
     "issue": "Prompt screen before lab device error.",
     "status": "exact",
     "statusLabel": "On device",
@@ -258,7 +354,7 @@
     "screen": "Onboarding",
     "group": "Onboarding",
     "name": "Health Connect version error",
-    "issue": "Lab Pixel Health Connect too old — device/lab issue, not app design.",
+    "issue": "Lab Pixel Health Connect too old \u2014 device/lab issue, not app design.",
     "status": "lab",
     "statusLabel": "Lab device",
     "img": "images/onboarding-hc-error.jpg",
@@ -268,7 +364,7 @@
     "id": "onb-10",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · continue",
+    "name": "Onboarding \u00b7 continue",
     "issue": "Motion / permissions path after HC prompt.",
     "status": "exact",
     "statusLabel": "On device",
@@ -279,8 +375,8 @@
     "id": "onb-12",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · mid flow",
-    "issue": "Visual parity check — glass + copy.",
+    "name": "Onboarding \u00b7 mid flow",
+    "issue": "Visual parity check \u2014 glass + copy.",
     "status": "exact",
     "statusLabel": "On device",
     "img": "images/onboarding-12.jpg",
@@ -290,7 +386,7 @@
     "id": "onb-15",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · later step",
+    "name": "Onboarding \u00b7 later step",
     "issue": "Glows restored in code; not in this APK yet.",
     "status": "fixed-in-code",
     "statusLabel": "Fixed in code",
@@ -301,7 +397,7 @@
     "id": "onb-18",
     "screen": "Onboarding",
     "group": "Onboarding",
-    "name": "Onboarding · near Home",
+    "name": "Onboarding \u00b7 near Home",
     "issue": "Last onboarding frames before Agent Home.",
     "status": "exact",
     "statusLabel": "On device",
@@ -312,29 +408,29 @@
     "id": "home-25",
     "screen": "Home",
     "group": "Home",
-    "name": "Home Agent · frame 1",
-    "issue": "Glass cards + aurora present. Ask Aria bar still visible — remove for next build.",
-    "status": "broken",
-    "statusLabel": "Still broken",
+    "name": "Home Agent \u00b7 frame 1",
+    "issue": "Glass cards + aurora present. Ask Aria bar still visible \u2014 remove for next build. (Build B shot \u2014 Ask Aria removed in Build C.)",
+    "status": "needs-rebuild",
+    "statusLabel": "Fixed in Build C",
     "img": "images/home-25.jpg",
-    "broken": true
+    "broken": false
   },
   {
     "id": "home-26",
     "screen": "Home",
     "group": "Home",
-    "name": "Home Agent · frame 2",
-    "issue": "Ask Aria bar at bottom; Home colours otherwise close to iOS.",
-    "status": "broken",
-    "statusLabel": "Still broken",
+    "name": "Home Agent \u00b7 frame 2",
+    "issue": "Ask Aria bar at bottom; Home colours otherwise close to iOS. (Build B shot \u2014 Ask Aria removed in Build C.)",
+    "status": "needs-rebuild",
+    "statusLabel": "Fixed in Build C",
     "img": "images/home-26.jpg",
-    "broken": true
+    "broken": false
   },
   {
     "id": "home-27",
     "screen": "Home",
     "group": "Home",
-    "name": "Home Agent · frame 3",
+    "name": "Home Agent \u00b7 frame 3",
     "issue": "Scroll / card stack. Glass no longer flat grey.",
     "status": "needs-rebuild",
     "statusLabel": "Needs rebuild",
@@ -345,7 +441,7 @@
     "id": "home-28",
     "screen": "Home",
     "group": "Home",
-    "name": "Home Agent · frame 4",
+    "name": "Home Agent \u00b7 frame 4",
     "issue": "Glow polish in PR code; needs new APK to verify on device.",
     "status": "fixed-in-code",
     "statusLabel": "Fixed in code",
@@ -356,18 +452,18 @@
     "id": "profile-29",
     "screen": "Profile",
     "group": "Profile",
-    "name": "Profile · still shows Snoring",
-    "issue": "Concerns still list Snoring · Fatigue; hide is committed, not in this APK.",
-    "status": "fixed-in-code",
-    "statusLabel": "Fixed in code",
+    "name": "Profile \u00b7 still shows Snoring",
+    "issue": "Concerns still list Snoring \u00b7 Fatigue; hide is committed, not in this APK.",
+    "status": "needs-rebuild",
+    "statusLabel": "Fixed in Build C",
     "img": "images/profile-29.jpg",
-    "broken": true
+    "broken": false
   },
   {
     "id": "profile-30",
     "screen": "Profile",
     "group": "Profile",
-    "name": "Profile · Optional snore recording",
+    "name": "Profile \u00b7 Optional snore recording",
     "issue": "iOS listening copy + snore toggle still visible; Android wording + hide in code.",
     "status": "fixed-in-code",
     "statusLabel": "Fixed in code",
@@ -378,7 +474,7 @@
     "id": "d-login",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Login target",
+    "name": "Design \u00b7 Login target",
     "issue": "Android / iOS / proposed side-by-side from design pass.",
     "status": "design",
     "statusLabel": "Design sheet",
@@ -390,7 +486,7 @@
     "id": "d-onb",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Usual sleep",
+    "name": "Design \u00b7 Usual sleep",
     "issue": "Onboarding target sheet.",
     "status": "design",
     "statusLabel": "Design sheet",
@@ -402,7 +498,7 @@
     "id": "d-hc",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Health Connect",
+    "name": "Design \u00b7 Health Connect",
     "issue": "Android wording target for Motion / Health Connect.",
     "status": "design",
     "statusLabel": "Design sheet",
@@ -414,7 +510,7 @@
     "id": "d-need",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Sleep need",
+    "name": "Design \u00b7 Sleep need",
     "issue": "Onboarding sleep-need target.",
     "status": "design",
     "statusLabel": "Design sheet",
@@ -426,8 +522,8 @@
     "id": "d-home",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Home",
-    "issue": "Home Agent target — exact match requested.",
+    "name": "Design \u00b7 Home",
+    "issue": "Home Agent target \u2014 exact match requested.",
     "status": "design",
     "statusLabel": "Design sheet",
     "img": "images/design-05-home.jpg",
@@ -438,31 +534,31 @@
     "id": "d-track",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Track",
-    "issue": "Track not captured on device yet — use sheet until next crawl.",
+    "name": "Design \u00b7 Track",
+    "issue": "Track now on device in Build C.",
     "status": "design",
     "statusLabel": "Not on device",
     "img": "images/design-06-track.jpg",
     "wide": true,
-    "broken": true
+    "broken": false
   },
   {
     "id": "d-insights",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Insights",
-    "issue": "Insights full screen not reached by Robo.",
+    "name": "Design \u00b7 Insights",
+    "issue": "Insights reached in Build C \u2014 snoring copy still broken.",
     "status": "design",
     "statusLabel": "Not on device",
     "img": "images/design-07-insights.jpg",
     "wide": true,
-    "broken": true
+    "broken": false
   },
   {
     "id": "d-energy",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Energy",
+    "name": "Design \u00b7 Energy",
     "issue": "Energy keeps iOS amber for exact match; not captured on device.",
     "status": "design",
     "statusLabel": "Not on device",
@@ -474,7 +570,7 @@
     "id": "d-profile",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Profile",
+    "name": "Design \u00b7 Profile",
     "issue": "Target without snoring controls / with Android copy.",
     "status": "design",
     "statusLabel": "Design sheet",
@@ -486,7 +582,7 @@
     "id": "d-contact",
     "screen": "Design",
     "group": "Design",
-    "name": "Design · Contact sheet",
+    "name": "Design \u00b7 Contact sheet",
     "issue": "All design targets on one sheet.",
     "status": "design",
     "statusLabel": "Overview",
@@ -501,6 +597,7 @@
   const ISSUES = JSON.parse(document.getElementById('issues-data').textContent);
   const FILTERS = [
     { id: 'all', label: 'All' },
+    { id: 'Build C', label: 'Build C (latest)' },
     { id: 'Login', label: 'Login' },
     { id: 'Onboarding', label: 'Onboarding' },
     { id: 'Home', label: 'Home' },
@@ -508,7 +605,7 @@
     { id: 'Design', label: 'Design' },
     { id: 'broken', label: 'Still broken' },
   ];
-  let active = 'all';
+  let active = 'Build C';
 
   const filtersEl = document.getElementById('filters');
   const gridEl = document.getElementById('grid');
@@ -525,6 +622,8 @@
   function visible() {
     if (active === 'all') return ISSUES;
     if (active === 'broken') return ISSUES.filter(i => i.broken);
+    if (active === 'Build C') return ISSUES.filter(i => i.group === 'Build C');
+    if (['Home','Profile','Login','Onboarding','Design'].includes(active)) return ISSUES.filter(i => i.group === active || (i.group==='Build C' && i.screen===active));
     return ISSUES.filter(i => i.group === active);
   }
 
@@ -535,7 +634,7 @@
     statsEl.innerHTML = `<span><b>${list.length}</b> shown</span>
       <span><b>${broken}</b> still broken / pending</span>
       <span><b>${fixed}</b> fixed in code (need rebuild)</span>
-      <span>APK: glass Login · missing Profile/onboarding hides</span>`;
+      <span>Build C: Ask Aria removed · Profile Snoring gone · Insights snoring copy still broken</span>`;
     gridEl.innerHTML = list.map(i => `
       <article class="card ${i.wide ? 'wide' : ''}" data-id="${i.id}">
         <img src="${i.img}" alt="${i.name}" loading="lazy" data-full="${i.img}" />
