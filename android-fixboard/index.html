@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Somniq Android fix board</title>
+<meta name="description" content="Pixel 7 device shots vs iOS design — PR #136 Android parity" />
+<style>
+  :root {
+    --bg: #07060f;
+    --panel: rgba(255,255,255,0.04);
+    --panel-border: rgba(255,255,255,0.08);
+    --text: #f2f0ff;
+    --muted: #9b97b8;
+    --violet: #8b5cf6;
+    --cyan: #22d3ee;
+    --broken: #c4b5fd;
+    --fixed: #67e8f9;
+    --rebuild: #a78bfa;
+    --exact: #5eead4;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,0.18), transparent 60%),
+                radial-gradient(900px 500px at 100% 0%, rgba(34,211,238,0.12), transparent 55%),
+                var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, Segoe UI, Roboto, sans-serif;
+    min-height: 100%;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 18px 80px; }
+  header { margin-bottom: 22px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    box-shadow: 0 0 12px rgba(34,211,238,0.6);
+  }
+  h1 {
+    font-size: clamp(26px, 4vw, 36px); font-weight: 650; letter-spacing: -0.03em;
+    margin: 0 0 8px;
+    background: linear-gradient(110deg, #fff 10%, #c4b5fd 45%, #67e8f9 90%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--muted); font-size: 14px; line-height: 1.55; max-width: 720px; }
+  .sub a { white-space: nowrap; }
+  .links {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;
+  }
+  .links a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--panel-border);
+    color: var(--text); font-size: 12px;
+  }
+  .links a:hover { border-color: rgba(34,211,238,0.45); text-decoration: none; }
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    position: sticky; top: 0; z-index: 20;
+    padding: 12px 0 14px;
+    background: linear-gradient(180deg, rgba(7,6,15,0.96) 60%, rgba(7,6,15,0));
+    backdrop-filter: blur(10px);
+  }
+  .chip {
+    appearance: none; border: 1px solid var(--panel-border);
+    background: var(--panel); color: var(--muted);
+    padding: 8px 14px; border-radius: 999px; font-size: 13px; cursor: pointer;
+    transition: all .15s ease;
+  }
+  .chip:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .chip.active {
+    color: #061018; font-weight: 600;
+    background: linear-gradient(110deg, var(--violet), var(--cyan));
+    border-color: transparent;
+  }
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 10px 18px;
+    color: var(--muted); font-size: 12px; margin: 4px 0 18px;
+  }
+  .stats b { color: var(--text); font-weight: 600; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .card:hover { border-color: rgba(139,92,246,0.45); transform: translateY(-1px); }
+  .card.hidden { display: none; }
+  .card img {
+    width: 100%; aspect-ratio: 9/16; object-fit: cover; object-position: top;
+    background: #0c0a18; display: block; cursor: zoom-in;
+  }
+  .card.wide img { aspect-ratio: 16/10; object-fit: contain; background: #0a0814; }
+  .meta { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .name { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+  .issue { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .badge {
+    flex-shrink: 0; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px; font-weight: 650;
+    border: 1px solid transparent;
+  }
+  .badge.broken { color: #1a1028; background: var(--broken); }
+  .badge.fixed-in-code { color: #04202a; background: var(--fixed); }
+  .badge.needs-rebuild { color: #160c2a; background: var(--rebuild); }
+  .badge.exact { color: #04221c; background: var(--exact); }
+  .badge.design { color: var(--text); background: transparent; border-color: var(--panel-border); }
+  .badge.lab { color: #04202a; background: #a5f3fc; }
+  footer {
+    margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--panel-border);
+    color: var(--muted); font-size: 12px; line-height: 1.5;
+  }
+  /* lightbox */
+  .lb {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+    display: none; align-items: center; justify-content: center;
+    z-index: 100; padding: 24px; cursor: zoom-out;
+  }
+  .lb.open { display: flex; }
+  .lb img { max-width: min(960px, 96vw); max-height: 92vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><span class="dot"></span> Somniq · Android parity · 5 Nov 2026 IST</div>
+    <h1>Somniq Android fix board</h1>
+    <p class="sub">
+      Real Pixel 7 shots from Firebase Test Lab next to the iOS design targets.
+      Filter by screen or “Still broken”. Tap any shot to enlarge.
+    </p>
+    <div class="links">
+      <a href="https://github.com/drharish14-tech/somniq-app/pull/136" target="_blank" rel="noopener">PR #136 ↗</a>
+      <a href="https://expo.dev/artifacts/eas/Bqdd9DNUBsRQKCdZIFpaz8UXSvOmQKVH3ywMA3o2l_s.apk" target="_blank" rel="noopener">Current APK ↗</a>
+      <a href="https://console.firebase.google.com/u/0/project/somniq-bb1fd/testlab/histories/bh.6647e783757c2e8a/matrices/8643804582143795714" target="_blank" rel="noopener">Firebase matrix ↗</a>
+    </div>
+  </header>
+
+  <div class="filters" id="filters"></div>
+  <div class="stats" id="stats"></div>
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    Glass on Android is Skia-drawn (iOS blur APIs don't exist). Profile / onboarding snoring hides and glow restores are in PR #136 code but not yet in the APK above — next build will show them.
+    Track / Insights / Energy full tabs were not reached by Robo. Health Connect version error is a Test Lab device issue.
+  </footer>
+</div>
+
+<div class="lb" id="lb"><img alt="" /></div>
+
+<script id="issues-data" type="application/json">
+[
+  {
+    "id": "login-ba",
+    "screen": "Login",
+    "group": "Login",
+    "name": "Login — before vs after",
+    "issue": "Glass was flat grey; after APK glass is translucent with violet→cyan glow.",
+    "status": "exact",
+    "statusLabel": "Improved",
+    "img": "images/login-before-after.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "login-device",
+    "screen": "Login",
+    "group": "Login",
+    "name": "Login — Pixel 7",
+    "issue": "Device shot of new glass card. Close to iOS; rim still slightly softer.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/login-after-device.jpg",
+    "broken": false
+  },
+  {
+    "id": "create-account",
+    "screen": "Login",
+    "group": "Login",
+    "name": "Create Account",
+    "issue": "Glass + brand glow present on Pixel 7.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/create-account.jpg",
+    "broken": false
+  },
+  {
+    "id": "country-picker",
+    "screen": "Login",
+    "group": "Login",
+    "name": "Country picker glass",
+    "issue": "Sheet glass readable; matches brand glass treatment.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/country-picker.jpg",
+    "broken": false
+  },
+  {
+    "id": "onb-01",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · start",
+    "issue": "Flow entry on Pixel 7 after Try Demo.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/onboarding-01.jpg",
+    "broken": false
+  },
+  {
+    "id": "onb-03",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · step",
+    "issue": "Layout parity OK; snoring chip hide is in code, not this APK.",
+    "status": "needs-rebuild",
+    "statusLabel": "Needs rebuild",
+    "img": "images/onboarding-03.jpg",
+    "broken": true
+  },
+  {
+    "id": "onb-05",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · sleep prefs",
+    "issue": "Snoring concern chip still selectable in this APK (fixed in PR code).",
+    "status": "fixed-in-code",
+    "statusLabel": "Fixed in code",
+    "img": "images/onboarding-05.jpg",
+    "broken": true
+  },
+  {
+    "id": "onb-07",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · Health Connect",
+    "issue": "Prompt screen before lab device error.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/onboarding-07.jpg",
+    "broken": false
+  },
+  {
+    "id": "onb-hc",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Health Connect version error",
+    "issue": "Lab Pixel Health Connect too old — device/lab issue, not app design.",
+    "status": "lab",
+    "statusLabel": "Lab device",
+    "img": "images/onboarding-hc-error.jpg",
+    "broken": true
+  },
+  {
+    "id": "onb-10",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · continue",
+    "issue": "Motion / permissions path after HC prompt.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/onboarding-10.jpg",
+    "broken": false
+  },
+  {
+    "id": "onb-12",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · mid flow",
+    "issue": "Visual parity check — glass + copy.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/onboarding-12.jpg",
+    "broken": false
+  },
+  {
+    "id": "onb-15",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · later step",
+    "issue": "Glows restored in code; not in this APK yet.",
+    "status": "fixed-in-code",
+    "statusLabel": "Fixed in code",
+    "img": "images/onboarding-15.jpg",
+    "broken": true
+  },
+  {
+    "id": "onb-18",
+    "screen": "Onboarding",
+    "group": "Onboarding",
+    "name": "Onboarding · near Home",
+    "issue": "Last onboarding frames before Agent Home.",
+    "status": "exact",
+    "statusLabel": "On device",
+    "img": "images/onboarding-18.jpg",
+    "broken": false
+  },
+  {
+    "id": "home-25",
+    "screen": "Home",
+    "group": "Home",
+    "name": "Home Agent · frame 1",
+    "issue": "Glass cards + aurora present. Ask Aria bar still visible — remove for next build.",
+    "status": "broken",
+    "statusLabel": "Still broken",
+    "img": "images/home-25.jpg",
+    "broken": true
+  },
+  {
+    "id": "home-26",
+    "screen": "Home",
+    "group": "Home",
+    "name": "Home Agent · frame 2",
+    "issue": "Ask Aria bar at bottom; Home colours otherwise close to iOS.",
+    "status": "broken",
+    "statusLabel": "Still broken",
+    "img": "images/home-26.jpg",
+    "broken": true
+  },
+  {
+    "id": "home-27",
+    "screen": "Home",
+    "group": "Home",
+    "name": "Home Agent · frame 3",
+    "issue": "Scroll / card stack. Glass no longer flat grey.",
+    "status": "needs-rebuild",
+    "statusLabel": "Needs rebuild",
+    "img": "images/home-27.jpg",
+    "broken": true
+  },
+  {
+    "id": "home-28",
+    "screen": "Home",
+    "group": "Home",
+    "name": "Home Agent · frame 4",
+    "issue": "Glow polish in PR code; needs new APK to verify on device.",
+    "status": "fixed-in-code",
+    "statusLabel": "Fixed in code",
+    "img": "images/home-28.jpg",
+    "broken": true
+  },
+  {
+    "id": "profile-29",
+    "screen": "Profile",
+    "group": "Profile",
+    "name": "Profile · still shows Snoring",
+    "issue": "Concerns still list Snoring · Fatigue; hide is committed, not in this APK.",
+    "status": "fixed-in-code",
+    "statusLabel": "Fixed in code",
+    "img": "images/profile-29.jpg",
+    "broken": true
+  },
+  {
+    "id": "profile-30",
+    "screen": "Profile",
+    "group": "Profile",
+    "name": "Profile · Optional snore recording",
+    "issue": "iOS listening copy + snore toggle still visible; Android wording + hide in code.",
+    "status": "fixed-in-code",
+    "statusLabel": "Fixed in code",
+    "img": "images/profile-30.jpg",
+    "broken": true
+  },
+  {
+    "id": "d-login",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Login target",
+    "issue": "Android / iOS / proposed side-by-side from design pass.",
+    "status": "design",
+    "statusLabel": "Design sheet",
+    "img": "images/design-01-login.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "d-onb",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Usual sleep",
+    "issue": "Onboarding target sheet.",
+    "status": "design",
+    "statusLabel": "Design sheet",
+    "img": "images/design-02-onboarding.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "d-hc",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Health Connect",
+    "issue": "Android wording target for Motion / Health Connect.",
+    "status": "design",
+    "statusLabel": "Design sheet",
+    "img": "images/design-03-health.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "d-need",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Sleep need",
+    "issue": "Onboarding sleep-need target.",
+    "status": "design",
+    "statusLabel": "Design sheet",
+    "img": "images/design-04-sleep-need.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "d-home",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Home",
+    "issue": "Home Agent target — exact match requested.",
+    "status": "design",
+    "statusLabel": "Design sheet",
+    "img": "images/design-05-home.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "d-track",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Track",
+    "issue": "Track not captured on device yet — use sheet until next crawl.",
+    "status": "design",
+    "statusLabel": "Not on device",
+    "img": "images/design-06-track.jpg",
+    "wide": true,
+    "broken": true
+  },
+  {
+    "id": "d-insights",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Insights",
+    "issue": "Insights full screen not reached by Robo.",
+    "status": "design",
+    "statusLabel": "Not on device",
+    "img": "images/design-07-insights.jpg",
+    "wide": true,
+    "broken": true
+  },
+  {
+    "id": "d-energy",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Energy",
+    "issue": "Energy keeps iOS amber for exact match; not captured on device.",
+    "status": "design",
+    "statusLabel": "Not on device",
+    "img": "images/design-08-energy.jpg",
+    "wide": true,
+    "broken": true
+  },
+  {
+    "id": "d-profile",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Profile",
+    "issue": "Target without snoring controls / with Android copy.",
+    "status": "design",
+    "statusLabel": "Design sheet",
+    "img": "images/design-09-profile.jpg",
+    "wide": true,
+    "broken": false
+  },
+  {
+    "id": "d-contact",
+    "screen": "Design",
+    "group": "Design",
+    "name": "Design · Contact sheet",
+    "issue": "All design targets on one sheet.",
+    "status": "design",
+    "statusLabel": "Overview",
+    "img": "images/design-contact-sheet.jpg",
+    "wide": true,
+    "broken": false
+  }
+]
+</script>
+
+<script>
+  const ISSUES = JSON.parse(document.getElementById('issues-data').textContent);
+  const FILTERS = [
+    { id: 'all', label: 'All' },
+    { id: 'Login', label: 'Login' },
+    { id: 'Onboarding', label: 'Onboarding' },
+    { id: 'Home', label: 'Home' },
+    { id: 'Profile', label: 'Profile' },
+    { id: 'Design', label: 'Design' },
+    { id: 'broken', label: 'Still broken' },
+  ];
+  let active = 'all';
+
+  const filtersEl = document.getElementById('filters');
+  const gridEl = document.getElementById('grid');
+  const statsEl = document.getElementById('stats');
+  const lb = document.getElementById('lb');
+  const lbImg = lb.querySelector('img');
+
+  function renderFilters() {
+    filtersEl.innerHTML = FILTERS.map(f =>
+      `<button class="chip ${active===f.id?'active':''}" data-f="${f.id}">${f.label}</button>`
+    ).join('');
+  }
+
+  function visible() {
+    if (active === 'all') return ISSUES;
+    if (active === 'broken') return ISSUES.filter(i => i.broken);
+    return ISSUES.filter(i => i.group === active);
+  }
+
+  function render() {
+    const list = visible();
+    const broken = ISSUES.filter(i => i.broken).length;
+    const fixed = ISSUES.filter(i => i.status === 'fixed-in-code').length;
+    statsEl.innerHTML = `<span><b>${list.length}</b> shown</span>
+      <span><b>${broken}</b> still broken / pending</span>
+      <span><b>${fixed}</b> fixed in code (need rebuild)</span>
+      <span>APK: glass Login · missing Profile/onboarding hides</span>`;
+    gridEl.innerHTML = list.map(i => `
+      <article class="card ${i.wide ? 'wide' : ''}" data-id="${i.id}">
+        <img src="${i.img}" alt="${i.name}" loading="lazy" data-full="${i.img}" />
+        <div class="meta">
+          <div class="row">
+            <div class="name">${i.name}</div>
+            <span class="badge ${i.status}">${i.statusLabel}</span>
+          </div>
+          <div class="issue">${i.issue}</div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  filtersEl.addEventListener('click', e => {
+    const btn = e.target.closest('[data-f]');
+    if (!btn) return;
+    active = btn.dataset.f;
+    renderFilters();
+    render();
+  });
+
+  gridEl.addEventListener('click', e => {
+    const img = e.target.closest('img');
+    if (!img) return;
+    lbImg.src = img.dataset.full || img.src;
+    lb.classList.add('open');
+  });
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+  renderFilters();
+  render();
+</script>
+</body>
+</html>
