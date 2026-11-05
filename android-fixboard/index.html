@@ -120,6 +120,8 @@
   .badge.exact { color: #04221c; background: var(--exact); }
   .badge.design { color: var(--text); background: transparent; border-color: var(--panel-border); }
   .badge.lab { color: #04202a; background: #a5f3fc; }
+  .badge.wrong-target { color: #2a1008; background: #fdba74; }
+  .badge.port { color: #04202a; background: #fde68a; }
   footer {
     margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--panel-border);
     color: var(--muted); font-size: 12px; line-height: 1.5;
@@ -140,8 +142,9 @@
     <div class="eyebrow"><span class="dot"></span> Somniq · Android parity · 5 Nov 2026 IST</div>
     <h1>Somniq Android fix board</h1>
     <p class="sub">
-      Real Pixel 7 shots from Firebase Test Lab next to the signature Home target. Build C Home is empty-state — not the filled hero.
-      Filter by screen or “Still broken”. Tap any shot to enlarge.
+      Real Pixel 7 shots from Firebase Test Lab next to the signature Home target (Build 67).
+      Build C Home cards are <b>WRONG TARGET</b> — empty AWAITING / NO DATA, not the stacked debt-ring hero.
+      Home code port in progress; <b>no new APK until Harish says yes</b>. Filter by screen or “Still broken”. Tap to enlarge.
     </p>
     <div class="links">
       <a href="https://github.com/drharish14-tech/somniq-app/pull/136" target="_blank" rel="noopener">PR #136 ↗</a>
@@ -156,7 +159,7 @@
   <div class="grid" id="grid"></div>
 
   <footer>
-    Build C Home on Pixel 7 is the <b>empty state</b> (AWAITING / NO DATA YET) — wrong capture target, not “Fixed”. Signature Home = debt-hours ring + score + Slept last night / bed·wake + Need meter (Ask Aria off). Next: filled-hero capture after demo-seed or Looks-right Robo path. Insights snoring copy still broken. Older cards are Build B.
+    <b>Summary:</b> Home code port in progress (Build 67 stacked hero + Need meter). Build C Home shots (c-robo-26 / scrolled) are empty AWAITING / NO DATA — WRONG TARGET, not Fixed. Signature target is morning-mobile-top (Build 67). <b>No new APK until Harish says yes.</b> Profile/Ask Aria/Track notes from Build C still stand. Insights snoring copy still broken. Older cards kept for history.
   </footer>
 </div>
 
@@ -169,10 +172,10 @@
     "screen": "Home",
     "group": "Build C",
     "name": "Target · signature Home (Build 67)",
-    "issue": "Must match: glowing hours-of-debt ring, sleep score pill, Slept last night with bed/wake clocks, Need meter (of Xh need). Ask Aria bar stays OFF on Android (already removed). Ref: morning-mobile-top.png.",
-    "status": "design",
-    "statusLabel": "Target",
-    "img": "images/target-signature-home.jpg",
+    "issue": "PRIMARY TARGET from morning-mobile-top.png: stacked debt-hours ring, score pill under orb, Slept last night + bed/wake chips, Need meter. Android Home still old flank / empty — port in progress. No new APK until Harish says yes.",
+    "status": "port",
+    "statusLabel": "Port target",
+    "img": "images/target-home-build67.jpg",
     "broken": true,
     "wide": false
   },
@@ -193,8 +196,8 @@
     "screen": "Home",
     "group": "Build C",
     "name": "Build C · Home (WRONG TARGET)",
-    "issue": "Empty-state Home — AWAITING / NO DATA YET orb. Not the signature hero (debt hours ring, sleep score, Slept last night + bed/wake, Need slider). Ask Aria correctly gone; capture target was wrong.",
-    "status": "broken",
+    "issue": "WRONG TARGET — empty AWAITING / NO DATA YET orb, not signature Build 67 hero (stacked debt ring, score, bed/wake chips, Need meter). Ask Aria correctly gone; do not treat as Fixed.",
+    "status": "wrong-target",
     "statusLabel": "Wrong target",
     "img": "images/c-robo-26.jpg",
     "broken": true,
@@ -204,9 +207,9 @@
     "id": "c-home-27",
     "screen": "Home",
     "group": "Build C",
-    "name": "Build C · Home scrolled (empty seed)",
-    "issue": "Same empty-state session scrolled — Energy curve under an unset debt. Not a filled signature Home capture.",
-    "status": "broken",
+    "name": "Build C · Home scrolled (WRONG TARGET)",
+    "issue": "WRONG TARGET — same empty AWAITING / NO DATA session scrolled (Energy under unset debt). Not signature Build 67 Home.",
+    "status": "wrong-target",
     "statusLabel": "Wrong target",
     "img": "images/c-robo-27.jpg",
     "broken": true,
@@ -658,7 +661,7 @@
     statsEl.innerHTML = `<span><b>${list.length}</b> shown</span>
       <span><b>${broken}</b> still broken / pending</span>
       <span><b>${fixed}</b> fixed in code (need rebuild)</span>
-      <span>Build C Home = empty-state (wrong target) · need filled signature hero next · Insights snoring still broken</span>`;
+      <span>Home port in progress (Build 67) · no new APK until Harish says yes · Build C Home = wrong target (empty) · Insights snoring still broken</span>`;
     gridEl.innerHTML = list.map(i => `
       <article class="card ${i.wide ? 'wide' : ''}" data-id="${i.id}">
         <img src="${i.img}" alt="${i.name}" loading="lazy" data-full="${i.img}" />
