@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Somniq · Build 67 design preview (exact iOS)</title>
+<meta name="description" content="Exact iOS Build 67 main screens — Home, Energy, Track, Insights, Profile. The target Android must match." />
+<style>
+  :root {
+    --bg: #07060f;
+    --panel: rgba(255,255,255,0.045);
+    --panel-border: rgba(255,255,255,0.09);
+    --text: #f4f1ff;
+    --muted: #9b97b8;
+    --violet: #8b5cf6;
+    --cyan: #22d3ee;
+    --warm: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background:
+      radial-gradient(1000px 520px at 8% -8%, rgba(139,92,246,0.22), transparent 58%),
+      radial-gradient(800px 480px at 100% 0%, rgba(34,211,238,0.12), transparent 55%),
+      radial-gradient(700px 400px at 50% 100%, rgba(251,191,36,0.05), transparent 50%),
+      var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, Segoe UI, Roboto, sans-serif;
+    min-height: 100%;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 16px 96px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    box-shadow: 0 0 12px rgba(34,211,238,0.55);
+  }
+  h1 {
+    font-size: clamp(26px, 4.4vw, 38px);
+    font-weight: 650; letter-spacing: -0.03em;
+    margin: 0 0 10px; line-height: 1.15;
+    background: linear-gradient(110deg, #fff 8%, #c4b5fd 48%, #67e8f9 92%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lead {
+    color: var(--muted); font-size: 15px; line-height: 1.6;
+    max-width: 640px; margin: 0 0 18px;
+  }
+  .lead strong { color: var(--text); font-weight: 600; }
+  .note {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 0 0 28px;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--panel-border);
+    color: var(--text); font-size: 12px;
+  }
+  .pill.warm { border-color: rgba(251,191,36,0.35); color: #fde68a; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+  }
+  @media (min-width: 720px) {
+    .grid { grid-template-columns: repeat(5, 1fr); }
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .card:hover { border-color: rgba(139,92,246,0.5); transform: translateY(-2px); }
+  .card.hero {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(220px, 320px) 1fr;
+    gap: 0;
+  }
+  @media (max-width: 700px) {
+    .card.hero { grid-template-columns: 1fr; }
+  }
+  .phone {
+    position: relative;
+    background: #0a0816;
+    padding: 14px 14px 18px;
+    display: flex; justify-content: center;
+  }
+  .phone img {
+    width: 100%; max-width: 280px;
+    aspect-ratio: 9 / 19.5;
+    object-fit: cover; object-position: top;
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.45), 0 0 0 1px rgba(139,92,246,0.12);
+    display: block; cursor: zoom-in;
+    background: #0c0a18;
+  }
+  .card:not(.hero) .phone img { max-width: none; border-radius: 18px; }
+  .meta { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+  .name { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+  .desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .tag {
+    align-self: flex-start;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 999px; font-weight: 650;
+    color: #04221c; background: #5eead4;
+  }
+  .tag.target { background: linear-gradient(110deg, #c4b5fd, #67e8f9); color: #0b1020; }
+  footer {
+    margin-top: 36px; padding-top: 18px;
+    border-top: 1px solid var(--panel-border);
+    color: var(--muted); font-size: 12px; line-height: 1.55;
+  }
+  /* lightbox */
+  .lb {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(4,3,10,0.92);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px; cursor: zoom-out;
+  }
+  .lb.open { display: flex; }
+  .lb img {
+    max-width: min(420px, 100%);
+    max-height: 92vh;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+  .lb .cap {
+    position: absolute; bottom: 18px; left: 0; right: 0;
+    text-align: center; color: var(--muted); font-size: 13px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> Exact iOS · Build 67</div>
+    <h1>Somniq · Build 67 design preview (exact iOS)</h1>
+    <p class="lead">
+      These are the <strong>iOS Build 67</strong> main screens Android must match —
+      filled signature Home (debt ring, score pill, SLEPT LAST NIGHT, Need meter),
+      plus Energy, Track, Insights, and Profile.
+      <strong>Not</strong> the old empty AWAITING / NO DATA Firebase Home.
+    </p>
+    <div class="note">
+      <span class="pill warm">Target for Android parity</span>
+      <span class="pill">Tap any phone to enlarge</span>
+      <span class="pill">Static preview · no APK</span>
+    </div>
+
+    <div class="grid">
+      <article class="card hero">
+        <div class="phone">
+          <img src="images/home.jpg" alt="Home — Build 67 signature" data-full="images/home.jpg" data-cap="Home · debt ring · score pill · SLEPT LAST NIGHT · Need meter" />
+        </div>
+        <div class="meta">
+          <span class="tag target">Home · signature</span>
+          <div class="name">Home (Today)</div>
+          <div class="desc">
+            Exact filled Build 67 Home: SLEEP DEBT ring (1.8h), score pill (74 Fair),
+            SLEPT LAST NIGHT 6h 52m, Need meter of 8h, Energy Index, Ask Aria, and the
+            Today · Energy · Aria · Track · Insights dock. This is the hero Android must copy.
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="phone">
+          <img src="images/energy.jpg" alt="Energy — Build 67" data-full="images/energy.jpg" data-cap="Energy · Today wave · Best hours" />
+        </div>
+        <div class="meta">
+          <span class="tag">Energy</span>
+          <div class="name">Energy</div>
+          <div class="desc">Today / Tonight / Pattern · energy wave · Best hours.</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="phone">
+          <img src="images/track.jpg" alt="Track — Build 67" data-full="images/track.jpg" data-cap="Track · Start recording · factors" />
+        </div>
+        <div class="meta">
+          <span class="tag">Track</span>
+          <div class="name">Track</div>
+          <div class="desc">Ready for bed · Start recording ring · factors &amp; remedies.</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="phone">
+          <img src="images/insights.jpg" alt="Insights — Build 67" data-full="images/insights.jpg" data-cap="Insights · 7-night ring" />
+        </div>
+        <div class="meta">
+          <span class="tag">Insights</span>
+          <div class="name">Insights</div>
+          <div class="desc">Your last 7 nights · concentric night rings · averages.</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="phone">
+          <img src="images/profile.jpg" alt="Profile — Build 67" data-full="images/profile.jpg" data-cap="Profile · Sleep profile · goals" />
+        </div>
+        <div class="meta">
+          <span class="tag">Profile</span>
+          <div class="name">Profile</div>
+          <div class="desc">Harish · Sleep profile / goals · optional snore · Upgrade to Plus.</div>
+        </div>
+      </article>
+    </div>
+
+    <footer>
+      Source: real iOS Build 67 / store &amp; polish captures — not Build C empty Home.
+      Android code port lives on somniq-app draft PR #136 (separate). This page is design-only.
+    </footer>
+  </div>
+
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged screen">
+    <img id="lbImg" alt="" />
+    <div class="cap" id="lbCap"></div>
+  </div>
+  <script>
+    const lb = document.getElementById('lb');
+    const lbImg = document.getElementById('lbImg');
+    const lbCap = document.getElementById('lbCap');
+    document.querySelectorAll('.phone img').forEach(img => {
+      img.addEventListener('click', () => {
+        lbImg.src = img.dataset.full || img.src;
+        lbImg.alt = img.alt;
+        lbCap.textContent = img.dataset.cap || img.alt;
+        lb.classList.add('open');
+      });
+    });
+    function closeLb() { lb.classList.remove('open'); lbImg.removeAttribute('src'); }
+    lb.addEventListener('click', closeLb);
+    window.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+  </script>
+</body>
+</html>
